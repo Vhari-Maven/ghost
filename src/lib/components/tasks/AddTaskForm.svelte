@@ -19,6 +19,7 @@
     onToggleLabelPicker: () => void;
     onCreateNewLabel: () => void;
     onReset: () => void;
+    onTaskCreated?: () => void;
   };
 
   let {
@@ -36,7 +37,10 @@
     onToggleLabelPicker,
     onCreateNewLabel,
     onReset,
+    onTaskCreated,
   }: Props = $props();
+
+  let titleInput: HTMLInputElement | undefined = $state();
 </script>
 
 <div class="mb-2">
@@ -48,11 +52,18 @@
       use:enhance={() => {
         return async ({ update }) => {
           await update({ reset: false });
-          onReset();
+          if (onTaskCreated) {
+            onTaskCreated();
+            // Refocus the title input for rapid entry
+            setTimeout(() => titleInput?.focus(), 0);
+          } else {
+            onReset();
+          }
         };
       }}
     >
       <input
+        bind:this={titleInput}
         type="text"
         name="title"
         value={title}

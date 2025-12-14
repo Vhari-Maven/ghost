@@ -112,8 +112,17 @@ export class TasksPage {
 
   /** Open the add task form in a specific column (defaults to Todo) */
   async openAddForm(column: ColumnName = 'Todo'): Promise<void> {
-    await this.addTaskButton(column).click();
-    await expect(this.titleInput).toBeVisible();
+    // Check if any form is currently open (from rapid entry mode)
+    const titleInputVisible = await this.titleInput.isVisible().catch(() => false);
+
+    if (titleInputVisible) {
+      // Form is already open - clear any existing text and ensure ready for input
+      await this.titleInput.clear();
+    } else {
+      // Need to click the button to open the form
+      await this.addTaskButton(column).click();
+      await expect(this.titleInput).toBeVisible();
+    }
   }
 
   /** Create a new task with optional description, labels, and target column */

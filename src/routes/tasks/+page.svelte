@@ -137,6 +137,14 @@
     showLabelPicker = false;
   }
 
+  function clearAddFormForNextTask() {
+    // Clear fields but keep form open for rapid entry
+    newTaskTitle = '';
+    newTaskDescription = '';
+    newTaskLabelIds = [];
+    showLabelPicker = false;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Label Modal Handlers
   // ─────────────────────────────────────────────────────────────────────────────
@@ -239,6 +247,7 @@
       onToggleLabelPicker: () => (showLabelPicker = !showLabelPicker),
       onCreateNewLabel: () => (showCreateLabel = true),
       onReset: resetAddForm,
+      onTaskCreated: clearAddFormForNextTask,
     };
   }
 </script>
