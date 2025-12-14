@@ -1,6 +1,7 @@
 <script lang="ts">
   import '../app.css';
   import { page } from '$app/stores';
+  import CircuitPulse from '$lib/components/CircuitPulse.svelte';
 
   let { children } = $props();
 
@@ -17,7 +18,9 @@
   }
 </script>
 
-<div class="min-h-screen">
+<CircuitPulse />
+
+<div class="min-h-screen relative z-10">
   <nav class="border-b border-[var(--color-border)] px-6 py-4">
     <div class="flex items-center gap-8">
       <a
