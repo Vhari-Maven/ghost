@@ -8,15 +8,22 @@
   let { data }: { data: PageData } = $props();
 
   // Local state for tasks (will be updated by drag-and-drop)
+  // Initialize once from server data - NO $effect to sync because that causes snap-back during drag
   let todoTasks = $state([...data.todoTasks]);
   let inProgressTasks = $state([...data.inProgressTasks]);
   let doneTasks = $state([...data.doneTasks]);
 
-  // Sync from server data when it changes
-  $effect(() => {
-    todoTasks = [...data.todoTasks];
-    inProgressTasks = [...data.inProgressTasks];
-    doneTasks = [...data.doneTasks];
+  // Track last known data reference to detect actual page navigations/reloads
+  let lastDataRef = data;
+
+  // Only sync when the data object itself changes (navigation/reload), not on reactivity updates
+  $effect.pre(() => {
+    if (data !== lastDataRef) {
+      lastDataRef = data;
+      todoTasks = [...data.todoTasks];
+      inProgressTasks = [...data.inProgressTasks];
+      doneTasks = [...data.doneTasks];
+    }
   });
 
   // UI state
@@ -129,58 +136,37 @@
   }
 
   async function persistColumnOrder(columnId: string, items: Task[]) {
-    // Create and submit a form to persist the order
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '?/reorderColumn';
-    form.style.display = 'none';
+    // Use fetch to persist without triggering SvelteKit's automatic data reload
+    // This prevents the snap-back issue during drag-and-drop
 
-    const taskIdsInput = document.createElement('input');
-    taskIdsInput.type = 'hidden';
-    taskIdsInput.name = 'taskIds';
-    taskIdsInput.value = JSON.stringify(items.map(t => t.id));
-    form.appendChild(taskIdsInput);
-
-    // Also update status for any tasks that changed columns
+    // First, update status for any tasks that changed columns
     for (let i = 0; i < items.length; i++) {
       const task = items[i];
       if (task.status !== columnId) {
         // This task moved columns - need to update its status
-        const moveForm = document.createElement('form');
-        moveForm.method = 'POST';
-        moveForm.action = '?/moveTask';
-        moveForm.style.display = 'none';
+        const formData = new FormData();
+        formData.append('taskId', String(task.id));
+        formData.append('status', columnId);
+        formData.append('sortOrder', String(i));
 
-        const taskIdInput = document.createElement('input');
-        taskIdInput.type = 'hidden';
-        taskIdInput.name = 'taskId';
-        taskIdInput.value = String(task.id);
-        moveForm.appendChild(taskIdInput);
-
-        const statusInput = document.createElement('input');
-        statusInput.type = 'hidden';
-        statusInput.name = 'status';
-        statusInput.value = columnId;
-        moveForm.appendChild(statusInput);
-
-        const sortOrderInput = document.createElement('input');
-        sortOrderInput.type = 'hidden';
-        sortOrderInput.name = 'sortOrder';
-        sortOrderInput.value = String(i);
-        moveForm.appendChild(sortOrderInput);
-
-        document.body.appendChild(moveForm);
-        moveForm.requestSubmit();
-        document.body.removeChild(moveForm);
+        await fetch('?/moveTask', {
+          method: 'POST',
+          body: formData
+        });
 
         // Update local status so subsequent operations know the new status
         task.status = columnId;
       }
     }
 
-    document.body.appendChild(form);
-    form.requestSubmit();
-    document.body.removeChild(form);
+    // Then persist the column order
+    const formData = new FormData();
+    formData.append('taskIds', JSON.stringify(items.map(t => t.id)));
+
+    await fetch('?/reorderColumn', {
+      method: 'POST',
+      body: formData
+    });
   }
 
   function getColumnTasks(columnId: string): Task[] {
@@ -208,13 +194,8 @@
         </span>
       </div>
 
-      <div
-        class="flex-1 bg-[var(--color-surface)]/30 rounded-lg p-2 space-y-2 overflow-y-auto min-h-[100px]"
-        use:dndzone={{ items: todoTasks, flipDurationMs, dropTargetStyle: {} }}
-        onconsider={(e) => handleDndConsider('todo', e)}
-        onfinalize={(e) => handleDndFinalize('todo', e)}
-      >
-        <!-- Add Task Form -->
+      <!-- Add Task Form - Outside dndzone -->
+      <div class="mb-2">
         {#if showAddForm}
           <form
             method="POST"
@@ -316,7 +297,15 @@
             Add task
           </button>
         {/if}
+      </div>
 
+      <!-- Drag-and-drop zone for tasks -->
+      <div
+        class="flex-1 bg-[var(--color-surface)]/30 rounded-lg p-2 space-y-2 overflow-y-auto min-h-[100px]"
+        use:dndzone={{ items: todoTasks, flipDurationMs, dropTargetStyle: {} }}
+        onconsider={(e) => handleDndConsider('todo', e)}
+        onfinalize={(e) => handleDndFinalize('todo', e)}
+      >
         <!-- Task Cards -->
         {#each todoTasks as task (task.id)}
           <div animate:flip={{ duration: flipDurationMs }}>

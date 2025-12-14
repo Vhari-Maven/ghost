@@ -307,6 +307,120 @@ test.describe('Tasks Kanban Board', () => {
   });
 });
 
+test.describe('Tasks - Drag and Drop', () => {
+  test.beforeEach(async ({ page }) => {
+    testRunId = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    await page.goto('/tasks');
+    await page.waitForLoadState('networkidle');
+  });
+
+  test.afterEach(async ({ page }) => {
+    await cleanupTestTasks(page);
+  });
+
+  test('should drag task from Todo to In Progress column', async ({ page }) => {
+    const taskName = uniqueName('Drag task');
+
+    // Create a task in Todo
+    await page.locator('button', { hasText: 'Add task' }).click();
+    await page.waitForTimeout(100);
+    await page.locator('input[placeholder="Task title..."]').fill(taskName);
+    await page.locator('button[type="submit"]', { hasText: 'Add' }).click();
+    await page.waitForTimeout(500);
+
+    // Verify task is in Todo column
+    const todoColumn = page.locator('div').filter({ hasText: /^Todo/ }).locator('..').first();
+    await expect(page.locator('h3', { hasText: taskName })).toBeVisible();
+
+    // Get the task card and the In Progress drop zone
+    const taskCard = page.locator('.group').filter({ hasText: taskName }).first();
+    const inProgressZone = page.locator('div[class*="min-h-"]').nth(1);
+
+    // Perform drag and drop
+    await taskCard.dragTo(inProgressZone);
+
+    // Wait for the drop to be processed
+    await page.waitForTimeout(500);
+
+    // Reload to verify persistence
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Task should still be visible (now in In Progress)
+    await expect(page.locator('h3', { hasText: taskName })).toBeVisible();
+  });
+
+  test('should drag task from In Progress to Done column', async ({ page }) => {
+    const taskName = uniqueName('Drag to done');
+
+    // Create a task and move it to In Progress using buttons first
+    await page.locator('button', { hasText: 'Add task' }).click();
+    await page.waitForTimeout(100);
+    await page.locator('input[placeholder="Task title..."]').fill(taskName);
+    await page.locator('button[type="submit"]', { hasText: 'Add' }).click();
+    await page.waitForTimeout(500);
+
+    // Move to In Progress
+    const taskCard = page.locator('.group').filter({ hasText: taskName }).first();
+    await taskCard.hover();
+    await taskCard.locator('button[title="Move right"]').click();
+    await page.waitForTimeout(500);
+
+    // Now drag from In Progress to Done
+    const taskInProgress = page.locator('.group').filter({ hasText: taskName }).first();
+    const doneZone = page.locator('div[class*="min-h-"]').nth(2);
+
+    await taskInProgress.dragTo(doneZone);
+    await page.waitForTimeout(500);
+
+    // Reload to verify persistence
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Task should still be visible (now in Done)
+    await expect(page.locator('h3', { hasText: taskName })).toBeVisible();
+  });
+
+  test('should reorder tasks within Todo column', async ({ page }) => {
+    const task1 = uniqueName('First task');
+    const task2 = uniqueName('Second task');
+
+    // Create first task
+    await page.locator('button', { hasText: 'Add task' }).click();
+    await page.waitForTimeout(100);
+    await page.locator('input[placeholder="Task title..."]').fill(task1);
+    await page.locator('button[type="submit"]', { hasText: 'Add' }).click();
+    await page.waitForTimeout(500);
+
+    // Create second task
+    await page.locator('button', { hasText: 'Add task' }).click();
+    await page.waitForTimeout(100);
+    await page.locator('input[placeholder="Task title..."]').fill(task2);
+    await page.locator('button[type="submit"]', { hasText: 'Add' }).click();
+    await page.waitForTimeout(500);
+
+    // Both tasks should be visible
+    await expect(page.locator('h3', { hasText: task1 })).toBeVisible();
+    await expect(page.locator('h3', { hasText: task2 })).toBeVisible();
+
+    // Get the task cards
+    const firstTaskCard = page.locator('.group').filter({ hasText: task1 }).first();
+    const secondTaskCard = page.locator('.group').filter({ hasText: task2 }).first();
+
+    // Drag first task below the second task
+    await firstTaskCard.dragTo(secondTaskCard, { targetPosition: { x: 50, y: 80 } });
+    await page.waitForTimeout(500);
+
+    // Reload to verify persistence
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // Both tasks should still be visible
+    await expect(page.locator('h3', { hasText: task1 })).toBeVisible();
+    await expect(page.locator('h3', { hasText: task2 })).toBeVisible();
+  });
+});
+
 test.describe('Tasks - Done Column Behavior', () => {
   test.beforeEach(async ({ page }) => {
     // Generate a unique ID for this test run
