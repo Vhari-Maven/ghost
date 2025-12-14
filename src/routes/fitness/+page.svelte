@@ -247,7 +247,10 @@
 
 <div>
   <div class="flex items-center justify-between mb-6">
-    <h1 class="text-2xl font-bold">Fitness & Morning Tracker</h1>
+    <h1 class="text-2xl font-bold flex items-center gap-3">
+      <img src="/icon-fitness.svg" alt="" class="w-8 h-8" />
+      Fitness & Morning Tracker
+    </h1>
 
   </div>
 

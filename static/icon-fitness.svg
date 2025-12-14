@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="fitnessGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#67e8f9"/>
+      <stop offset="50%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer glow -->
+  <ellipse cx="16" cy="16" rx="14" ry="6" fill="#06b6d4" opacity="0.1"/>
+
+  <!-- Barbell bar -->
+  <rect x="4" y="14" width="24" height="4" rx="2" fill="url(#fitnessGrad)" opacity="0.7"/>
+  <rect x="4" y="14" width="24" height="4" rx="2" fill="none" stroke="#67e8f9" stroke-width="1"/>
+
+  <!-- Left weight plate - outer -->
+  <rect x="2" y="8" width="6" height="16" rx="1" fill="#06b6d4" opacity="0.3"/>
+  <rect x="2" y="8" width="6" height="16" rx="1" fill="none" stroke="url(#fitnessGrad)" stroke-width="1.5"/>
+
+  <!-- Left weight plate - inner -->
+  <rect x="6" y="10" width="4" height="12" rx="1" fill="#06b6d4" opacity="0.5"/>
+  <rect x="6" y="10" width="4" height="12" rx="1" fill="none" stroke="#67e8f9" stroke-width="1"/>
+
+  <!-- Right weight plate - outer -->
+  <rect x="24" y="8" width="6" height="16" rx="1" fill="#06b6d4" opacity="0.3"/>
+  <rect x="24" y="8" width="6" height="16" rx="1" fill="none" stroke="url(#fitnessGrad)" stroke-width="1.5"/>
+
+  <!-- Right weight plate - inner -->
+  <rect x="22" y="10" width="4" height="12" rx="1" fill="#06b6d4" opacity="0.5"/>
+  <rect x="22" y="10" width="4" height="12" rx="1" fill="none" stroke="#67e8f9" stroke-width="1"/>
+
+  <!-- Scan lines -->
+  <g opacity="0.25">
+    <line x1="2" y1="12" x2="30" y2="12" stroke="#67e8f9" stroke-width="0.5"/>
+    <line x1="2" y1="16" x2="30" y2="16" stroke="#67e8f9" stroke-width="0.5"/>
+    <line x1="2" y1="20" x2="30" y2="20" stroke="#67e8f9" stroke-width="0.5"/>
+  </g>
+
+  <!-- Center grip highlight -->
+  <rect x="14" y="15" width="4" height="2" rx="0.5" fill="#67e8f9" opacity="0.6"/>
+</svg>

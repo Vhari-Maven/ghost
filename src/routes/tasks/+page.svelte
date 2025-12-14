@@ -254,7 +254,10 @@
 
 <div class="h-[calc(100vh-120px)] flex flex-col">
   <div class="flex items-center justify-between mb-4">
-    <h1 class="text-2xl font-bold">Tasks</h1>
+    <h1 class="text-2xl font-bold flex items-center gap-3">
+      <img src="/icon-tasks.svg" alt="" class="w-8 h-8" />
+      Tasks
+    </h1>
   </div>
 
   <div class="flex-1 flex gap-4 overflow-x-auto pb-4">

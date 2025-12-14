@@ -22,8 +22,9 @@
     <div class="flex items-center gap-8">
       <a
         href="/"
-        class="text-xl font-bold transition-colors {$page.url.pathname === '/' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'}"
+        class="flex items-center gap-2 text-xl font-bold transition-colors {$page.url.pathname === '/' ? 'text-[var(--color-accent)]' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'}"
       >
+        <img src="/favicon.svg" alt="" class="w-6 h-6" />
         Ghost
       </a>
       <div class="flex gap-1">

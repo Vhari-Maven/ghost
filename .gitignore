@@ -32,3 +32,6 @@ npm-debug.log*
 # Playwright
 playwright-report/
 test-results/
+
+# Asset archive (unused favicon experiments, etc.)
+static/archive/
