@@ -14,10 +14,17 @@ A personal dashboard for tracking fitness, habits, and more. Built with SvelteKi
 - One-click copy of yesterday's walk data
 - Future dates locked until they arrive
 
+### Task Tracker
+- Kanban board with Todo, In Progress, and Done columns
+- Drag-and-drop tasks between columns
+- Color-coded labels for categorization
+- Rapid task entry (Enter to add, stay in form for more)
+- Inline editing with label management
+- Delete confirmation modal
+
 ### Coming Soon
 - Shopping List
 - Media Queue
-- Task Kanban
 
 ## Tech Stack
 
@@ -60,6 +67,8 @@ The app will be available at `http://localhost:5173`
 | `npm run dev` | Start development server |
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build |
+| `npm test` | Run unit tests (Vitest) |
+| `npm run test:e2e` | Run E2E tests (Playwright) |
 | `npm run db:generate` | Generate Drizzle migrations |
 | `npm run db:migrate` | Apply database migrations |
 | `npm run db:seed` | Seed database with sample data |
@@ -71,13 +80,17 @@ ghost/
 ├── src/
 │   ├── lib/
 │   │   ├── db/           # Database connection, schema, migrations
-│   │   └── components/   # Shared UI components
+│   │   ├── components/   # Shared UI components
+│   │   └── services/     # Business logic and DB operations
 │   ├── routes/
 │   │   ├── +layout.svelte    # App shell with navigation
 │   │   ├── +page.svelte      # Dashboard home
-│   │   └── fitness/          # Fitness tracker micro-app
+│   │   ├── fitness/          # Fitness tracker micro-app
+│   │   └── tasks/            # Task tracker micro-app
 │   ├── app.css           # Global styles
 │   └── app.html          # HTML template
+├── tests/                # E2E tests (Playwright)
+│   └── helpers/          # Page Object Model helpers
 ├── drizzle/              # Generated SQL migrations
 ├── data/                 # SQLite database (gitignored)
 └── drizzle.config.ts     # Drizzle configuration
