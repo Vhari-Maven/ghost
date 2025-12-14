@@ -29,6 +29,10 @@ Each feature lives in its own route directory with:
 - `+page.svelte` - UI component
 - `+page.server.ts` - Server-side data loading and form actions
 
+For complex features, extract reusable components and services:
+- `src/lib/components/{feature}/` - Feature-specific components
+- `src/lib/services/{feature}.ts` - Database operations and business logic
+
 ### Database Schema
 All tables are defined in `src/lib/db/schema.ts` using Drizzle's SQLite schema builder. After changes:
 1. Run `npm run db:generate` to create migration
@@ -54,6 +58,8 @@ Uses SvelteKit's `use:enhance` for progressive enhancement with optimistic updat
 
 - `src/lib/db/schema.ts` - Database schema definitions
 - `src/lib/db/index.ts` - Database connection
+- `src/lib/services/` - Service layer for database operations
+- `src/lib/components/` - Reusable UI components
 - `src/routes/+layout.svelte` - App shell with navigation
 - `src/app.css` - Global styles and CSS variables
 - `drizzle.config.ts` - Drizzle ORM configuration
@@ -74,9 +80,24 @@ Tracks daily metrics and habits:
 - **Boolean habits**: breakfast, brush, floss, shower, shake
 - **Features**: ±5 day view, streak calculation, copy yesterday's walk data
 
+### Task Tracker (`/tasks`)
+Kanban-style task management with three columns (Todo, In Progress, Done):
+- **Drag-and-drop**: Uses `svelte-dnd-action` for reordering and moving between columns
+- **Labels**: Color-coded tags that can be assigned to tasks
+- **Features**: Rapid task entry (Enter to add, stay in form), inline editing, delete confirmation modal
+- **Architecture**: Extracted components in `src/lib/components/tasks/`, service layer in `src/lib/services/tasks.ts`
+
+## Testing
+
+```bash
+npm test            # Run unit tests (Vitest)
+npm run test:e2e    # Run E2E tests (Playwright)
+```
+
+E2E tests use Page Object Model pattern - see `tests/helpers/` for reusable test utilities.
+
 ## Future Plans
 
 - Google OAuth authentication (for web deployment)
 - Shopping list micro-app
 - Media queue micro-app
-- Task kanban micro-app
