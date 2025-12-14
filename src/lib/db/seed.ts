@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { fitnessEntries } from './schema';
+import { fitnessEntries, taskLabels } from './schema';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -30,4 +30,24 @@ for (const entry of seedData) {
 }
 
 console.log(`Seeded ${seedData.length} fitness entries!`);
+
+// Default task labels
+const defaultLabels = [
+  { name: 'bug', color: '#ef4444' },       // red
+  { name: 'feature', color: '#3b82f6' },   // blue
+  { name: 'improvement', color: '#22c55e' }, // green
+  { name: 'research', color: '#a855f7' },  // purple
+  { name: 'urgent', color: '#f97316' },    // orange
+];
+
+console.log('Seeding task labels...');
+
+for (const label of defaultLabels) {
+  db.insert(taskLabels)
+    .values(label)
+    .onConflictDoNothing()
+    .run();
+}
+
+console.log(`Seeded ${defaultLabels.length} task labels!`);
 sqlite.close();

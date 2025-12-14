@@ -8,6 +8,13 @@
       "when": 1765716122033,
       "tag": "0000_dusty_screwball",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1765721851676,
+      "tag": "0001_steady_cassandra_nova",
+      "breakpoints": true
     }
   ]
 }

@@ -8,7 +8,7 @@
     { href: '/fitness', label: 'Fitness', enabled: true },
     { href: '/shopping', label: 'Shopping', enabled: false },
     { href: '/media', label: 'Media', enabled: false },
-    { href: '/tasks', label: 'Tasks', enabled: false },
+    { href: '/tasks', label: 'Tasks', enabled: true },
   ];
 
   function isActive(href: string, currentPath: string): boolean {
