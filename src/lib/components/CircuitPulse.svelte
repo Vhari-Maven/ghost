@@ -11,83 +11,88 @@
 
   let pulseId = 0;
 
-  // Generate a random circuit path from center-ish toward an edge
-  function generatePath(fromX?: number, fromY?: number): string {
+  // Generate a circuit path from a point toward a specific edge
+  // edge: 0=top, 1=right, 2=bottom, 3=left
+  function generatePathToEdge(
+    startX: number,
+    startY: number,
+    edge: number,
+    targetPoint: number // where on the edge to aim (0-1)
+  ): string {
     const width = typeof window !== 'undefined' ? window.innerWidth : 1920;
     const height = typeof window !== 'undefined' ? window.innerHeight : 1080;
 
-    // Start from provided coordinates or somewhere in the center third of the screen
-    const startX = fromX ?? width * (0.33 + Math.random() * 0.34);
-    const startY = fromY ?? height * (0.33 + Math.random() * 0.34);
+    // Calculate the target point on the edge
+    let targetX: number;
+    let targetY: number;
+    if (edge === 0) {
+      // Top edge
+      targetX = targetPoint * width;
+      targetY = -20;
+    } else if (edge === 1) {
+      // Right edge
+      targetX = width + 20;
+      targetY = targetPoint * height;
+    } else if (edge === 2) {
+      // Bottom edge
+      targetX = targetPoint * width;
+      targetY = height + 20;
+    } else {
+      // Left edge
+      targetX = -20;
+      targetY = targetPoint * height;
+    }
 
-    // Pick a random edge to head toward (0=top, 1=right, 2=bottom, 3=left)
-    const edge = Math.floor(Math.random() * 4);
-
-    // Build path with circuit-style 45° and 90° turns
+    // Build path with circuit-style 90° turns
     const points: Array<{ x: number; y: number }> = [{ x: startX, y: startY }];
 
     let currentX = startX;
     let currentY = startY;
 
-    // Generate 3-6 segments toward the edge
-    const segments = 3 + Math.floor(Math.random() * 4);
+    // Generate 2-4 segments toward the target
+    const segments = 2 + Math.floor(Math.random() * 3);
 
     for (let i = 0; i < segments; i++) {
       const isLastSegment = i === segments - 1;
-      const segmentLength = 50 + Math.random() * 150;
+      const progress = (i + 1) / segments;
 
-      // Bias direction toward target edge
-      let dx = 0;
-      let dy = 0;
+      // Calculate intermediate target (interpolate toward final target with some randomness)
+      const intermediateX = currentX + (targetX - currentX) * (0.3 + Math.random() * 0.4);
+      const intermediateY = currentY + (targetY - currentY) * (0.3 + Math.random() * 0.4);
 
-      if (edge === 0) {
-        // Top
-        dy = -segmentLength;
-        dx = (Math.random() - 0.5) * segmentLength * 0.5;
-      } else if (edge === 1) {
-        // Right
-        dx = segmentLength;
-        dy = (Math.random() - 0.5) * segmentLength * 0.5;
-      } else if (edge === 2) {
-        // Bottom
-        dy = segmentLength;
-        dx = (Math.random() - 0.5) * segmentLength * 0.5;
-      } else {
-        // Left
-        dx = -segmentLength;
-        dy = (Math.random() - 0.5) * segmentLength * 0.5;
-      }
+      // Add some perpendicular drift for visual interest
+      const drift = (Math.random() - 0.5) * 80;
 
-      // Circuit-style: first go horizontal, then vertical (or vice versa)
-      if (Math.random() > 0.5) {
-        // Horizontal first
-        if (Math.abs(dx) > 10) {
-          currentX += dx;
-          points.push({ x: currentX, y: currentY });
-        }
-        if (Math.abs(dy) > 10) {
-          currentY += dy;
-          points.push({ x: currentX, y: currentY });
-        }
-      } else {
-        // Vertical first
-        if (Math.abs(dy) > 10) {
-          currentY += dy;
-          points.push({ x: currentX, y: currentY });
-        }
-        if (Math.abs(dx) > 10) {
-          currentX += dx;
-          points.push({ x: currentX, y: currentY });
-        }
-      }
-
-      // On last segment, extend to edge
       if (isLastSegment) {
-        if (edge === 0) currentY = -20;
-        else if (edge === 1) currentX = width + 20;
-        else if (edge === 2) currentY = height + 20;
-        else currentX = -20;
-        points.push({ x: currentX, y: currentY });
+        // Final segment: go straight to target with one turn
+        if (edge === 0 || edge === 2) {
+          // Vertical edges: go horizontal first, then vertical
+          currentX = targetX;
+          points.push({ x: currentX, y: currentY });
+          currentY = targetY;
+          points.push({ x: currentX, y: currentY });
+        } else {
+          // Horizontal edges: go vertical first, then horizontal
+          currentY = targetY;
+          points.push({ x: currentX, y: currentY });
+          currentX = targetX;
+          points.push({ x: currentX, y: currentY });
+        }
+      } else {
+        // Intermediate segment: circuit-style turns
+        if (Math.random() > 0.5) {
+          // Horizontal first
+          currentX = intermediateX + (edge === 0 || edge === 2 ? drift : 0);
+          points.push({ x: currentX, y: currentY });
+          currentY = intermediateY + (edge === 1 || edge === 3 ? drift : 0);
+          points.push({ x: currentX, y: currentY });
+        } else {
+          // Vertical first
+          currentY = intermediateY + (edge === 1 || edge === 3 ? drift : 0);
+          points.push({ x: currentX, y: currentY });
+          currentX = intermediateX + (edge === 0 || edge === 2 ? drift : 0);
+          points.push({ x: currentX, y: currentY });
+        }
       }
     }
 
@@ -97,9 +102,23 @@
       .join(' ');
   }
 
+  // Generate a random path from center-ish toward a random edge (for ambient pulses)
+  function generateRandomPath(fromX?: number, fromY?: number): string {
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1920;
+    const height = typeof window !== 'undefined' ? window.innerHeight : 1080;
+
+    const startX = fromX ?? width * (0.33 + Math.random() * 0.34);
+    const startY = fromY ?? height * (0.33 + Math.random() * 0.34);
+    const edge = Math.floor(Math.random() * 4);
+    const targetPoint = Math.random();
+
+    return generatePathToEdge(startX, startY, edge, targetPoint);
+  }
+
+  // Single ambient pulse (random direction)
   function triggerPulse(fromX?: number, fromY?: number) {
     const id = pulseId++;
-    const path = generatePath(fromX, fromY);
+    const path = generateRandomPath(fromX, fromY);
     const duration = 1.5 + Math.random() * 1; // 1.5-2.5 seconds
     const opacity = 0.4 + Math.random() * 0.3; // 0.4-0.7
 
@@ -109,6 +128,30 @@
     setTimeout(() => {
       activePulses = activePulses.filter((p) => p.id !== id);
     }, duration * 1000 + 500);
+  }
+
+  // Signature pulse: four traces from cursor to each edge
+  function triggerSignaturePulse(fromX: number, fromY: number) {
+    const baseDuration = 1.2 + Math.random() * 0.5; // 1.2-1.7 seconds
+    const baseOpacity = 0.5 + Math.random() * 0.2; // 0.5-0.7
+
+    // Fire four pulses, one to each edge
+    for (let edge = 0; edge < 4; edge++) {
+      const id = pulseId++;
+      // Random target point on each edge (0-1)
+      const targetPoint = 0.2 + Math.random() * 0.6; // Bias toward middle
+      const path = generatePathToEdge(fromX, fromY, edge, targetPoint);
+      // Slight variation in timing for organic feel
+      const duration = baseDuration + Math.random() * 0.3;
+      const opacity = baseOpacity;
+
+      activePulses = [...activePulses, { id, path, duration, opacity }];
+
+      // Remove pulse after animation completes
+      setTimeout(() => {
+        activePulses = activePulses.filter((p) => p.id !== id);
+      }, duration * 1000 + 500);
+    }
   }
 
   function scheduleNextPulse() {
@@ -121,9 +164,15 @@
   }
 
   // Allow external triggering via custom event
+  // If coordinates provided, use signature pulse (four directions)
+  // Otherwise use single ambient pulse
   function handleManualTrigger(event: CustomEvent<{ x?: number; y?: number }>) {
     const { x, y } = event.detail || {};
-    triggerPulse(x, y);
+    if (x !== undefined && y !== undefined) {
+      triggerSignaturePulse(x, y);
+    } else {
+      triggerPulse();
+    }
   }
 
   onMount(() => {

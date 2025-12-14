@@ -51,8 +51,9 @@ Uses SvelteKit's `use:enhance` for progressive enhancement with optimistic updat
 
 ### Styling Conventions
 - CSS variables defined in `src/app.css` for theming (`--color-bg`, `--color-surface`, `--color-accent`, etc.)
-- Dark theme by default
+- Dark theme with cyan "ghost in the machine" aesthetic
 - Use Tailwind utilities with CSS variables: `class="bg-[var(--color-surface)]"`
+- See `DESIGN.md` for full visual design guide (colors, icons, effects)
 
 ## Key Files
 

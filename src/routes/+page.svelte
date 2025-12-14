@@ -38,12 +38,18 @@
     </a>
 
     <div class="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg opacity-50">
-      <h2 class="text-xl font-semibold mb-2">🛒 Shopping List</h2>
+      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+        <img src="/icon-shopping.svg" alt="" class="w-6 h-6" />
+        Shopping List
+      </h2>
       <p class="text-[var(--color-text-muted)]">Coming soon...</p>
     </div>
 
     <div class="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg opacity-50">
-      <h2 class="text-xl font-semibold mb-2">📺 Media Queue</h2>
+      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+        <img src="/icon-media.svg" alt="" class="w-6 h-6" />
+        Media Queue
+      </h2>
       <p class="text-[var(--color-text-muted)]">Coming soon...</p>
     </div>
 
