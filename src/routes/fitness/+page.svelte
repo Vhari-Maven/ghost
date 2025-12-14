@@ -249,26 +249,6 @@
   <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold">Fitness & Morning Tracker</h1>
 
-    <!-- Streak badges -->
-    <div class="flex gap-2">
-      {#each habitColumns as col}
-        {#if data.streaks[col.key] > 0}
-          <div
-            class="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
-              {data.streaks[col.key] >= 7
-                ? 'bg-green-500/20 text-green-400'
-                : data.streaks[col.key] >= 3
-                  ? 'bg-yellow-500/20 text-yellow-400'
-                  : 'bg-[var(--color-surface)] text-[var(--color-text-muted)]'}"
-            title="{col.label}: {data.streaks[col.key]} day streak"
-          >
-            <span class="text-[10px]">🔥</span>
-            <span>{col.label}</span>
-            <span class="font-bold">{data.streaks[col.key]}</span>
-          </div>
-        {/if}
-      {/each}
-    </div>
   </div>
 
   <div class="overflow-x-auto">
@@ -277,8 +257,25 @@
         <tr class="border-b border-[var(--color-border)]">
           <th class="text-left py-3 px-2 text-[var(--color-text-muted)] font-medium w-24">Date</th>
           {#each columns as col}
+            {@const streakKey = col.key === 'walkDistance' ? 'walk' : col.key}
+            {@const streak = data.streaks[streakKey] || 0}
             <th class="text-center py-3 px-2 text-[var(--color-text-muted)] font-medium min-w-[70px]">
-              {col.label}
+              <div class="flex flex-col items-center gap-0.5">
+                <span>{col.label}</span>
+                {#if streak > 0}
+                  <span
+                    class="text-[10px] px-1.5 py-0.5 rounded-full font-bold
+                      {streak >= 7
+                        ? 'bg-green-500/20 text-green-400'
+                        : streak >= 3
+                          ? 'bg-yellow-500/20 text-yellow-400'
+                          : 'bg-[var(--color-surface)] text-[var(--color-text-muted)]'}"
+                    title="{streak} day streak"
+                  >
+                    {col.key === 'walkDistance' ? '🚶' : '🔥'}{streak}
+                  </span>
+                {/if}
+              </div>
             </th>
           {/each}
           <th class="w-10"></th>

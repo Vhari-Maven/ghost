@@ -55,6 +55,39 @@ function calculateStreak(entries: Array<{ date: string; [key: string]: any }>, f
   return streak;
 }
 
+// Calculate streak for numeric fields (like walkDistance) - counts days with value > 0
+function calculateNumericStreak(entries: Array<{ date: string; [key: string]: any }>, field: string, today: string): number {
+  const sorted = [...entries]
+    .filter(e => e.date <= today)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  let streak = 0;
+  let expectedDate = new Date(today + 'T00:00:00');
+
+  for (const entry of sorted) {
+    const entryDate = new Date(entry.date + 'T00:00:00');
+    const diffDays = Math.round((expectedDate.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (diffDays > 1) break;
+
+    const value = entry[field];
+    const hasValue = typeof value === 'number' && value > 0;
+
+    if (hasValue) {
+      streak++;
+      expectedDate = entryDate;
+    } else if (diffDays === 0) {
+      // Today doesn't have a value yet, check yesterday
+      expectedDate = new Date(expectedDate);
+      expectedDate.setDate(expectedDate.getDate() - 1);
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+}
+
 export const load: PageServerLoad = async () => {
   const { start, end, dates } = getDateRange();
   const today = new Date().toISOString().split('T')[0];
@@ -82,6 +115,9 @@ export const load: PageServerLoad = async () => {
   for (const field of habitFields) {
     streaks[field] = calculateStreak(allEntries, field, today);
   }
+
+  // Calculate walk streak (days with walkDistance > 0)
+  streaks['walk'] = calculateNumericStreak(allEntries, 'walkDistance', today);
 
   // Get yesterday's data for the "copy" feature
   const yesterday = new Date();
