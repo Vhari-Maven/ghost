@@ -1,0 +1,27 @@
+# fly.toml - Fly.io configuration
+# See https://fly.io/docs/reference/configuration/
+
+app = "ghost-dashboard"
+primary_region = "iad"  # Virginia (Ashburn)
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+  DATABASE_PATH = "/data/ghost.db"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false   # Keep it running (free tier allows this)
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+[mounts]
+  source = "ghost_data"
+  destination = "/data"

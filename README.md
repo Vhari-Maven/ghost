@@ -117,6 +117,21 @@ npm run db:migrate
 npm run db:seed  # optional
 ```
 
+## Deployment
+
+Ghost is deployed on [Fly.io](https://fly.io) with [Cloudflare Access](https://www.cloudflare.com/products/zero-trust/access/) for authentication.
+
+See [DEPLOY.md](DEPLOY.md) for setup instructions.
+
+```bash
+# Deploy changes
+fly deploy
+
+# Backup database
+fly sftp shell
+# > get /data/ghost.db ./backup.db
+```
+
 ## License
 
 MIT

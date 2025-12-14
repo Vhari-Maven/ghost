@@ -1,0 +1,10 @@
+node_modules
+data
+.git
+.gitignore
+*.md
+.env*
+tests
+playwright-report
+test-results
+.svelte-kit

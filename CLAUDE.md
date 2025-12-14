@@ -97,8 +97,31 @@ npm run test:e2e    # Run E2E tests (Playwright)
 
 E2E tests use Page Object Model pattern - see `tests/helpers/` for reusable test utilities.
 
+## Deployment
+
+The app is deployed on **Fly.io** with **Cloudflare Access** for authentication.
+
+- **Production URL**: `https://ghostdash.dev`
+- **Fly app**: `ghost-dashboard`
+- **Region**: `iad` (Virginia)
+
+### Key deployment files:
+- `Dockerfile` - Multi-stage Node.js build with better-sqlite3
+- `fly.toml` - Fly.io configuration
+- `src/hooks.server.ts` - Blocks direct access to fly.dev (requires Cloudflare proxy)
+- `DEPLOY.md` - Full deployment guide
+
+### Deploy changes:
+```bash
+fly deploy
+```
+
+### Database is on a persistent volume:
+- Path in production: `/data/ghost.db`
+- Configured via `DATABASE_PATH` env var
+- Backup: `fly sftp shell` → `get /data/ghost.db ./backup.db`
+
 ## Future Plans
 
-- Google OAuth authentication (for web deployment)
 - Shopping list micro-app
 - Media queue micro-app
