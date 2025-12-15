@@ -3,6 +3,14 @@ import { db } from '$lib/db';
 import { fitnessEntries } from '$lib/db/schema';
 import { eq, and, gte, lte, desc } from 'drizzle-orm';
 
+// Get local date string (YYYY-MM-DD) - toISOString() returns UTC which can be wrong timezone
+function getLocalDateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function getDateRange(): { start: string; end: string; dates: string[] } {
   const today = new Date();
   const dates: string[] = [];
@@ -11,7 +19,7 @@ function getDateRange(): { start: string; end: string; dates: string[] } {
   for (let i = -5; i <= 5; i++) {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
-    dates.push(date.toISOString().split('T')[0]);
+    dates.push(getLocalDateString(date));
   }
 
   return {
@@ -90,7 +98,7 @@ function calculateNumericStreak(entries: Array<{ date: string; [key: string]: an
 
 export const load: PageServerLoad = async () => {
   const { start, end, dates } = getDateRange();
-  const today = new Date().toISOString().split('T')[0];
+  const today = getLocalDateString(new Date());
 
   // Fetch existing entries in date range
   const entries = await db
@@ -104,7 +112,7 @@ export const load: PageServerLoad = async () => {
   const allEntries = await db
     .select()
     .from(fitnessEntries)
-    .where(gte(fitnessEntries.date, streakStart.toISOString().split('T')[0]));
+    .where(gte(fitnessEntries.date, getLocalDateString(streakStart)));
 
   // Create a map for quick lookup
   const entryMap = new Map(entries.map((e) => [e.date, e]));
@@ -122,7 +130,7 @@ export const load: PageServerLoad = async () => {
   // Get yesterday's data for the "copy" feature
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayStr = yesterday.toISOString().split('T')[0];
+  const yesterdayStr = getLocalDateString(yesterday);
   const yesterdayEntry = entryMap.get(yesterdayStr);
 
   // Build the full date range with entries (or empty placeholders)
@@ -157,7 +165,7 @@ export const actions: Actions = {
     const field = formData.get('field') as string;
     const value = formData.get('value') as string;
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString(new Date());
 
     // Don't allow updates to future dates
     if (date > today) {
@@ -206,7 +214,7 @@ export const actions: Actions = {
     const walkDistance = formData.get('walkDistance');
     const walkIncline = formData.get('walkIncline');
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString(new Date());
 
     if (date > today) {
       return { success: false, error: 'Cannot update future dates' };
