@@ -30,9 +30,10 @@ FROM node:20-slim
 
 WORKDIR /app
 
-# Install runtime dependencies for better-sqlite3
+# Install runtime dependencies for better-sqlite3 and timezone support
 RUN apt-get update && apt-get install -y \
     libsqlite3-0 \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy built app and production dependencies
