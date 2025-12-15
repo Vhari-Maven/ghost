@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="brushGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#67e8f9"/>
+      <stop offset="50%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer glow -->
+  <ellipse cx="16" cy="16" rx="14" ry="14" fill="#06b6d4" opacity="0.1"/>
+
+  <!-- Handle -->
+  <rect x="14" y="14" width="4" height="16" rx="2" fill="#06b6d4" opacity="0.25"/>
+  <rect x="14" y="14" width="4" height="16" rx="2" fill="none" stroke="url(#brushGrad)" stroke-width="1.5"/>
+
+  <!-- Handle grip lines -->
+  <line x1="14.5" y1="20" x2="17.5" y2="20" stroke="#67e8f9" stroke-width="0.75" opacity="0.4"/>
+  <line x1="14.5" y1="23" x2="17.5" y2="23" stroke="#67e8f9" stroke-width="0.75" opacity="0.4"/>
+  <line x1="14.5" y1="26" x2="17.5" y2="26" stroke="#67e8f9" stroke-width="0.75" opacity="0.4"/>
+
+  <!-- Brush head -->
+  <rect x="11" y="3" width="10" height="12" rx="2" fill="#06b6d4" opacity="0.3"/>
+  <rect x="11" y="3" width="10" height="12" rx="2" fill="none" stroke="url(#brushGrad)" stroke-width="1.5"/>
+
+  <!-- Bristles -->
+  <g stroke="#67e8f9" stroke-width="1" stroke-linecap="round" opacity="0.8">
+    <line x1="13.5" y1="5" x2="13.5" y2="9"/>
+    <line x1="16" y1="5" x2="16" y2="9"/>
+    <line x1="18.5" y1="5" x2="18.5" y2="9"/>
+  </g>
+
+  <!-- Sparkle/clean effect -->
+  <g fill="#67e8f9" opacity="0.6">
+    <circle cx="24" cy="6" r="1"/>
+    <circle cx="26" cy="9" r="0.5"/>
+    <circle cx="23" cy="10" r="0.5"/>
+  </g>
+
+  <!-- Scan lines -->
+  <g opacity="0.2">
+    <line x1="11" y1="8" x2="21" y2="8" stroke="#67e8f9" stroke-width="0.5"/>
+    <line x1="11" y1="12" x2="21" y2="12" stroke="#67e8f9" stroke-width="0.5"/>
+  </g>
+</svg>

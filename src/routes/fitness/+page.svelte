@@ -230,11 +230,11 @@
     { key: 'weight', label: 'Weight', type: 'number', unit: 'lbs', step: '0.1' },
     { key: 'walkDistance', label: 'Walk', type: 'number', unit: 'mi', step: '0.01' },
     { key: 'walkIncline', label: 'Incline', type: 'number', unit: '%', step: '0.1' },
-    { key: 'breakfast', label: 'Brkfst', type: 'boolean' },
-    { key: 'brush', label: 'Brush', type: 'boolean' },
-    { key: 'floss', label: 'Floss', type: 'boolean' },
-    { key: 'shower', label: 'Shower', type: 'boolean' },
-    { key: 'shake', label: 'Shake', type: 'boolean' },
+    { key: 'breakfast', label: 'Breakfast', type: 'boolean', icon: '/icon-breakfast.svg' },
+    { key: 'brush', label: 'Brush', type: 'boolean', icon: '/icon-brush.svg' },
+    { key: 'floss', label: 'Floss', type: 'boolean', icon: '/icon-floss.svg' },
+    { key: 'shower', label: 'Shower', type: 'boolean', icon: '/icon-shower.svg' },
+    { key: 'shake', label: 'Shake', type: 'boolean', icon: '/icon-shake.svg' },
   ];
 
   const habitColumns = columns.filter(c => c.type === 'boolean');
@@ -264,7 +264,11 @@
             {@const streak = data.streaks[streakKey] || 0}
             <th class="text-center py-3 px-2 text-[var(--color-text-muted)] font-medium min-w-[70px]">
               <div class="flex flex-col items-center gap-0.5">
-                <span>{col.label}</span>
+                {#if col.icon}
+                  <img src={col.icon} alt={col.label} title={col.label} class="w-6 h-6" />
+                {:else}
+                  <span>{col.label}</span>
+                {/if}
                 {#if streak > 0}
                   <span
                     class="text-[10px] px-1.5 py-0.5 rounded-full font-bold

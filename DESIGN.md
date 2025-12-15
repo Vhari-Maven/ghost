@@ -103,6 +103,18 @@ Each micro-app has a matching hologram-style icon:
 | Fitness | `/static/icon-fitness.svg` | Barbell with circuit-style treatment |
 | Tasks | `/static/icon-tasks.svg` | Clipboard with checkboxes |
 
+### Habit Icons
+
+The fitness tracker uses custom icons for daily habits:
+
+| Icon | File | Description |
+|------|------|-------------|
+| Breakfast | `/static/icon-breakfast.svg` | Toast slice with steam wisps |
+| Brush | `/static/icon-brush.svg` | Toothbrush with bristles and sparkles |
+| Floss | `/static/icon-floss.svg` | Floss dispenser with trailing string |
+| Shower | `/static/icon-shower.svg` | Showerhead with water droplets |
+| Shake | `/static/icon-shake.svg` | Protein shaker with mixing ball |
+
 **Icon Design Guidelines:**
 
 - Use the hologram color gradient (`#67e8f9` → `#06b6d4` → `#0e7490`)
@@ -181,6 +193,11 @@ a, button, input, [role="button"] {
 | `static/favicon-eye-hologram.svg` | Same as above (named reference) |
 | `static/icon-fitness.svg` | Fitness app icon |
 | `static/icon-tasks.svg` | Tasks app icon |
+| `static/icon-breakfast.svg` | Breakfast habit icon (toast) |
+| `static/icon-brush.svg` | Brush habit icon (toothbrush) |
+| `static/icon-floss.svg` | Floss habit icon (dispenser) |
+| `static/icon-shower.svg` | Shower habit icon (showerhead) |
+| `static/icon-shake.svg` | Shake habit icon (protein shaker) |
 | `static/circuit-pattern.svg` | Background pattern |
 | `static/cursor.svg` | Default cursor |
 | `static/cursor-pointer.svg` | Pointer cursor |
