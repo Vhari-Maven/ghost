@@ -9,6 +9,7 @@ primary_region = "iad"  # Virginia (Ashburn)
 [env]
   NODE_ENV = "production"
   DATABASE_PATH = "/data/ghost.db"
+  TZ = "America/New_York"
 
 [http_service]
   internal_port = 3000
