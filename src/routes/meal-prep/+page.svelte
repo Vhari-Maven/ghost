@@ -59,417 +59,95 @@
     </div>
   </Accordion>
 
-  <!-- Standard Breakfast -->
-  <Accordion title="Standard Breakfast" icon="🍳">
-    <div class="space-y-4">
-      <p class="text-[var(--color-text-muted)] text-sm italic">Same every day — ~925 calories</p>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-[var(--color-border)]">
-              <th class="text-left py-2 text-[var(--color-text-muted)]">Item</th>
-              <th class="text-right py-2 text-[var(--color-text-muted)]">Calories</th>
-            </tr>
-          </thead>
-          <tbody class="text-[var(--color-text)]">
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">2 slices whole wheat bread</td>
-              <td class="text-right">160</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">2 tbsp crunchy peanut butter</td>
-              <td class="text-right">190</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">2 tbsp grape jam</td>
-              <td class="text-right">100</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">4 oz orange juice</td>
-              <td class="text-right">55</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">12 oz 2% milk + 60g whey protein</td>
-              <td class="text-right">420</td>
-            </tr>
-            <tr class="font-semibold text-[var(--color-accent)]">
-              <td class="py-2">Total</td>
-              <td class="text-right">~925</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
-        <span class="text-[var(--color-accent)] font-medium">Macros:</span>
-        <span class="text-[var(--color-text-muted)]"> ~76g protein, ~90g carbs, ~32g fat, ~6g fiber</span>
-      </div>
-    </div>
-  </Accordion>
-
-  <!-- Weeknight Dinners -->
-  <Accordion title="Weeknight Dinners (Mon–Fri)" icon="🍽️">
-    <div class="space-y-4">
-      <p class="text-[var(--color-text-muted)] text-sm italic">~700–750 calories | Prep time: &lt;15 minutes using batch-prepped ingredients</p>
-
-      <h3 class="font-semibold text-[var(--color-accent)]">Air Fryer Salmon + Roasted Vegetables + Lentils</h3>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-[var(--color-border)]">
-              <th class="text-left py-2 text-[var(--color-text-muted)]">Component</th>
-              <th class="text-left py-2 text-[var(--color-text-muted)]">Portion</th>
-              <th class="text-right py-2 text-[var(--color-text-muted)]">Calories</th>
-            </tr>
-          </thead>
-          <tbody class="text-[var(--color-text)]">
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">Salmon fillet</td>
-              <td class="py-2">6 oz</td>
-              <td class="text-right">~350</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">Roasted vegetables</td>
-              <td class="py-2">1.5 cups (with olive oil)</td>
-              <td class="text-right">~120</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">Cooked lentils</td>
-              <td class="py-2">¾ cup</td>
-              <td class="text-right">~170</td>
-            </tr>
-            <tr class="border-b border-[var(--color-border)]/50">
-              <td class="py-2">Bagged salad (optional)</td>
-              <td class="py-2">1 cup with light dressing</td>
-              <td class="text-right">~60</td>
-            </tr>
-            <tr class="font-semibold text-[var(--color-accent)]">
-              <td class="py-2">Total</td>
-              <td class="py-2"></td>
-              <td class="text-right">~700</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
-        <span class="text-[var(--color-accent)] font-medium">Dinner Macros:</span>
-        <span class="text-[var(--color-text-muted)]"> ~50g protein, ~45g carbs, ~20g fat, ~12g fiber</span>
-      </div>
-    </div>
-  </Accordion>
-
-  <!-- Weekend Meals -->
-  <Accordion title="Weekend Meals (Sat–Sun)" icon="📅">
+  <!-- Daily Meals -->
+  <Accordion title="Daily Meals" icon="🍽️">
     <div class="space-y-6">
-      <!-- Saturday -->
+      <!-- Breakfast -->
       <div>
-        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Saturday</h3>
-        <div class="space-y-4 ml-4">
-          <div>
-            <h4 class="font-medium text-[var(--color-text)]">Breakfast: Standard (~825 cal)</h4>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-[var(--color-text)] mb-2">Lunch: Mediterranean Bowl (~450 cal)</h4>
-            <ul class="text-sm text-[var(--color-text-muted)] space-y-1 ml-4">
-              <li>1 cup cooked quinoa (220 cal)</li>
-              <li>½ cup chickpeas, drained (120 cal)</li>
-              <li>1 cup mixed greens + cucumber + tomato (30 cal)</li>
-              <li>1 tbsp olive oil + lemon juice (80 cal)</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-[var(--color-text)] mb-2">Dinner: Lighter Salmon Plate (~500 cal)</h4>
-            <p class="text-sm text-[var(--color-text-muted)] ml-4">Same as weeknight but smaller: 5 oz salmon, 1 cup vegetables, ½ cup lentils</p>
+        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Standard Breakfast (~925 cal)</h3>
+        <p class="text-[var(--color-text-muted)] text-sm italic mb-3">Same every day</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
+            <li>2 slices whole wheat bread (160 cal)</li>
+            <li>2 tbsp crunchy peanut butter (190 cal)</li>
+            <li>2 tbsp grape jam (100 cal)</li>
+            <li>4 oz orange juice (55 cal)</li>
+            <li>12 oz 2% milk + 60g whey protein (420 cal)</li>
+          </ul>
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <span class="text-[var(--color-accent)] font-medium">Macros:</span>
+            <span class="text-[var(--color-text-muted)]"> ~76g protein, ~90g carbs, ~32g fat, ~6g fiber</span>
           </div>
         </div>
       </div>
 
-      <!-- Sunday -->
+      <!-- Weeknight Dinners -->
       <div>
-        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Sunday</h3>
-        <div class="space-y-4 ml-4">
-          <div>
-            <h4 class="font-medium text-[var(--color-text)]">Breakfast: Standard (~825 cal)</h4>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-[var(--color-text)] mb-2">Lunch: Bean & Vegetable Soup (~400 cal)</h4>
-            <p class="text-sm text-[var(--color-text-muted)] ml-4">2 cups soup with crusty bread — pull from freezer stash (made during monthly batch)</p>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-[var(--color-text)]">Dinner: Batch prep time — eat leftovers or lighter meal</h4>
+        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Weeknight Dinners (~700 cal)</h3>
+        <p class="text-[var(--color-text-muted)] text-sm italic mb-3">Mon–Fri: Air Fryer Salmon + Roasted Vegetables + Lentils</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
+            <li>6 oz salmon fillet (~350 cal)</li>
+            <li>1.5 cups roasted vegetables (~120 cal)</li>
+            <li>¾ cup cooked lentils (~170 cal)</li>
+            <li>Optional: 1 cup bagged salad (~60 cal)</li>
+          </ul>
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <span class="text-[var(--color-accent)] font-medium">Macros:</span>
+            <span class="text-[var(--color-text-muted)]"> ~50g protein, ~45g carbs, ~20g fat, ~12g fiber</span>
           </div>
         </div>
       </div>
 
-      <!-- Daily Summary -->
+      <!-- Weekend -->
+      <div>
+        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Weekend Variations</h3>
+        <div class="space-y-3 text-sm">
+          <div>
+            <span class="font-medium text-[var(--color-text)]">Saturday Lunch — Mediterranean Bowl (~450 cal):</span>
+            <span class="text-[var(--color-text-muted)]"> 1 cup quinoa + ½ cup chickpeas + mixed greens + 1 tbsp olive oil & lemon</span>
+          </div>
+          <div>
+            <span class="font-medium text-[var(--color-text)]">Saturday Dinner — Lighter Salmon (~500 cal):</span>
+            <span class="text-[var(--color-text-muted)]"> 5 oz salmon, 1 cup vegetables, ½ cup lentils</span>
+          </div>
+          <div>
+            <span class="font-medium text-[var(--color-text)]">Sunday Lunch — Bean Soup (~400 cal):</span>
+            <span class="text-[var(--color-text-muted)]"> 2 cups soup with crusty bread (from freezer stash)</span>
+          </div>
+          <div>
+            <span class="font-medium text-[var(--color-text)]">Sunday Dinner:</span>
+            <span class="text-[var(--color-text-muted)]"> Batch prep time — eat leftovers or lighter meal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition Summary -->
       <div class="bg-[var(--color-surface)] rounded p-4">
         <h4 class="font-medium text-[var(--color-accent)] mb-2">Daily Nutrition Summary</h4>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="border-b border-[var(--color-border)]">
-                <th class="text-left py-2 text-[var(--color-text-muted)]">Metric</th>
-                <th class="text-center py-2 text-[var(--color-text-muted)]">Weekday</th>
-                <th class="text-center py-2 text-[var(--color-text-muted)]">Weekend</th>
-              </tr>
-            </thead>
-            <tbody class="text-[var(--color-text)]">
-              <tr class="border-b border-[var(--color-border)]/50">
-                <td class="py-2">Calories</td>
-                <td class="text-center">~1,625</td>
-                <td class="text-center">~1,775–1,875</td>
-              </tr>
-              <tr class="border-b border-[var(--color-border)]/50">
-                <td class="py-2">Protein</td>
-                <td class="text-center">~125g</td>
-                <td class="text-center">~115g</td>
-              </tr>
-              <tr class="border-b border-[var(--color-border)]/50">
-                <td class="py-2">Fiber</td>
-                <td class="text-center">~24g</td>
-                <td class="text-center">~28g</td>
-              </tr>
-              <tr>
-                <td class="py-2">Omega-3s</td>
-                <td class="text-center">~2.5g (from salmon)</td>
-                <td class="text-center">~2g</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </Accordion>
-
-  <!-- Sunday Batch Prep -->
-  <Accordion title="Sunday Batch Prep (90–120 min)" icon="⏱️">
-    <div class="space-y-4">
-      <ol class="space-y-4">
-        <li class="flex gap-3">
-          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">1</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-center">
           <div>
-            <span class="font-medium text-[var(--color-text)]">Start lentils in Instant Pot</span>
-            <span class="text-[var(--color-text-muted)] text-sm"> (5 min active, 25 min cook)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">2 cups dry green/brown lentils + 4 cups water + pinch salt. Pressure cook 12 minutes, natural release 10 min.</p>
-          </div>
-        </li>
-
-        <li class="flex gap-3">
-          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">2</span>
-          <div>
-            <span class="font-medium text-[var(--color-text)]">Prep vegetables for roasting</span>
-            <span class="text-[var(--color-text-muted)] text-sm"> (15 min)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">Cut into 1-inch pieces.</p>
-          </div>
-        </li>
-
-        <li class="flex gap-3">
-          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">3</span>
-          <div>
-            <span class="font-medium text-[var(--color-text)]">Roast vegetables</span>
-            <span class="text-[var(--color-text-muted)] text-sm"> (5 min active, 35 min cook)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">Toss with 2 tbsp olive oil + salt + pepper. Spread on 2 sheet pans. Roast at 425°F for 35 minutes, stirring halfway.</p>
-          </div>
-        </li>
-
-        <li class="flex gap-3">
-          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">4</span>
-          <div>
-            <span class="font-medium text-[var(--color-text)]">Portion salmon</span>
-            <span class="text-[var(--color-text-muted)] text-sm"> (5 min)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">Divide into 6 oz portions, wrap individually, refrigerate.</p>
-          </div>
-        </li>
-
-        <li class="flex gap-3">
-          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">5</span>
-          <div>
-            <span class="font-medium text-[var(--color-text)]">Portion and store everything</span>
-            <span class="text-[var(--color-text-muted)] text-sm"> (10 min)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">Lentils and vegetables in fridge containers.</p>
-          </div>
-        </li>
-      </ol>
-
-      <p class="text-sm text-[var(--color-text-muted)] italic mt-2">
-        💡 Bean soup is a separate monthly batch — see the dedicated section below.
-      </p>
-
-      <!-- Vegetable Mix -->
-      <div class="bg-[var(--color-surface)] rounded p-4 mt-4">
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Vegetable Roasting Mix</h4>
-        <p class="text-sm text-[var(--color-text-muted)] mb-2">Choose 3–4 from this rotation (all reheat well):</p>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-          <div><span class="text-[var(--color-accent)]">🥦</span> Broccoli — High fiber</div>
-          <div><span class="text-[var(--color-accent)]">🫑</span> Bell peppers — Sweet, colorful</div>
-          <div><span class="text-[var(--color-accent)]">🥒</span> Zucchini/Squash — Mild</div>
-          <div><span class="text-[var(--color-accent)]">🥬</span> Brussels sprouts — Crispy</div>
-          <div><span class="text-[var(--color-accent)]">🥕</span> Carrots — Sweet roasted</div>
-          <div><span class="text-[var(--color-accent)]">🧅</span> Red onion — Caramelizes</div>
-        </div>
-        <p class="text-sm text-[var(--color-text)] mt-3"><strong>Recommended combo:</strong> Broccoli + bell peppers + zucchini + red onion</p>
-      </div>
-    </div>
-  </Accordion>
-
-  <!-- Air Fryer Salmon Recipe -->
-  <Accordion title="Foolproof Air Fryer Salmon" icon="🐟">
-    <div class="space-y-4">
-      <p class="text-[var(--color-text-muted)] text-sm italic">
-        The air fryer's circulating heat cooks salmon evenly and quickly. A meat thermometer removes all guesswork.
-      </p>
-
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Ingredients -->
-        <div>
-          <h4 class="font-medium text-[var(--color-accent)] mb-2">Ingredients (per serving)</h4>
-          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-            <li>6 oz salmon fillet (skin-on or skinless)</li>
-            <li>½ tsp olive oil</li>
-            <li>Garlic salt and pepper to taste</li>
-            <li>Optional: lemon wedge, fresh dill</li>
-          </ul>
-        </div>
-
-        <!-- Instructions -->
-        <div>
-          <h4 class="font-medium text-[var(--color-accent)] mb-2">Instructions</h4>
-          <ol class="text-sm text-[var(--color-text-muted)] space-y-2 list-decimal list-inside">
-            <li><strong>Preheat</strong> air fryer to 390°F (about 3 min)</li>
-            <li><strong>Pat salmon completely dry</strong> with paper towels — crucial for texture</li>
-            <li><strong>Rub with olive oil</strong>, season generously with garlic salt and pepper</li>
-            <li><strong>Place skin-side down</strong> in air fryer basket</li>
-            <li><strong>Cook 7–8 minutes</strong> for 1-inch thick fillets. Do not flip.</li>
-            <li><strong>Check internal temp</strong> at thickest part: Target 125–130°F</li>
-            <li><strong>Rest 2 minutes</strong> before serving</li>
-          </ol>
-        </div>
-      </div>
-
-      <!-- Temperature Guide -->
-      <div class="bg-[var(--color-surface)] rounded p-4 mt-4">
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Temperature Guide</h4>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="border-b border-[var(--color-border)]">
-                <th class="text-left py-2 text-[var(--color-text-muted)]">Doneness</th>
-                <th class="text-center py-2 text-[var(--color-text-muted)]">Pull Temp</th>
-                <th class="text-center py-2 text-[var(--color-text-muted)]">Final Temp</th>
-              </tr>
-            </thead>
-            <tbody class="text-[var(--color-text)]">
-              <tr class="border-b border-[var(--color-border)]/50">
-                <td class="py-2">Medium-rare</td>
-                <td class="text-center">120°F</td>
-                <td class="text-center">125°F</td>
-              </tr>
-              <tr class="border-b border-[var(--color-border)]/50 bg-[var(--color-accent)]/10">
-                <td class="py-2 font-medium">Medium (recommended)</td>
-                <td class="text-center">125–130°F</td>
-                <td class="text-center">130–135°F</td>
-              </tr>
-              <tr>
-                <td class="py-2">Medium-well</td>
-                <td class="text-center">135°F</td>
-                <td class="text-center">140°F</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="text-xs text-[var(--color-text-muted)] mt-2 italic">
-          Most home cooks overcook salmon to 145°F+, which makes it dry and chalky. Pull at 125–130°F for restaurant-quality results.
-        </p>
-      </div>
-    </div>
-  </Accordion>
-
-  <!-- Bean Soup (Monthly) -->
-  <Accordion title="Bean & Vegetable Soup (Monthly Batch)" icon="🍲">
-    <div class="space-y-4">
-      <p class="text-[var(--color-text-muted)] text-sm italic">
-        Make once a month, freeze in 2-cup portions. ~4 Sunday lunches per batch.
-      </p>
-
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Ingredients -->
-        <div>
-          <h4 class="font-medium text-[var(--color-accent)] mb-2">Ingredients</h4>
-          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-            <li>1 yellow onion, diced</li>
-            <li>3-4 cloves garlic, minced</li>
-            <li>1 lb carrots, sliced into ¼" coins</li>
-            <li>2 cans white beans (15 oz each), drained</li>
-            <li>1 can diced tomatoes (14 oz) — juice and all</li>
-            <li>4 cups vegetable or chicken broth</li>
-            <li>1 bag spinach</li>
-            <li>Olive oil, salt, pepper</li>
-            <li>Broccoli stems from roasting prep (optional — don't waste them!)</li>
-          </ul>
-        </div>
-
-        <!-- Instructions -->
-        <div>
-          <h4 class="font-medium text-[var(--color-accent)] mb-2">Instructions (Instant Pot)</h4>
-          <ol class="text-sm text-[var(--color-text-muted)] space-y-2 list-decimal list-inside">
-            <li><strong>Sauté mode:</strong> Heat olive oil, add onion and carrots</li>
-            <li><strong>Cook until onions are translucent</strong> — go by visual cues, not the clock</li>
-            <li><strong>Add garlic last</strong> — only 30 seconds, it burns easily</li>
-            <li><strong>Add everything else:</strong> beans, tomatoes (whole can), broth, spinach, broccoli stems</li>
-            <li><strong>Pressure cook 15 minutes</strong>, natural release</li>
-            <li><strong>Season to taste</strong> with salt and pepper</li>
-          </ol>
-        </div>
-      </div>
-
-      <!-- Cutting Tips -->
-      <div class="bg-[var(--color-surface)] rounded p-4">
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Cutting Tips</h4>
-        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
-          <div>
-            <strong class="text-[var(--color-text)]">Onion:</strong> Skip horizontal cuts (risky). Just halve, peel, cut vertical slices, then cut across into pieces.
+            <div class="text-[var(--color-text)]">Weekday</div>
+            <div class="text-[var(--color-text-muted)]">~1,625 cal</div>
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Carrots:</strong> Slice into ¼" coins. If fat, halve lengthwise first, then slice into half-moons.
+            <div class="text-[var(--color-text)]">Weekend</div>
+            <div class="text-[var(--color-text-muted)]">~1,775–1,875 cal</div>
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Garlic:</strong> A head contains multiple cloves. Smash cloves with a jar or can (safer than knife), peel, then mince.
+            <div class="text-[var(--color-text)]">Protein</div>
+            <div class="text-[var(--color-text-muted)]">~115–125g</div>
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Broccoli stems:</strong> Chop small and toss in — good fiber, don't waste them.
-          </div>
-        </div>
-      </div>
-
-      <!-- Storage -->
-      <div class="bg-[var(--color-surface)] rounded p-4">
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Storage & Reheating</h4>
-        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
-          <div>
-            <strong class="text-[var(--color-text)]">Fridge:</strong> 5–7 days
-          </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Freezer:</strong> Cool first, leave 1" headspace, single portions, label with date. Good for 2–3 months.
-          </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Reheat from fridge:</strong> Stovetop or microwave
-          </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Reheat from frozen:</strong> Thaw overnight in fridge, or microwave from frozen with extra time
+            <div class="text-[var(--color-text)]">Omega-3s</div>
+            <div class="text-[var(--color-text-muted)]">~2–2.5g</div>
           </div>
         </div>
       </div>
     </div>
   </Accordion>
 
-  <!-- Grocery List -->
+  <!-- Grocery List - MOVED UP -->
   <Accordion title="Weekly Grocery List" icon="🛒">
     <div class="grid md:grid-cols-2 gap-6">
       <!-- Proteins -->
@@ -528,91 +206,324 @@
     </div>
   </Accordion>
 
-  <!-- Kitchen Tips -->
-  <Accordion title="Practical Kitchen Tips" icon="🔪">
+  <!-- MAIN EVENT: Sunday Batch Prep Guide with ALL tips inline -->
+  <Accordion title="Sunday Batch Prep Guide" icon="⏱️">
     <div class="space-y-6">
-      <!-- Weeknight Workflow -->
-      <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Weeknight Salmon Workflow</h4>
-        <p class="text-sm text-[var(--color-text-muted)] mb-2">Salmon is cooked fresh each night—not batch prepped. Total time: ~10 minutes.</p>
-        <ul class="text-sm text-[var(--color-text-muted)] space-y-1 ml-4">
-          <li><strong>Night before (or morning):</strong> Move one salmon fillet from freezer to fridge to thaw</li>
-          <li><strong>Same-day thaw option:</strong> Sealed bag in cold water for 20–30 min (weigh down with a plate)</li>
-          <li><strong>When ready to cook:</strong> Preheat air fryer (3 min), season salmon, cook (7–8 min)</li>
-          <li><strong>While salmon cooks:</strong> Microwave pre-portioned lentils and vegetables</li>
-        </ul>
+      <p class="text-[var(--color-text-muted)] text-sm italic">
+        Total time: 90–120 minutes. Follow these steps in order — tips included at each step.
+      </p>
+
+      <!-- Step 1: Lentils -->
+      <div class="border-l-4 border-[var(--color-accent)] pl-4">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center font-bold">1</span>
+          <div class="flex-1">
+            <h4 class="font-semibold text-[var(--color-text)]">Start Lentils in Instant Pot</h4>
+            <p class="text-sm text-[var(--color-text-muted)]">5 min active, 25 min hands-off</p>
+          </div>
+        </div>
+        <div class="mt-3 ml-11 space-y-3">
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <p class="text-[var(--color-text)]"><strong>Do this:</strong></p>
+            <ol class="text-[var(--color-text-muted)] space-y-1 list-decimal list-inside mt-1">
+              <li>Add 2 cups dry green/brown lentils + 4 cups water</li>
+              <li>Add a pinch of salt (3–4 shakes from shaker)</li>
+              <li>Close lid, set to High Pressure 12 minutes</li>
+              <li>Let natural release 10 minutes, then drain in strainer</li>
+            </ol>
+          </div>
+          <p class="text-xs text-[var(--color-accent)]">💡 Use green or brown lentils — red lentils turn to mush!</p>
+        </div>
       </div>
 
-      <!-- Vegetable Cutting Tips -->
-      <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Vegetable Cutting Tips</h4>
-        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
-          <div>
-            <strong class="text-[var(--color-text)]">Bell peppers:</strong> Cut off top and bottom, slice down one side to open flat, remove seeds/ribs in one piece, then cut into chunks.
+      <!-- Step 2: Prep Vegetables -->
+      <div class="border-l-4 border-[var(--color-accent)] pl-4">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center font-bold">2</span>
+          <div class="flex-1">
+            <h4 class="font-semibold text-[var(--color-text)]">Prep Vegetables for Roasting</h4>
+            <p class="text-sm text-[var(--color-text-muted)]">15 min — do this while lentils cook</p>
           </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Zucchini:</strong> Cut off ends, slice lengthwise down the middle, cut each half into ½-inch half-moons.
+        </div>
+        <div class="mt-3 ml-11 space-y-3">
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <p class="text-[var(--color-text)]"><strong>Vegetable mix — choose 3–4:</strong></p>
+            <div class="grid grid-cols-2 gap-1 mt-1 text-[var(--color-text-muted)]">
+              <span>🥦 Broccoli</span>
+              <span>🫑 Bell peppers</span>
+              <span>🥒 Zucchini</span>
+              <span>🧅 Red onion</span>
+              <span>🥕 Carrots</span>
+              <span>🥬 Brussels sprouts</span>
+            </div>
+            <p class="mt-2 text-[var(--color-text)]"><strong>Recommended combo:</strong> Broccoli + bell peppers + zucchini + red onion</p>
           </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Broccoli:</strong> Cut where florets branch off from stem. If florets are huge, cut in half. Discard thick woody stem.
-          </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Red onion:</strong> Cut off ends, slice in half through root, peel skin, lay flat and cut into wedges like pizza slices.
-          </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Garlic:</strong> Smash clove with flat side of knife—papery skin slides right off. Then chop.
-          </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Lemon juice:</strong> Cut in half, jab a fork into the cut side and twist while squeezing.
+
+          <!-- Cutting tips inline -->
+          <div class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded p-3 text-sm">
+            <p class="text-[var(--color-accent)] font-medium mb-2">✂️ How to Cut Each Vegetable:</p>
+            <div class="space-y-2 text-[var(--color-text-muted)]">
+              <p><strong class="text-[var(--color-text)]">Bell peppers:</strong> Cut off top and bottom, slice down one side to open flat, remove seeds/ribs in one piece, then cut into 1-inch chunks.</p>
+              <p><strong class="text-[var(--color-text)]">Zucchini:</strong> Cut off ends, slice lengthwise down the middle, cut each half into ½-inch half-moons.</p>
+              <p><strong class="text-[var(--color-text)]">Broccoli:</strong> Cut where florets branch off from stem. If florets are huge, cut in half. <em>Save the stems for soup!</em></p>
+              <p><strong class="text-[var(--color-text)]">Red onion:</strong> Cut off ends, slice in half through root, peel skin, lay flat and cut into wedges like pizza slices.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Roasting Tips -->
-      <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Roasting Vegetables</h4>
-        <ol class="text-sm text-[var(--color-text-muted)] space-y-1 list-decimal list-inside">
-          <li>Preheat oven to 425°F</li>
-          <li>Toss vegetables with olive oil (~1 tbsp per sheet pan), salt, and pepper—easiest with your hands</li>
-          <li>Spread in single layer with space between pieces—don't crowd or they'll steam instead of roast</li>
-          <li>Roast 35 minutes total, stir/flip at the halfway mark (~17 min)</li>
-          <li>Look for browned edges and tender (not mushy) texture</li>
-        </ol>
+      <!-- Step 3: Roast Vegetables -->
+      <div class="border-l-4 border-[var(--color-accent)] pl-4">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center font-bold">3</span>
+          <div class="flex-1">
+            <h4 class="font-semibold text-[var(--color-text)]">Roast Vegetables</h4>
+            <p class="text-sm text-[var(--color-text-muted)]">5 min active, 35 min in oven</p>
+          </div>
+        </div>
+        <div class="mt-3 ml-11 space-y-3">
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <p class="text-[var(--color-text)]"><strong>Do this:</strong></p>
+            <ol class="text-[var(--color-text-muted)] space-y-1 list-decimal list-inside mt-1">
+              <li>Preheat oven to <strong>425°F</strong></li>
+              <li>Toss veggies with olive oil (~1 tbsp per sheet pan) + salt + pepper — easiest with your hands</li>
+              <li>Spread on 2 sheet pans in <strong>single layer with space between pieces</strong></li>
+              <li>Roast 35 minutes total, <strong>stir/flip at 17 min</strong></li>
+              <li>Done when edges are browned and tender (not mushy)</li>
+            </ol>
+          </div>
+          <p class="text-xs text-[var(--color-accent)]">💡 Don't crowd the pan or they'll steam instead of roast!</p>
+        </div>
       </div>
 
-      <!-- Instant Pot Lentils -->
-      <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Instant Pot Lentils</h4>
-        <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-          <li>Use green or brown lentils (red lentils turn to mush)</li>
-          <li>2 cups dry lentils + 4 cups water + pinch of salt (3–4 shakes from shaker)</li>
-          <li>High pressure 12 minutes, natural release 10 minutes</li>
-          <li>Drain in strainer when done</li>
+      <!-- Step 4: Portion Salmon -->
+      <div class="border-l-4 border-[var(--color-accent)] pl-4">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center font-bold">4</span>
+          <div class="flex-1">
+            <h4 class="font-semibold text-[var(--color-text)]">Portion Salmon</h4>
+            <p class="text-sm text-[var(--color-text-muted)]">5 min</p>
+          </div>
+        </div>
+        <div class="mt-3 ml-11 space-y-3">
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <p class="text-[var(--color-text)]"><strong>Do this:</strong></p>
+            <ul class="text-[var(--color-text-muted)] space-y-1 list-disc list-inside mt-1">
+              <li>Divide salmon into <strong>6 oz portions</strong></li>
+              <li>Wrap each portion individually</li>
+              <li>Refrigerate (use within 2 days) or freeze</li>
+            </ul>
+          </div>
+          <p class="text-xs text-[var(--color-accent)]">💡 Cut vegetables BEFORE handling raw salmon, then wash board with hot soapy water after.</p>
+        </div>
+      </div>
+
+      <!-- Step 5: Store Everything -->
+      <div class="border-l-4 border-[var(--color-accent)] pl-4">
+        <div class="flex items-start gap-3">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-accent)] text-white flex items-center justify-center font-bold">5</span>
+          <div class="flex-1">
+            <h4 class="font-semibold text-[var(--color-text)]">Portion & Store Everything</h4>
+            <p class="text-sm text-[var(--color-text-muted)]">10 min</p>
+          </div>
+        </div>
+        <div class="mt-3 ml-11 space-y-3">
+          <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+            <p class="text-[var(--color-text)]"><strong>Storage times:</strong></p>
+            <ul class="text-[var(--color-text-muted)] space-y-1 mt-1">
+              <li><strong>Cooked lentils:</strong> 5 days in fridge</li>
+              <li><strong>Roasted vegetables:</strong> 4–5 days in fridge</li>
+              <li><strong>Raw salmon (thawed):</strong> Use within 2 days</li>
+              <li><strong>Cooked salmon:</strong> 3 days in fridge</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- You're done! -->
+      <div class="bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/30 rounded-lg p-4 text-center">
+        <p class="text-[var(--color-accent)] font-semibold">✅ Weekly batch prep complete!</p>
+        <p class="text-sm text-[var(--color-text-muted)] mt-1">Bean soup is a separate monthly batch — see section below.</p>
+      </div>
+    </div>
+  </Accordion>
+
+  <!-- Weeknight Salmon (nightly cooking guide) -->
+  <Accordion title="Weeknight Salmon Guide" icon="🐟">
+    <div class="space-y-4">
+      <p class="text-[var(--color-text-muted)] text-sm italic">
+        Salmon is cooked fresh each night — total time ~10 minutes.
+      </p>
+
+      <!-- Thawing -->
+      <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+        <p class="text-[var(--color-accent)] font-medium mb-2">🧊 Thawing Options:</p>
+        <ul class="text-[var(--color-text-muted)] space-y-1">
+          <li><strong>Night before:</strong> Move one fillet from freezer to fridge</li>
+          <li><strong>Same-day:</strong> Sealed bag in cold water for 20–30 min (weigh down with a plate)</li>
         </ul>
       </div>
 
-      <!-- Food Safety -->
+      <!-- Cooking Steps -->
+      <div>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">Air Fryer Instructions</h4>
+        <ol class="text-sm text-[var(--color-text-muted)] space-y-2 list-decimal list-inside">
+          <li><strong>Preheat</strong> air fryer to 390°F (about 3 min)</li>
+          <li><strong>Pat salmon completely dry</strong> with paper towels — crucial for texture!</li>
+          <li><strong>Rub with ½ tsp olive oil</strong>, season generously with garlic salt and pepper</li>
+          <li><strong>Place skin-side down</strong> in air fryer basket</li>
+          <li><strong>Cook 7–8 minutes</strong> for 1-inch thick fillets. Do not flip.</li>
+          <li><strong>Check internal temp:</strong> Pull at 125–130°F for medium</li>
+          <li><strong>Rest 2 minutes</strong> before serving</li>
+        </ol>
+      </div>
+
+      <!-- Temperature Guide -->
       <div class="bg-[var(--color-surface)] rounded p-4">
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Food Safety & Storage</h4>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🌡️ Temperature Guide</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--color-border)]">
+                <th class="text-left py-2 text-[var(--color-text-muted)]">Doneness</th>
+                <th class="text-center py-2 text-[var(--color-text-muted)]">Pull Temp</th>
+                <th class="text-center py-2 text-[var(--color-text-muted)]">Final Temp</th>
+              </tr>
+            </thead>
+            <tbody class="text-[var(--color-text)]">
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Medium-rare</td>
+                <td class="text-center">120°F</td>
+                <td class="text-center">125°F</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50 bg-[var(--color-accent)]/10">
+                <td class="py-2 font-medium">Medium (recommended)</td>
+                <td class="text-center">125–130°F</td>
+                <td class="text-center">130–135°F</td>
+              </tr>
+              <tr>
+                <td class="py-2">Medium-well</td>
+                <td class="text-center">135°F</td>
+                <td class="text-center">140°F</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-[var(--color-text-muted)] mt-2 italic">
+          Most home cooks overcook salmon to 145°F+, which makes it dry and chalky. A thermometer is your friend!
+        </p>
+      </div>
+
+      <!-- While cooking -->
+      <div class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded p-3 text-sm">
+        <p class="text-[var(--color-accent)] font-medium mb-2">⏱️ While salmon cooks (7–8 min):</p>
+        <ul class="text-[var(--color-text-muted)] space-y-1">
+          <li>Microwave pre-portioned lentils (add a splash of water if dried out)</li>
+          <li>Microwave pre-portioned vegetables, OR air fryer 3–4 min at 350°F for crispier texture</li>
+        </ul>
+      </div>
+    </div>
+  </Accordion>
+
+  <!-- Bean Soup (Monthly) -->
+  <Accordion title="Bean & Vegetable Soup (Monthly Batch)" icon="🍲">
+    <div class="space-y-4">
+      <p class="text-[var(--color-text-muted)] text-sm italic">
+        Make once a month, freeze in 2-cup portions. ~4 Sunday lunches per batch.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Ingredients -->
+        <div>
+          <h4 class="font-medium text-[var(--color-accent)] mb-2">Ingredients</h4>
+          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
+            <li>1 yellow onion, diced</li>
+            <li>3-4 cloves garlic, minced</li>
+            <li>1 lb carrots, sliced into ¼" coins</li>
+            <li>2 cans white beans (15 oz each), drained</li>
+            <li>1 can diced tomatoes (14 oz) — juice and all</li>
+            <li>4 cups vegetable or chicken broth</li>
+            <li>1 bag spinach</li>
+            <li>Olive oil, salt, pepper</li>
+            <li>Broccoli stems from roasting prep (optional — don't waste them!)</li>
+          </ul>
+        </div>
+
+        <!-- Instructions -->
+        <div>
+          <h4 class="font-medium text-[var(--color-accent)] mb-2">Instructions (Instant Pot)</h4>
+          <ol class="text-sm text-[var(--color-text-muted)] space-y-2 list-decimal list-inside">
+            <li><strong>Sauté mode:</strong> Heat olive oil, add onion and carrots</li>
+            <li><strong>Cook until onions are translucent</strong> — go by visual cues, not the clock</li>
+            <li><strong>Add garlic last</strong> — only 30 seconds, it burns easily!</li>
+            <li><strong>Add everything else:</strong> beans, tomatoes (whole can), broth, spinach, broccoli stems</li>
+            <li><strong>Pressure cook 15 minutes</strong>, natural release</li>
+            <li><strong>Season to taste</strong> with salt and pepper</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Cutting Tips -->
+      <div class="bg-[var(--color-surface)] rounded p-4">
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">✂️ Cutting Tips for Soup</h4>
         <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
           <div>
-            <strong class="text-[var(--color-text)]">Raw salmon handling:</strong> Cut vegetables first, then handle salmon, then wash cutting board with hot soapy water
+            <strong class="text-[var(--color-text)]">Onion:</strong> Skip horizontal cuts (risky). Just halve, peel, cut vertical slices, then cut across into pieces.
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Cooked lentils:</strong> 5 days in fridge
+            <strong class="text-[var(--color-text)]">Carrots:</strong> Slice into ¼" coins. If fat, halve lengthwise first, then slice into half-moons.
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Roasted vegetables:</strong> 4–5 days in fridge
+            <strong class="text-[var(--color-text)]">Garlic:</strong> A head contains multiple cloves. Smash cloves with a jar or can (safer than knife), peel, then mince.
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Raw salmon (thawed):</strong> Use within 2 days
+            <strong class="text-[var(--color-text)]">Broccoli stems:</strong> Chop small and toss in — good fiber, don't waste them.
+          </div>
+        </div>
+      </div>
+
+      <!-- Storage -->
+      <div class="bg-[var(--color-surface)] rounded p-4">
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🧊 Storage & Reheating</h4>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
+          <div>
+            <strong class="text-[var(--color-text)]">Fridge:</strong> 5–7 days
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Cooked salmon:</strong> 3 days in fridge
+            <strong class="text-[var(--color-text)]">Freezer:</strong> Cool first, leave 1" headspace, single portions, label with date. Good for 2–3 months.
           </div>
           <div>
-            <strong class="text-[var(--color-text)]">Produce storage:</strong> Fridge for salad greens, cucumber, carrots, lemons, tomatoes. Counter for yellow onion, garlic.
+            <strong class="text-[var(--color-text)]">Reheat from fridge:</strong> Stovetop or microwave
           </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Reheat from frozen:</strong> Thaw overnight in fridge, or microwave from frozen with extra time
+          </div>
+        </div>
+      </div>
+    </div>
+  </Accordion>
+
+  <!-- Quick Reference (condensed from old Kitchen Tips) -->
+  <Accordion title="Quick Reference" icon="📋">
+    <div class="space-y-4">
+      <!-- Storage Times -->
+      <div class="bg-[var(--color-surface)] rounded p-4">
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">Storage Times at a Glance</h4>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+          <div class="text-[var(--color-text-muted)]"><strong class="text-[var(--color-text)]">Cooked lentils:</strong> 5 days</div>
+          <div class="text-[var(--color-text-muted)]"><strong class="text-[var(--color-text)]">Roasted veggies:</strong> 4–5 days</div>
+          <div class="text-[var(--color-text-muted)]"><strong class="text-[var(--color-text)]">Raw salmon:</strong> 2 days</div>
+          <div class="text-[var(--color-text-muted)]"><strong class="text-[var(--color-text)]">Cooked salmon:</strong> 3 days</div>
+          <div class="text-[var(--color-text-muted)]"><strong class="text-[var(--color-text)]">Frozen soup:</strong> 2–3 months</div>
+        </div>
+      </div>
+
+      <!-- Produce Storage -->
+      <div>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">Where to Store Produce</h4>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
+          <div><strong class="text-[var(--color-text)]">Fridge:</strong> Salad greens, cucumber, carrots, lemons, tomatoes</div>
+          <div><strong class="text-[var(--color-text)]">Counter:</strong> Yellow onion, garlic (cool dry spot)</div>
         </div>
       </div>
 
@@ -620,9 +531,15 @@
       <div>
         <h4 class="font-medium text-[var(--color-accent)] mb-2">Reheating</h4>
         <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-          <li><strong>Vegetables:</strong> Air fryer 3–4 min at 350°F (best), or oven, or microwave (softer texture)</li>
-          <li><strong>Lentils:</strong> Microwave—add a splash of water if dried out</li>
+          <li><strong>Vegetables:</strong> Air fryer 3–4 min at 350°F (crispiest), or microwave (softer)</li>
+          <li><strong>Lentils:</strong> Microwave — add a splash of water if dried out</li>
+          <li><strong>Soup:</strong> Stovetop or microwave; from frozen, microwave in 2-min bursts stirring between</li>
         </ul>
+      </div>
+
+      <!-- Lemon tip -->
+      <div class="text-sm text-[var(--color-text-muted)]">
+        <strong class="text-[var(--color-text)]">Lemon juice:</strong> Cut in half, jab a fork into the cut side and twist while squeezing. Store cut-side down in fridge (lasts about a week).
       </div>
     </div>
   </Accordion>
