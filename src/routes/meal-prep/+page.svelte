@@ -149,59 +149,251 @@
 
   <!-- Grocery List - MOVED UP -->
   <Accordion title="Weekly Grocery List" icon="🛒">
-    <div class="grid md:grid-cols-2 gap-6">
+    <div class="space-y-6">
       <!-- Proteins -->
       <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Proteins</h4>
-        <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-          <li>Salmon fillets — 2.5 lbs (for 6–7 dinners)</li>
-          <li>Whey protein powder — per your current supply</li>
-        </ul>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🥩 Proteins</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--color-border)]">
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Item</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[15%]">Amount</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Storage</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[25%]">Lasts</th>
+              </tr>
+            </thead>
+            <tbody class="text-[var(--color-text-muted)]">
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Salmon fillets</td>
+                <td class="py-2">2.5 lbs</td>
+                <td class="py-2"><span class="text-blue-400">❄️ Freezer</span> or <span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">3 mo frozen / 2 days thawed</td>
+              </tr>
+              <tr>
+                <td class="py-2">Whey protein powder</td>
+                <td class="py-2">per supply</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span></td>
+                <td class="py-2">1–2 years (check label)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <div class="border-b border-[var(--color-border)]/30"></div>
 
       <!-- Produce -->
       <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Produce</h4>
-        <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-          <li>Broccoli — 2 large heads</li>
-          <li>Bell peppers — 4 (mixed colors)</li>
-          <li>Zucchini — 3 medium</li>
-          <li>Red onion — 2</li>
-          <li>Carrots — 1 lb bag</li>
-          <li>Spinach — 1 bag (for soup, monthly)</li>
-          <li>Cucumber — 1</li>
-          <li>Tomatoes — 2</li>
-          <li>Mixed greens — 1 container</li>
-          <li>Lemons — 2</li>
-          <li>Garlic — 1 head</li>
-          <li>Yellow onion — 1 (for soup, monthly)</li>
-        </ul>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🥬 Produce</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--color-border)]">
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Item</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[15%]">Amount</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Storage</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[25%]">Lasts</th>
+              </tr>
+            </thead>
+            <tbody class="text-[var(--color-text-muted)]">
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Broccoli</td>
+                <td class="py-2">2 large heads</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
+                <td class="py-2">5–7 days</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Bell peppers</td>
+                <td class="py-2">4 (mixed)</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
+                <td class="py-2">1–2 weeks</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Zucchini</td>
+                <td class="py-2">3 medium</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
+                <td class="py-2">5–7 days</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Red onion</td>
+                <td class="py-2">2</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Counter</span> cool, dark</td>
+                <td class="py-2">2–3 weeks</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Carrots</td>
+                <td class="py-2">1 lb bag</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
+                <td class="py-2">3–4 weeks</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Spinach <span class="text-xs">(soup, monthly)</span></td>
+                <td class="py-2">1 bag</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">5–7 days</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Cucumber</td>
+                <td class="py-2">1</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">1 week</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Tomatoes</td>
+                <td class="py-2">2</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Counter</span> until ripe, then fridge</td>
+                <td class="py-2">1 week</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Mixed greens</td>
+                <td class="py-2">1 container</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">5–7 days (check date)</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Lemons</td>
+                <td class="py-2">2</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">3–4 weeks</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Garlic</td>
+                <td class="py-2">1 head</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Counter</span> cool, dark</td>
+                <td class="py-2">3–5 weeks whole</td>
+              </tr>
+              <tr>
+                <td class="py-2">Yellow onion <span class="text-xs">(soup, monthly)</span></td>
+                <td class="py-2">1</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Counter</span> cool, dark</td>
+                <td class="py-2">2–3 months</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <div class="border-b border-[var(--color-border)]/30"></div>
 
       <!-- Pantry -->
       <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Pantry/Dry Goods</h4>
-        <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-          <li>Green or brown lentils — 2 cups dry</li>
-          <li>Quinoa — 1 cup dry</li>
-          <li>Canned chickpeas — 1 can (15 oz)</li>
-          <li>Canned white beans — 2 cans (15 oz) <span class="text-[var(--color-text-muted)]">(monthly, for soup)</span></li>
-          <li>Canned diced tomatoes — 1 can (14 oz) <span class="text-[var(--color-text-muted)]">(monthly, for soup)</span></li>
-          <li>Vegetable or chicken broth — 4 cups <span class="text-[var(--color-text-muted)]">(monthly, for soup)</span></li>
-          <li>Whole wheat bread — 1 loaf</li>
-          <li>Olive oil — per your current supply</li>
-        </ul>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🏠 Pantry/Dry Goods</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--color-border)]">
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Item</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[15%]">Amount</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Storage</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[25%]">Lasts</th>
+              </tr>
+            </thead>
+            <tbody class="text-[var(--color-text-muted)]">
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Green/brown lentils</td>
+                <td class="py-2">2 cups dry</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> airtight</td>
+                <td class="py-2">1–2 years dry</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Quinoa</td>
+                <td class="py-2">1 cup dry</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> airtight</td>
+                <td class="py-2">2–3 years dry</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Canned chickpeas</td>
+                <td class="py-2">1 can (15 oz)</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span></td>
+                <td class="py-2">2–5 years (check date)</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Canned white beans <span class="text-xs">(monthly)</span></td>
+                <td class="py-2">2 cans (15 oz)</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span></td>
+                <td class="py-2">2–5 years (check date)</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Canned diced tomatoes <span class="text-xs">(monthly)</span></td>
+                <td class="py-2">1 can (14 oz)</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span></td>
+                <td class="py-2">1–2 years (check date)</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Broth <span class="text-xs">(monthly)</span></td>
+                <td class="py-2">4 cups</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> / <span class="text-cyan-400">🧊 Fridge</span> once opened</td>
+                <td class="py-2">1 year / 4–5 days opened</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Whole wheat bread</td>
+                <td class="py-2">1 loaf</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> or <span class="text-blue-400">❄️ Freezer</span></td>
+                <td class="py-2">5–7 days / 3 mo frozen</td>
+              </tr>
+              <tr>
+                <td class="py-2">Olive oil</td>
+                <td class="py-2">per supply</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> cool, dark</td>
+                <td class="py-2">1–2 years unopened</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <div class="border-b border-[var(--color-border)]/30"></div>
 
       <!-- Dairy/Refrigerated -->
       <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2">Dairy/Refrigerated</h4>
-        <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
-          <li>2% milk — 1 gallon</li>
-          <li>Orange juice — 1 small bottle</li>
-          <li>Crunchy peanut butter — per your current supply</li>
-          <li>Grape jam — per your current supply</li>
-        </ul>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🧊 Dairy/Refrigerated</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-[var(--color-border)]">
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Item</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[15%]">Amount</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[30%]">Storage</th>
+                <th class="text-left py-2 text-[var(--color-text-muted)] w-[25%]">Lasts</th>
+              </tr>
+            </thead>
+            <tbody class="text-[var(--color-text-muted)]">
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">2% milk</td>
+                <td class="py-2">1 gallon</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">5–7 days after opening</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Orange juice</td>
+                <td class="py-2">1 small bottle</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">7–10 days after opening</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Crunchy peanut butter</td>
+                <td class="py-2">per supply</td>
+                <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> or <span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">3 mo pantry / 6 mo fridge</td>
+              </tr>
+              <tr>
+                <td class="py-2">Grape jam</td>
+                <td class="py-2">per supply</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> after opening</td>
+                <td class="py-2">6–12 months opened</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
+        <span class="font-medium text-[var(--color-text)]">Storage Key:</span>
+        <span class="ml-2 text-amber-400">🏠 Pantry</span>
+        <span class="ml-2 text-cyan-400">🧊 Fridge</span>
+        <span class="ml-2 text-blue-400">❄️ Freezer</span>
       </div>
     </div>
   </Accordion>
