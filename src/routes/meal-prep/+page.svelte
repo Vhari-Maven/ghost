@@ -239,19 +239,19 @@
               </tr>
               <tr class="border-b border-[var(--color-border)]/50">
                 <td class="py-2">Broccoli</td>
-                <td class="py-2">2 large heads</td>
+                <td class="py-2">1 large head</td>
                 <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
                 <td class="py-2">5–7 days</td>
               </tr>
               <tr class="border-b border-[var(--color-border)]/50">
                 <td class="py-2">Bell peppers</td>
-                <td class="py-2">4 (mixed)</td>
+                <td class="py-2">3 (mixed)</td>
                 <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
                 <td class="py-2">1–2 weeks</td>
               </tr>
               <tr class="border-b border-[var(--color-border)]/50">
                 <td class="py-2">Zucchini</td>
-                <td class="py-2">3 medium</td>
+                <td class="py-2">4 medium</td>
                 <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span> crisper</td>
                 <td class="py-2">5–7 days</td>
               </tr>
