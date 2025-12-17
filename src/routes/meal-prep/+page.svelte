@@ -291,21 +291,16 @@
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">5</span>
           <div>
-            <span class="font-medium text-[var(--color-text)]">Bean soup (monthly — not every week)</span>
-            <span class="text-[var(--color-text-muted)] text-sm"> (10 min active, 20 min cook)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">Sauté onion + garlic + carrots, add beans + broth + tomatoes + spinach. Pressure cook 15 min. Portion into 2-cup containers and freeze — makes ~4 weeks of Sunday lunches.</p>
-          </div>
-        </li>
-
-        <li class="flex gap-3">
-          <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--color-accent)] text-white text-sm flex items-center justify-center font-bold">6</span>
-          <div>
             <span class="font-medium text-[var(--color-text)]">Portion and store everything</span>
             <span class="text-[var(--color-text-muted)] text-sm"> (10 min)</span>
-            <p class="text-sm text-[var(--color-text-muted)] mt-1">Lentils and vegetables in fridge containers. Soup goes in freezer (on soup-making weeks).</p>
+            <p class="text-sm text-[var(--color-text-muted)] mt-1">Lentils and vegetables in fridge containers.</p>
           </div>
         </li>
       </ol>
+
+      <p class="text-sm text-[var(--color-text-muted)] italic mt-2">
+        💡 Bean soup is a separate monthly batch — see the dedicated section below.
+      </p>
 
       <!-- Vegetable Mix -->
       <div class="bg-[var(--color-surface)] rounded p-4 mt-4">
@@ -392,6 +387,84 @@
         <p class="text-xs text-[var(--color-text-muted)] mt-2 italic">
           Most home cooks overcook salmon to 145°F+, which makes it dry and chalky. Pull at 125–130°F for restaurant-quality results.
         </p>
+      </div>
+    </div>
+  </Accordion>
+
+  <!-- Bean Soup (Monthly) -->
+  <Accordion title="Bean & Vegetable Soup (Monthly Batch)" icon="🍲">
+    <div class="space-y-4">
+      <p class="text-[var(--color-text-muted)] text-sm italic">
+        Make once a month, freeze in 2-cup portions. ~4 Sunday lunches per batch.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Ingredients -->
+        <div>
+          <h4 class="font-medium text-[var(--color-accent)] mb-2">Ingredients</h4>
+          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
+            <li>1 yellow onion, diced</li>
+            <li>3-4 cloves garlic, minced</li>
+            <li>1 lb carrots, sliced into ¼" coins</li>
+            <li>2 cans white beans (15 oz each), drained</li>
+            <li>1 can diced tomatoes (14 oz) — juice and all</li>
+            <li>4 cups vegetable or chicken broth</li>
+            <li>1 bag spinach</li>
+            <li>Olive oil, salt, pepper</li>
+            <li>Broccoli stems from roasting prep (optional — don't waste them!)</li>
+          </ul>
+        </div>
+
+        <!-- Instructions -->
+        <div>
+          <h4 class="font-medium text-[var(--color-accent)] mb-2">Instructions (Instant Pot)</h4>
+          <ol class="text-sm text-[var(--color-text-muted)] space-y-2 list-decimal list-inside">
+            <li><strong>Sauté mode:</strong> Heat olive oil, add onion and carrots</li>
+            <li><strong>Cook until onions are translucent</strong> — go by visual cues, not the clock</li>
+            <li><strong>Add garlic last</strong> — only 30 seconds, it burns easily</li>
+            <li><strong>Add everything else:</strong> beans, tomatoes (whole can), broth, spinach, broccoli stems</li>
+            <li><strong>Pressure cook 15 minutes</strong>, natural release</li>
+            <li><strong>Season to taste</strong> with salt and pepper</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Cutting Tips -->
+      <div class="bg-[var(--color-surface)] rounded p-4">
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">Cutting Tips</h4>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
+          <div>
+            <strong class="text-[var(--color-text)]">Onion:</strong> Skip horizontal cuts (risky). Just halve, peel, cut vertical slices, then cut across into pieces.
+          </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Carrots:</strong> Slice into ¼" coins. If fat, halve lengthwise first, then slice into half-moons.
+          </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Garlic:</strong> A head contains multiple cloves. Smash cloves with a jar or can (safer than knife), peel, then mince.
+          </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Broccoli stems:</strong> Chop small and toss in — good fiber, don't waste them.
+          </div>
+        </div>
+      </div>
+
+      <!-- Storage -->
+      <div class="bg-[var(--color-surface)] rounded p-4">
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">Storage & Reheating</h4>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-[var(--color-text-muted)]">
+          <div>
+            <strong class="text-[var(--color-text)]">Fridge:</strong> 5–7 days
+          </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Freezer:</strong> Cool first, leave 1" headspace, single portions, label with date. Good for 2–3 months.
+          </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Reheat from fridge:</strong> Stovetop or microwave
+          </div>
+          <div>
+            <strong class="text-[var(--color-text)]">Reheat from frozen:</strong> Thaw overnight in fridge, or microwave from frozen with extra time
+          </div>
+        </div>
       </div>
     </div>
   </Accordion>
@@ -540,9 +613,6 @@
           <div>
             <strong class="text-[var(--color-text)]">Produce storage:</strong> Fridge for salad greens, cucumber, carrots, lemons, tomatoes. Counter for yellow onion, garlic.
           </div>
-          <div>
-            <strong class="text-[var(--color-text)]">Frozen soup:</strong> 3–4 months in freezer. Thaw overnight in fridge or microwave from frozen.
-          </div>
         </div>
       </div>
 
@@ -552,7 +622,6 @@
         <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
           <li><strong>Vegetables:</strong> Air fryer 3–4 min at 350°F (best), or oven, or microwave (softer texture)</li>
           <li><strong>Lentils:</strong> Microwave—add a splash of water if dried out</li>
-          <li><strong>Frozen soup:</strong> Thaw overnight, then stovetop or microwave. Or microwave from frozen in 2-min bursts, stirring between.</li>
         </ul>
       </div>
     </div>
