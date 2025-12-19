@@ -1,7 +1,7 @@
 import type { PageServerLoad, Actions } from './$types';
 import { db } from '$lib/db';
 import { fitnessEntries } from '$lib/db/schema';
-import { eq, and, gte, lte, desc } from 'drizzle-orm';
+import { eq, and, gte, lte } from 'drizzle-orm';
 
 // Get local date string (YYYY-MM-DD) - toISOString() returns UTC which can be wrong timezone
 function getLocalDateString(date: Date): string {
