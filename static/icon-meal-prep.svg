@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="hologram" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="50%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0e7490"/>
+    </linearGradient>
+    <linearGradient id="hologramFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0e7490" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Bowl base - rounder, more pronounced -->
+  <path d="M4 13 Q4 26 16 26 Q28 26 28 13"
+        stroke="url(#hologram)" stroke-width="1.5" fill="url(#hologramFill)" stroke-linecap="round"/>
+
+  <!-- Bowl rim -->
+  <ellipse cx="16" cy="13" rx="12" ry="3" stroke="url(#hologram)" stroke-width="1.5" fill="url(#hologramFill)"/>
+
+  <!-- Simple leaf shapes - bold and clear -->
+  <path d="M10 12 Q8 6 10 4 Q12 6 10 12" stroke="url(#hologram)" stroke-width="1.2" fill="url(#hologramFill)"/>
+  <path d="M16 10 Q14 3 16 1 Q18 3 16 10" stroke="url(#hologram)" stroke-width="1.2" fill="url(#hologramFill)"/>
+  <path d="M22 12 Q20 6 22 4 Q24 6 22 12" stroke="url(#hologram)" stroke-width="1.2" fill="url(#hologramFill)"/>
+
+  <!-- Scan line for hologram effect -->
+  <line x1="7" y1="20" x2="25" y2="20" stroke="url(#hologram)" stroke-width="0.5" opacity="0.4"/>
+</svg>

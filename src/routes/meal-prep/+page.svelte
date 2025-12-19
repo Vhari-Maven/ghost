@@ -5,7 +5,7 @@
 <div class="max-w-4xl mx-auto">
   <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold flex items-center gap-3">
-      <span class="text-3xl">🥗</span>
+      <img src="/icon-meal-prep.svg" alt="" class="w-8 h-8" />
       Meal Prep Plan
     </h1>
     <span class="text-sm text-[var(--color-text-muted)]">Heart-Healthy Weight Management</span>
