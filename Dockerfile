@@ -45,6 +45,7 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/src/lib/db ./src/lib/db
 COPY --from=builder /app/drizzle ./drizzle
 COPY --from=builder /app/drizzle.config.ts ./
+COPY --from=builder /app/scripts ./scripts
 
 # Create data directory (will be mounted as volume)
 RUN mkdir -p /data
