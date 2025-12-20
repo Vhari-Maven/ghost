@@ -75,3 +75,52 @@ export const shoppingItems = sqliteTable('shopping_items', {
 
 export type ShoppingItem = typeof shoppingItems.$inferSelect;
 export type NewShoppingItem = typeof shoppingItems.$inferInsert;
+
+// ============================================
+// Exercise Tracker Tables
+// ============================================
+
+export const WORKOUT_TYPES = ['upper_push', 'lower', 'upper_pull', 'recovery'] as const;
+export type WorkoutType = (typeof WORKOUT_TYPES)[number];
+
+// Exercise session - one per day
+export const exerciseSessions = sqliteTable('exercise_sessions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  date: text('date').notNull().unique(),
+  workoutType: text('workout_type').notNull(), // 'upper_push' | 'lower' | 'upper_pull' | 'recovery'
+  completedAt: text('completed_at'),
+  notes: text('notes'),
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString())
+});
+
+// Individual set logs
+export const exerciseLogs = sqliteTable('exercise_logs', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  sessionId: integer('session_id').notNull().references(() => exerciseSessions.id, { onDelete: 'cascade' }),
+  exerciseId: text('exercise_id').notNull(),
+  setNumber: integer('set_number').notNull(),
+  reps: integer('reps'),
+  weight: real('weight'),
+  duration: integer('duration'), // for timed exercises (seconds)
+  completed: integer('completed', { mode: 'boolean' }).notNull().default(false),
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+// Always-do stack completion
+export const alwaysDoLogs = sqliteTable('always_do_logs', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  sessionId: integer('session_id').notNull().references(() => exerciseSessions.id, { onDelete: 'cascade' }),
+  exerciseId: text('exercise_id').notNull(),
+  completed: integer('completed', { mode: 'boolean' }).notNull().default(false),
+  duration: integer('duration'),
+  reps: integer('reps'),
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+export type ExerciseSession = typeof exerciseSessions.$inferSelect;
+export type NewExerciseSession = typeof exerciseSessions.$inferInsert;
+export type ExerciseLog = typeof exerciseLogs.$inferSelect;
+export type NewExerciseLog = typeof exerciseLogs.$inferInsert;
+export type AlwaysDoLog = typeof alwaysDoLogs.$inferSelect;
+export type NewAlwaysDoLog = typeof alwaysDoLogs.$inferInsert;

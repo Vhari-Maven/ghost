@@ -7,6 +7,7 @@
 
   const navItems = [
     { href: '/fitness', label: 'Fitness', enabled: true },
+    { href: '/exercise', label: 'Exercise', enabled: true },
     { href: '/meal-prep', label: 'Meal Prep', enabled: true },
     { href: '/shopping', label: 'Shopping', enabled: true },
     { href: '/media', label: 'Media', enabled: false },
