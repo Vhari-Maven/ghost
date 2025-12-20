@@ -90,7 +90,7 @@
             <li>6 oz salmon fillet (~350 cal)</li>
             <li>1.5 cups roasted vegetables (~120 cal)</li>
             <li>¾ cup cooked lentils (~170 cal)</li>
-            <li>Optional: 1 cup bagged salad (~60 cal)</li>
+            <li>1 cup mixed greens (~60 cal)</li>
           </ul>
           <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
             <span class="text-[var(--color-accent)] font-medium">Macros:</span>
@@ -99,25 +99,18 @@
         </div>
       </div>
 
-      <!-- Weekend -->
+      <!-- Weekend Dinners -->
       <div>
-        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Weekend Variations</h3>
+        <h3 class="font-semibold text-[var(--color-accent)] mb-3">Weekend Dinners (~700 cal)</h3>
+        <p class="text-[var(--color-text-muted)] text-sm italic mb-3">Same 2 meals/day pattern — just rotating the dinner options</p>
         <div class="space-y-3 text-sm">
           <div>
-            <span class="font-medium text-[var(--color-text)]">Saturday Lunch — Mediterranean Bowl (~450 cal):</span>
-            <span class="text-[var(--color-text-muted)]"> 1 cup quinoa + ½ cup chickpeas + mixed greens + 1 tbsp olive oil & lemon</span>
+            <span class="font-medium text-[var(--color-text)]">Saturday — Mediterranean Bowl (~700 cal):</span>
+            <span class="text-[var(--color-text-muted)]"> Quinoa + chickpeas + greens + cucumber + tomatoes + olive oil & lemon dressing.</span>
           </div>
           <div>
-            <span class="font-medium text-[var(--color-text)]">Saturday Dinner — Lighter Salmon (~500 cal):</span>
-            <span class="text-[var(--color-text-muted)]"> 5 oz salmon, 1 cup vegetables, ½ cup lentils</span>
-          </div>
-          <div>
-            <span class="font-medium text-[var(--color-text)]">Sunday Lunch — Bean Soup (~400 cal):</span>
-            <span class="text-[var(--color-text-muted)]"> 2 cups soup with crusty bread (from freezer stash)</span>
-          </div>
-          <div>
-            <span class="font-medium text-[var(--color-text)]">Sunday Dinner:</span>
-            <span class="text-[var(--color-text-muted)]"> Batch prep time — eat leftovers or lighter meal</span>
+            <span class="font-medium text-[var(--color-text)]">Sunday — Bean Soup (~700 cal):</span>
+            <span class="text-[var(--color-text-muted)]"> 2 cups soup with crusty bread (from freezer stash). Prep day — make next week's batch while eating.</span>
           </div>
         </div>
       </div>
@@ -127,12 +120,12 @@
         <h4 class="font-medium text-[var(--color-accent)] mb-2">Daily Nutrition Summary</h4>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-center">
           <div>
-            <div class="text-[var(--color-text)]">Weekday</div>
+            <div class="text-[var(--color-text)]">Daily Target</div>
             <div class="text-[var(--color-text-muted)]">~1,625 cal</div>
           </div>
           <div>
-            <div class="text-[var(--color-text)]">Weekend</div>
-            <div class="text-[var(--color-text-muted)]">~1,775–1,875 cal</div>
+            <div class="text-[var(--color-text)]">Meals</div>
+            <div class="text-[var(--color-text-muted)]">2/day (no lunch)</div>
           </div>
           <div>
             <div class="text-[var(--color-text)]">Protein</div>
@@ -262,10 +255,16 @@
                 <td class="py-2">2–3 weeks</td>
               </tr>
               <tr class="border-b border-[var(--color-border)]/50">
-                <td class="py-2">Lemons <span class="text-xs">(optional — for finishing)</span></td>
+                <td class="py-2">Lemons</td>
                 <td class="py-2">2</td>
                 <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
                 <td class="py-2">3–4 weeks</td>
+              </tr>
+              <tr class="border-b border-[var(--color-border)]/50">
+                <td class="py-2">Mixed greens / spring mix</td>
+                <td class="py-2">5–6 oz</td>
+                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
+                <td class="py-2">5–7 days</td>
               </tr>
               <tr>
                 <td class="py-2">Olive oil</td>
@@ -330,11 +329,17 @@
                 <td class="py-2"><span class="text-amber-400">🏠 Counter</span> cool, dark</td>
                 <td class="py-2">3–5 weeks whole</td>
               </tr>
-              <tr>
+              <tr class="border-b border-[var(--color-border)]/50">
                 <td class="py-2">Spinach</td>
                 <td class="py-2">1 bag</td>
                 <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
                 <td class="py-2">5–7 days</td>
+              </tr>
+              <tr>
+                <td class="py-2">Crusty bread</td>
+                <td class="py-2">1 loaf</td>
+                <td class="py-2"><span class="text-blue-400">❄️ Freezer</span> sliced</td>
+                <td class="py-2">3 months frozen</td>
               </tr>
             </tbody>
           </table>
@@ -343,13 +348,9 @@
 
       <div class="border-b border-[var(--color-border)]/30"></div>
 
-      <!-- MEDITERRANEAN BOWL (Optional) -->
+      <!-- MEDITERRANEAN BOWL (Saturday Dinner) -->
       <div>
-        <h4 class="font-medium text-[var(--color-accent)] mb-2 flex items-center gap-2">
-          🥗 Mediterranean Bowl
-          <span class="text-xs font-normal px-2 py-0.5 rounded bg-[var(--color-surface)] text-[var(--color-text-muted)]">optional</span>
-        </h4>
-        <p class="text-xs text-[var(--color-text-muted)] mb-2 italic">Saturday lunch if you want a midday meal. Skip if doing 2 meals/day.</p>
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🥗 Mediterranean Bowl <span class="text-xs font-normal text-[var(--color-text-muted)]">— Saturday dinner</span></h4>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
@@ -372,12 +373,6 @@
                 <td class="py-2">1 can (15 oz)</td>
                 <td class="py-2"><span class="text-amber-400">🏠 Pantry</span></td>
                 <td class="py-2">2–5 years (check date)</td>
-              </tr>
-              <tr class="border-b border-[var(--color-border)]/50">
-                <td class="py-2">Mixed greens</td>
-                <td class="py-2">1 container</td>
-                <td class="py-2"><span class="text-cyan-400">🧊 Fridge</span></td>
-                <td class="py-2">5–7 days (check date)</td>
               </tr>
               <tr class="border-b border-[var(--color-border)]/50">
                 <td class="py-2">Cucumber</td>
@@ -699,6 +694,72 @@
           <div>
             <strong class="text-[var(--color-text)]">Reheat from frozen:</strong> Thaw overnight in fridge, or microwave from frozen with extra time
           </div>
+        </div>
+      </div>
+    </div>
+  </Accordion>
+
+  <!-- Mediterranean Bowl (Saturday Dinner) -->
+  <Accordion title="Mediterranean Bowl (Saturday Dinner)" icon="🥗">
+    <div class="space-y-4">
+      <p class="text-[var(--color-text-muted)] text-sm italic">
+        Quick assembly — no cooking required if you prep quinoa ahead. ~10 minutes total.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Ingredients -->
+        <div>
+          <h4 class="font-medium text-[var(--color-accent)] mb-2">Ingredients</h4>
+          <ul class="text-sm text-[var(--color-text-muted)] space-y-1">
+            <li>1.5 cups cooked quinoa (~330 cal)</li>
+            <li>1 cup chickpeas, drained & rinsed (~210 cal)</li>
+            <li>1–2 cups mixed greens (~10 cal)</li>
+            <li>½ cucumber, diced (~15 cal)</li>
+            <li>1 medium tomato, diced (~25 cal)</li>
+            <li>1 tbsp olive oil (~120 cal)</li>
+            <li>Juice of ½ lemon</li>
+            <li>Salt & pepper to taste</li>
+          </ul>
+        </div>
+
+        <!-- Assembly -->
+        <div>
+          <h4 class="font-medium text-[var(--color-accent)] mb-2">Assembly</h4>
+          <ol class="text-sm text-[var(--color-text-muted)] space-y-2 list-decimal list-inside">
+            <li><strong>Base:</strong> Add quinoa to a bowl</li>
+            <li><strong>Greens:</strong> Layer mixed greens on top or to the side</li>
+            <li><strong>Toppings:</strong> Add chickpeas, cucumber, and tomato</li>
+            <li><strong>Dressing:</strong> Drizzle olive oil and squeeze lemon over everything</li>
+            <li><strong>Season:</strong> Add salt and pepper to taste</li>
+            <li><strong>Toss:</strong> Mix it all together (or keep it pretty — your call)</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Quinoa Prep -->
+      <div class="bg-[var(--color-surface)] rounded p-4">
+        <h4 class="font-medium text-[var(--color-accent)] mb-2">🍚 Cooking Quinoa</h4>
+        <div class="text-sm text-[var(--color-text-muted)] space-y-2">
+          <p><strong class="text-[var(--color-text)]">Stovetop:</strong> Rinse 1 cup dry quinoa, add to pot with 2 cups water and pinch of salt. Bring to boil, reduce to simmer, cover, cook 15 min. Fluff with fork.</p>
+          <p><strong class="text-[var(--color-text)]">Instant Pot:</strong> 1 cup quinoa + 1.25 cups water. High pressure 1 minute, natural release 10 min.</p>
+          <p><strong class="text-[var(--color-text)]">Batch tip:</strong> Make extra on Sunday — cooked quinoa keeps 5–7 days in the fridge.</p>
+        </div>
+      </div>
+
+      <!-- Leftover chickpeas -->
+      <div class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded p-3 text-sm">
+        <p class="text-[var(--color-accent)] font-medium mb-2">🫘 Leftover Chickpeas</p>
+        <p class="text-[var(--color-text-muted)]">A 15 oz can has ~1.5 cups — you'll have ½ cup extra. Store in an airtight container in the fridge (lasts 3–4 days). Toss them on your weeknight salads for extra protein.</p>
+      </div>
+
+      <!-- Variations -->
+      <div class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded p-3 text-sm">
+        <p class="text-[var(--color-accent)] font-medium mb-2">🔄 Optional Add-ins:</p>
+        <div class="grid grid-cols-2 gap-1 text-[var(--color-text-muted)]">
+          <span>• Feta cheese (adds ~75 cal/oz)</span>
+          <span>• Kalamata olives</span>
+          <span>• Red onion, thinly sliced</span>
+          <span>• Fresh herbs (parsley, mint)</span>
         </div>
       </div>
     </div>
