@@ -213,11 +213,7 @@ export const GLOSSARY: GlossaryTerm[] = [
   },
 
   // Equipment
-  {
-    term: "Captain's Chair",
-    definition: 'A frame with padded armrests and a back pad — you hang from it with legs free for leg raises.',
-    aliases: ["captain's chair", 'captains chair']
-  },
+  // Note: Captain's Chair removed from glossary - now has photo in equipment.ts
   {
     term: 'cable',
     definition: 'A pulley system with adjustable height, providing constant tension.',

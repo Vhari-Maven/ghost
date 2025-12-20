@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ExerciseInstructions } from '$lib/data/exercises';
   import GlossaryText from '$lib/components/GlossaryText.svelte';
+  import EquipmentLink from './EquipmentLink.svelte';
 
   let {
     instructions,
@@ -50,7 +51,11 @@
       <!-- Equipment -->
       <div>
         <h5 class="font-medium text-[var(--color-accent)] mb-1">Equipment</h5>
-        <p class="text-[var(--color-text-muted)]">{equipment.join(', ')}</p>
+        <p class="text-[var(--color-text-muted)]">
+          {#each equipment as item, i}
+            <EquipmentLink name={item} />{#if i < equipment.length - 1}, {/if}
+          {/each}
+        </p>
       </div>
 
       <!-- Setup -->

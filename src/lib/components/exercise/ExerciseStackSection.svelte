@@ -3,6 +3,7 @@
   import type { AlwaysDoItem, Exercise } from '$lib/data/exercises';
   import Accordion from '$lib/components/Accordion.svelte';
   import GlossaryText from '$lib/components/GlossaryText.svelte';
+  import EquipmentLink from './EquipmentLink.svelte';
 
   let {
     title,
@@ -126,6 +127,20 @@
           <!-- Expandable instructions -->
           {#if isExpanded}
             <div class="px-3 pb-3 space-y-3 border-t border-[var(--color-border)] pt-3">
+              <!-- Equipment -->
+              {#if exercise.equipment && exercise.equipment.length > 0 && exercise.equipment[0] !== 'Floor / Mat'}
+                <div>
+                  <h5 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-wide mb-1">
+                    Equipment
+                  </h5>
+                  <p class="text-sm text-[var(--color-text-muted)]">
+                    {#each exercise.equipment as equip, i}
+                      <EquipmentLink name={equip} />{#if i < exercise.equipment.length - 1}, {/if}
+                    {/each}
+                  </p>
+                </div>
+              {/if}
+
               <!-- Setup -->
               <div>
                 <h5 class="text-xs font-semibold text-[var(--color-accent)] uppercase tracking-wide mb-1">
