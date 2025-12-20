@@ -88,39 +88,39 @@ export const EXERCISES: Record<string, Exercise> = {
 
   pec_fly: {
     id: 'pec_fly',
-    name: 'Pec Fly Machine',
+    name: 'Cable Chest Fly',
     category: 'isolation',
-    equipment: ['Precor Pec Fly'],
+    equipment: ['Functional Trainer (Cable Machine)'],
     defaultSets: 3,
     defaultReps: '12-15',
-    starterWeight: '30-50 lbs',
+    starterWeight: '10-20 lbs per side',
     musclesWorked: ['Chest'],
     instructions: {
-      setup: 'Adjust the seat height so the handles are at chest level. Sit with your back against the pad. Grip the handles with your elbows slightly bent.',
+      setup: 'Set both pulleys to chest height (or slightly above). Stand in the center of the cable machine, grab a handle in each hand, and step forward so there\'s tension on the cables. Stagger your feet for balance. Start with arms out wide, elbows slightly bent.',
       execution: [
-        'Start with arms wide, feeling a stretch across your chest',
-        'Bring the handles together in front of your chest in a hugging motion',
-        'Squeeze your chest hard at the center for a 1-second pause',
-        'Slowly return to the starting position with control',
-        'Don\'t let the weight stack touch between reps'
+        'With a slight bend in your elbows, bring both handles together in front of your chest',
+        'Squeeze your chest hard when your hands meet in the middle',
+        'Hold the squeeze for 1 second',
+        'Slowly let your arms return to the wide starting position',
+        'Feel a stretch across your chest before starting the next rep'
       ],
       formCues: [
-        'Keep a slight bend in your elbows throughout',
-        'Think about bringing your elbows together, not your hands',
-        'Keep your back pressed into the pad',
-        'Move through the full range of motion'
+        'Keep a slight bend in your elbows throughout - don\'t straighten your arms',
+        'Think about bringing your elbows together, not just your hands',
+        'Keep your core tight and don\'t lean forward excessively',
+        'Control the weight - don\'t let the cables yank your arms back'
       ],
       commonMistakes: [
-        'Using too much weight and shortening the range of motion',
-        'Letting the weight pull your arms back too far (overstretching)',
+        'Using too much weight and losing the chest squeeze',
+        'Letting the cables pull your arms back too fast',
         'Straightening the arms completely (turns it into a press)',
-        'Rushing through the movement'
+        'Leaning too far forward and using momentum'
       ],
       tips: [
-        'START HERE: Try 30-50 lbs - this is an isolation move, go light!',
-        'Great as a finisher after pressing movements',
+        'START HERE: Try 10-20 lbs per side - cables are harder than they look!',
+        'Great as a finisher after chest press',
         'Imagine you\'re hugging a big tree',
-        'Add 10 lbs when you can do 3x15 with a good squeeze'
+        'Add 5 lbs per side when you can do 3x15 with a good squeeze'
       ]
     }
   },
@@ -248,38 +248,39 @@ export const EXERCISES: Record<string, Exercise> = {
 
   leg_press: {
     id: 'leg_press',
-    name: 'Leg Press Machine',
+    name: 'Seated Leg Press Machine',
     category: 'compound',
-    equipment: ['Precor Leg Press'],
+    equipment: ['Precor Seated Leg Press'],
     defaultSets: 3,
     defaultReps: '10-12',
     starterWeight: '90-140 lbs',
     musclesWorked: ['Quads', 'Glutes', 'Hamstrings'],
     instructions: {
-      setup: 'Sit in the machine with your back flat against the pad. Place your feet shoulder-width apart on the platform, toes slightly pointed out. Release the safety handles.',
+      setup: 'Sit in the machine with your back firmly against the backrest. Place your feet shoulder-width apart on the footplate, toes slightly pointed out. Adjust the seat position so your knees are at about 90 degrees when starting. Grip the handles on either side of the seat.',
       execution: [
-        'Slowly lower the platform by bending your knees',
-        'Go down until your knees are at about 90 degrees',
-        'Don\'t let your lower back round off the pad',
-        'Push through your whole foot to press the weight back up',
-        'Stop just short of locking out your knees at the top'
+        'Push the footplate away from you by extending your knees and hips',
+        'Press until your legs are almost fully extended (don\'t lock your knees)',
+        'Pause briefly at the extended position',
+        'Slowly bend your knees to let the weight return toward you',
+        'Stop when your knees reach about 90 degrees - don\'t let your lower back round'
       ],
       formCues: [
-        'Keep your lower back pressed into the pad',
-        'Push through your heels, not just your toes',
-        'Don\'t let your knees cave inward',
-        'Control the descent - don\'t let gravity do the work'
+        'Keep your lower back pressed into the pad throughout',
+        'Push through your whole foot, emphasizing the heels',
+        'Don\'t let your knees cave inward - keep them tracking over your toes',
+        'Control the weight in both directions - no bouncing'
       ],
       commonMistakes: [
-        'Going too deep and letting the lower back round',
-        'Locking out knees aggressively at the top',
-        'Placing feet too high or too low on the platform',
-        'Letting knees cave inward'
+        'Letting knees cave inward',
+        'Locking out knees aggressively at full extension',
+        'Letting the weight pull you too deep, rounding the lower back',
+        'Bouncing at the bottom to use momentum'
       ],
       tips: [
+        'START HERE: Try 90-140 lbs to learn the movement',
         'Foot placement matters: higher = more glutes/hamstrings, lower = more quads',
-        'Start with a moderate weight to learn the movement',
-        'This is one of the safest ways to train legs heavy'
+        'This machine guides the movement, so focus on controlled reps',
+        'Add 20 lbs when you can do 3x12 with good form'
       ]
     }
   },
@@ -325,38 +326,39 @@ export const EXERCISES: Record<string, Exercise> = {
 
   leg_curl: {
     id: 'leg_curl',
-    name: 'Leg Curl Machine',
+    name: 'Seated Leg Curl Machine',
     category: 'isolation',
-    equipment: ['Precor Leg Curl'],
+    equipment: ['Precor Seated Leg Curl'],
     defaultSets: 3,
     defaultReps: '12-15',
     starterWeight: '30-50 lbs',
     musclesWorked: ['Hamstrings'],
     instructions: {
-      setup: 'Lie face down on the machine. Adjust so your knees are just off the edge of the pad. The ankle roller should sit just above your heels. Grip the handles.',
+      setup: 'Sit in the machine with your back against the pad. Adjust the thigh pad so it rests on top of your lower thighs, just above the knees. Place your lower legs on top of the ankle roller, which should sit just above your heels. Grip the handles on either side.',
       execution: [
-        'Curl your heels toward your glutes by bending your knees',
-        'Squeeze your hamstrings hard at the top',
+        'Start with your legs extended in front of you',
+        'Curl your heels down and back toward the seat by bending your knees',
+        'Squeeze your hamstrings hard at the bottom of the movement',
         'Hold for 1 second',
-        'Slowly lower the weight back to the starting position',
+        'Slowly let your legs return to the starting position with control',
         'Don\'t let the weight stack touch between reps'
       ],
       formCues: [
-        'Keep your hips pressed into the pad',
-        'Don\'t lift your hips as you curl',
+        'Keep your back pressed firmly against the pad',
+        'The thigh pad keeps you from lifting up - use it',
         'Point your toes (plantar flex) for more hamstring activation',
-        'Control the negative - this is where the muscle grows'
+        'Control the return - this is where the muscle grows'
       ],
       commonMistakes: [
-        'Lifting the hips to help curl the weight',
+        'Letting your hips lift off the seat',
         'Using momentum instead of controlled movement',
         'Not going through full range of motion',
-        'Letting the weight slam down'
+        'Letting the weight slam back up'
       ],
       tips: [
         'START HERE: Try 30-50 lbs',
-        'Hamstrings respond well to slow negatives',
-        'Can also be done seated if your gym has that machine',
+        'Hamstrings respond well to slow negatives (3 seconds up)',
+        'Seated leg curls emphasize the lower portion of the hamstrings',
         'Add 10 lbs when you can do 3x15 with good form'
       ]
     }
@@ -364,38 +366,38 @@ export const EXERCISES: Record<string, Exercise> = {
 
   calf_raise_leg_press: {
     id: 'calf_raise_leg_press',
-    name: 'Calf Raises (on Leg Press)',
+    name: 'Seated Calf Raises (on Leg Press)',
     category: 'isolation',
-    equipment: ['Precor Leg Press'],
+    equipment: ['Precor Seated Leg Press'],
     defaultSets: 3,
     defaultReps: '15-20',
     starterWeight: '50-90 lbs',
     musclesWorked: ['Calves'],
     instructions: {
-      setup: 'Sit in the leg press machine. Place just the balls of your feet on the lower edge of the platform, heels hanging off. Start with a lighter weight than you\'d use for leg press.',
+      setup: 'Sit in the leg press machine. Extend your legs almost fully and place just the balls of your feet on the lower edge of the footplate, letting your heels hang off. Use a lighter weight than you would for regular leg press.',
       execution: [
-        'Push through the balls of your feet to extend your ankles',
-        'Rise up as high as you can onto your toes',
-        'Squeeze your calves hard at the top',
-        'Slowly lower your heels below the platform for a full stretch',
-        'Pause at the bottom stretch before the next rep'
+        'With legs extended, push through the balls of your feet to point your toes',
+        'Press the footplate as far away as your ankles will allow',
+        'Squeeze your calves hard at full extension',
+        'Slowly let your ankles flex back, bringing your toes toward you for a full stretch',
+        'Pause at the stretched position before the next rep'
       ],
       formCues: [
-        'Keep your legs nearly straight (slight bend is ok)',
-        'Move only at the ankle - no knee bending',
-        'Get a full stretch at the bottom, full squeeze at the top',
-        'Control the movement in both directions'
+        'Keep your legs nearly straight throughout (slight bend is ok)',
+        'Only your ankles should move - no knee bending',
+        'Get a full stretch (toes toward you) and full squeeze (toes pointed)',
+        'Control the movement in both directions - no bouncing'
       ],
       commonMistakes: [
         'Using too much weight and bouncing',
         'Not going through full range of motion',
-        'Bending the knees to help lift the weight',
-        'Going too fast'
+        'Bending the knees to help move the weight',
+        'Going too fast - calves respond to slow, controlled reps'
       ],
       tips: [
-        'START HERE: Try 50-90 lbs - calves can handle more weight',
-        'Calves need high reps and full range of motion',
-        'Pause at both the stretch and the squeeze',
+        'START HERE: Try 50-90 lbs - much lighter than your leg press weight',
+        'Calves need high reps and full range of motion to grow',
+        'Pause for 1 second at both the stretch and the squeeze',
         'Add 20 lbs when you can do 3x20 with good form'
       ]
     }
@@ -446,78 +448,78 @@ export const EXERCISES: Record<string, Exercise> = {
 
   seated_row: {
     id: 'seated_row',
-    name: 'Seated Row Machine',
+    name: 'Cable Seated Row',
     category: 'compound',
-    equipment: ['Precor Seated Row'],
+    equipment: ['Functional Trainer (Cable Machine)', 'Bench (optional)'],
     defaultSets: 3,
     defaultReps: '10-12',
-    starterWeight: '50-80 lbs',
+    starterWeight: '20-40 lbs per side',
     musclesWorked: ['Lats', 'Rhomboids', 'Rear Delts', 'Biceps'],
     instructions: {
-      setup: 'Sit with your chest against the pad (if applicable). Grab the handles. Start with arms extended and a slight stretch in your back.',
+      setup: 'Set both pulleys to the lowest position. Grab a handle in each hand. Sit on the floor facing the machine with your knees slightly bent, or sit on a bench placed in front of the cables. Start with arms extended, feeling a slight stretch in your back.',
       execution: [
-        'Pull the handles toward your torso by driving your elbows back',
+        'Pull both handles toward your torso by driving your elbows back',
         'Squeeze your shoulder blades together as you pull',
-        'Pull until your elbows are behind your body',
+        'Pull until your elbows are behind your body and hands are near your sides',
         'Hold the contraction for 1 second',
-        'Slowly extend your arms back to the starting position'
+        'Slowly extend your arms back to the starting position with control'
       ],
       formCues: [
-        'Keep your chest up and against the pad',
-        'Don\'t round your lower back',
-        'Pull with your back, not just your arms',
-        'Control the weight on the return'
+        'Keep your chest up and proud throughout',
+        'Don\'t round your lower back - maintain a slight arch',
+        'Pull with your back, not just your arms - feel the squeeze between your shoulder blades',
+        'Control the weight on the return - don\'t let it yank you forward'
       ],
       commonMistakes: [
-        'Using momentum by swinging the torso',
+        'Using momentum by swinging the torso back and forth',
         'Shrugging the shoulders up toward the ears',
-        'Not fully extending the arms between reps',
+        'Not fully extending the arms between reps (short range of motion)',
         'Pulling too high (toward chest instead of stomach)'
       ],
       tips: [
-        'START HERE: Try 50-80 lbs',
+        'START HERE: Try 20-40 lbs per side',
         'This works the "thickness" of your back',
-        'Different grip attachments change the muscle emphasis',
-        'Add 10 lbs when you can do 3x12 with good form'
+        'You can also do this one arm at a time for extra core work',
+        'Add 5 lbs per side when you can do 3x12 with good form'
       ]
     }
   },
 
   rear_delt_fly: {
     id: 'rear_delt_fly',
-    name: 'Rear Delt Fly Machine',
+    name: 'Cable Rear Delt Fly',
     category: 'isolation',
-    equipment: ['Precor Pec Fly (reversed)'],
+    equipment: ['Functional Trainer (Cable Machine)'],
     defaultSets: 3,
     defaultReps: '12-15',
-    starterWeight: '20-40 lbs',
+    starterWeight: '5-10 lbs per side',
     musclesWorked: ['Rear Delts', 'Rhomboids'],
     instructions: {
-      setup: 'Face the machine (opposite of pec fly). Adjust the handles so they\'re at shoulder height. Grip the handles with arms extended in front of you.',
+      setup: 'Set both pulleys to shoulder height. Stand in the center of the machine. Cross the cables: grab the LEFT handle with your RIGHT hand, and the RIGHT handle with your LEFT hand. Step back until there\'s tension. Start with arms extended in front of you, cables crossed.',
       execution: [
-        'Pull the handles outward and back in an arc',
-        'Lead with your elbows, keeping a slight bend',
+        'Pull the handles outward and back, uncrossing the cables',
+        'Lead with your elbows, keeping a slight bend in your arms',
+        'Pull until your arms are out to your sides in a "T" position',
         'Squeeze your rear delts and upper back at the end',
-        'Hold for 1 second',
-        'Slowly return to the starting position'
+        'Hold for 1 second, then slowly return to the crossed starting position'
       ],
       formCues: [
-        'Keep your chest pressed against the pad',
-        'Don\'t shrug your shoulders - keep them down',
-        'Think about moving your elbows, not your hands',
-        'Control the weight in both directions'
+        'Keep your torso upright - don\'t lean back',
+        'Don\'t shrug your shoulders - keep them down and back',
+        'Think about pulling your elbows apart, not your hands',
+        'Control the weight in both directions - don\'t let the cables snap back'
       ],
       commonMistakes: [
         'Using too much weight and shortening range of motion',
         'Pulling with the arms instead of the rear delts',
-        'Letting the shoulders shrug up',
-        'Swinging or using momentum'
+        'Letting the shoulders shrug up toward the ears',
+        'Leaning back to use momentum'
       ],
       tips: [
-        'START HERE: Try 20-40 lbs - rear delts are small muscles',
-        'This is the same machine as pec fly, just facing the other way',
+        'START HERE: Try just 5-10 lbs per side - rear delts are tiny muscles!',
+        'The crossed cables create constant tension throughout the movement',
         'Great for posture and shoulder health',
-        'Add 5-10 lbs when you can do 3x15 with good form'
+        'Add 2.5 lbs per side when you can do 3x15 with good form'
       ]
     }
   },
