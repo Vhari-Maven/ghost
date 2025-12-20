@@ -88,6 +88,21 @@ Kanban-style task management with three columns (Todo, In Progress, Done):
 - **Features**: Rapid task entry (Enter to add, stay in form), inline editing, delete confirmation modal
 - **Architecture**: Extracted components in `src/lib/components/tasks/`, service layer in `src/lib/services/tasks.ts`
 
+### Exercise Tracker (`/exercise`)
+7-day workout rotation with machine-focused exercises for beginners:
+- **Workout types**: Upper Push (Mon/Fri), Lower (Tue/Sat), Upper Pull (Wed/Sun), Recovery (Thu)
+- **Always-Do Stack**: Daily cardio (walking), core work, and mobility stretches shown in chronological workout order
+- **Set logging**: Track reps/weight for each set with optimistic updates
+- **Historical comparison**: Shows last workout of same type for progressive overload
+- **Beginner-friendly**: Detailed instructions with starter weights for each exercise
+- **Glossary system**: Hover tooltips for exercise terminology (muscles, equipment, movements)
+- **Architecture**: Exercise definitions in `src/lib/data/exercises.ts`, glossary in `src/lib/data/glossary.ts`, components in `src/lib/components/exercise/`
+
+### Shopping List (`/shopping`)
+Kanban-style shopping list with two columns (To Buy, Ordered):
+- **Drag-and-drop**: Reorder items within columns
+- **Architecture**: Uses shared kanban framework in `src/lib/components/kanban/`
+
 ## Testing
 
 ```bash
@@ -121,7 +136,16 @@ fly deploy
 - Configured via `DATABASE_PATH` env var
 - Backup: `fly sftp shell` → `get /data/ghost.db ./backup.db`
 
+### Production Migration Fixes
+
+If new tables aren't created in production after deploy, the Drizzle migration journal may be out of sync. Use the fix script:
+
+```bash
+fly ssh console -a ghost-dashboard -C "node /app/scripts/fix-migrations.cjs"
+```
+
+This script checks for missing tables and adds them along with the appropriate migration records.
+
 ## Future Plans
 
-- Shopping list micro-app
 - Media queue micro-app
