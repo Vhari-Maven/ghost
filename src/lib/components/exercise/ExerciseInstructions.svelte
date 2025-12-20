@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ExerciseInstructions } from '$lib/data/exercises';
+  import GlossaryText from '$lib/components/GlossaryText.svelte';
 
   let {
     instructions,
@@ -55,7 +56,7 @@
       <!-- Setup -->
       <div>
         <h5 class="font-medium text-[var(--color-accent)] mb-1">Setup</h5>
-        <p class="text-[var(--color-text-muted)]">{instructions.setup}</p>
+        <p class="text-[var(--color-text-muted)]"><GlossaryText text={instructions.setup} /></p>
       </div>
 
       <!-- Execution -->
@@ -63,7 +64,7 @@
         <h5 class="font-medium text-[var(--color-accent)] mb-1">How to Perform</h5>
         <ol class="list-decimal list-inside space-y-1 text-[var(--color-text-muted)]">
           {#each instructions.execution as step}
-            <li>{step}</li>
+            <li><GlossaryText text={step} /></li>
           {/each}
         </ol>
       </div>
@@ -73,7 +74,7 @@
         <h5 class="font-medium text-[var(--color-accent)] mb-1">Form Cues</h5>
         <ul class="list-disc list-inside space-y-1 text-[var(--color-text-muted)]">
           {#each instructions.formCues as cue}
-            <li>{cue}</li>
+            <li><GlossaryText text={cue} /></li>
           {/each}
         </ul>
       </div>
@@ -83,7 +84,7 @@
         <h5 class="font-medium text-amber-400 mb-1">Common Mistakes to Avoid</h5>
         <ul class="list-disc list-inside space-y-1 text-[var(--color-text-muted)]">
           {#each instructions.commonMistakes as mistake}
-            <li>{mistake}</li>
+            <li><GlossaryText text={mistake} /></li>
           {/each}
         </ul>
       </div>
@@ -93,7 +94,7 @@
         <h5 class="font-medium text-green-400 mb-1">Tips</h5>
         <ul class="list-disc list-inside space-y-1 text-[var(--color-text-muted)]">
           {#each instructions.tips as tip}
-            <li>{tip}</li>
+            <li><GlossaryText text={tip} /></li>
           {/each}
         </ul>
       </div>

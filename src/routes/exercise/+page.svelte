@@ -1,7 +1,7 @@
 <script lang="ts">
   import DayNavigation from '$lib/components/exercise/DayNavigation.svelte';
   import WorkoutHeader from '$lib/components/exercise/WorkoutHeader.svelte';
-  import AlwaysDoStack from '$lib/components/exercise/AlwaysDoStack.svelte';
+  import ExerciseStackSection from '$lib/components/exercise/ExerciseStackSection.svelte';
   import ExerciseCard from '$lib/components/exercise/ExerciseCard.svelte';
 
   let { data } = $props();
@@ -14,54 +14,67 @@
   <!-- Workout Header -->
   <WorkoutHeader workoutInfo={data.workoutInfo} selectedDate={data.selectedDate} />
 
-  <!-- Always Do Stack -->
+  <!--
+    WORKOUT ORDER:
+    1. Walking (warm-up cardio)
+    2. Lifting (main workout)
+    3. Core (abs after lifting)
+    4. Stretching (cooldown mobility)
+  -->
+
+  <!-- 1. WALKING (Warm-up) -->
   <div class="mb-6">
-    <AlwaysDoStack
-      alwaysDoByCategory={data.alwaysDoByCategory}
+    <ExerciseStackSection
+      title="Warm Up"
+      icon="🏃"
+      items={data.alwaysDoByCategory.cardio}
       alwaysDoStatus={data.alwaysDoStatus}
       exercises={data.allExercises}
       sessionId={data.session.id}
       isFuture={data.isFuture}
+      defaultOpen={true}
     />
   </div>
 
-  <!-- Main Exercises -->
+  <!-- 2. LIFTING (Main Workout) -->
   {#if data.exercises.length > 0}
-    <div class="mb-4">
-      <h2 class="text-lg font-semibold text-[var(--color-text)] flex items-center gap-2">
-        <span class="text-xl">🏋️</span>
-        Today's Workout
-      </h2>
-      <p class="text-sm text-[var(--color-text-muted)]">
-        {data.exercises.length} exercises • {data.exercises.reduce((acc, e) => acc + e.defaultSets, 0)} total sets
-      </p>
-    </div>
-
-    <div class="space-y-4">
-      {#each data.exercises as exercise}
-        <ExerciseCard
-          {exercise}
-          sessionId={data.session.id}
-          existingLogs={data.logsByExercise[exercise.id] || []}
-          historicalSummary={data.historicalSummaries[exercise.id] || ''}
-          isFuture={data.isFuture}
-        />
-      {/each}
-    </div>
-
-    {#if data.historyDate}
-      <div class="mt-6 text-center text-sm text-[var(--color-text-muted)]">
-        Comparing to your last {data.workoutInfo.label} workout on {new Date(data.historyDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+    <div class="mb-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-semibold text-[var(--color-text)] flex items-center gap-2">
+          <span class="text-xl">🏋️</span>
+          Today's Workout
+        </h2>
+        <p class="text-sm text-[var(--color-text-muted)]">
+          {data.exercises.length} exercises • {data.exercises.reduce((acc, e) => acc + e.defaultSets, 0)} total sets
+        </p>
       </div>
-    {/if}
+
+      <div class="space-y-4">
+        {#each data.exercises as exercise}
+          <ExerciseCard
+            {exercise}
+            sessionId={data.session.id}
+            existingLogs={data.logsByExercise[exercise.id] || []}
+            historicalSummary={data.historicalSummaries[exercise.id] || ''}
+            isFuture={data.isFuture}
+          />
+        {/each}
+      </div>
+
+      {#if data.historyDate}
+        <div class="mt-4 text-center text-sm text-[var(--color-text-muted)]">
+          Comparing to your last {data.workoutInfo.label} workout on {new Date(data.historyDate + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        </div>
+      {/if}
+    </div>
   {:else}
-    <!-- Recovery Day -->
-    <div class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-6 text-center">
+    <!-- Recovery Day message -->
+    <div class="mb-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-6 text-center">
       <div class="text-4xl mb-3">🧘</div>
       <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">Active Recovery Day</h3>
       <p class="text-[var(--color-text-muted)] max-w-md mx-auto">
-        No resistance training today. Focus on the Always Do stack above — consider extending your walk
-        and spending extra time on mobility.
+        No resistance training today. Focus on the cardio, core, and mobility sections — consider extending your walk
+        and spending extra time on stretching.
       </p>
       <div class="mt-4 p-4 bg-[var(--color-bg)] rounded-lg text-left">
         <h4 class="font-medium text-[var(--color-accent)] mb-2">Recovery Day Ideas:</h4>
@@ -75,7 +88,35 @@
     </div>
   {/if}
 
-  <!-- Session completion (future feature) -->
+  <!-- 3. CORE (After Lifting) -->
+  <div class="mb-6">
+    <ExerciseStackSection
+      title="Core Work"
+      icon="💪"
+      items={data.alwaysDoByCategory.core}
+      alwaysDoStatus={data.alwaysDoStatus}
+      exercises={data.allExercises}
+      sessionId={data.session.id}
+      isFuture={data.isFuture}
+      defaultOpen={true}
+    />
+  </div>
+
+  <!-- 4. STRETCHING (Cooldown) -->
+  <div class="mb-6">
+    <ExerciseStackSection
+      title="Stretching"
+      icon="🧘"
+      items={data.alwaysDoByCategory.mobility}
+      alwaysDoStatus={data.alwaysDoStatus}
+      exercises={data.allExercises}
+      sessionId={data.session.id}
+      isFuture={data.isFuture}
+      defaultOpen={true}
+    />
+  </div>
+
+  <!-- Session completion -->
   {#if !data.isFuture && data.session.completedAt}
     <div class="mt-6 text-center py-4 bg-green-500/10 border border-green-500/30 rounded-lg">
       <span class="text-green-400 font-medium">
