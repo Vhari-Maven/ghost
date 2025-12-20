@@ -1,70 +1,53 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { ChevronLeft, ChevronRight, Edit, Trash } from '$lib/components/kanban/icons';
-  import { Tag } from './icons';
-  import type { Task, ColumnId, TaskLabel } from './types';
-  import { COLUMN_CONFIG } from './types';
+  import type { ShoppingItem, ShoppingStatus } from './types';
+  import { SHOPPING_COLUMNS } from './types';
 
   type Props = {
-    task: Task;
-    columnId: ColumnId;
+    item: ShoppingItem;
+    columnId: ShoppingStatus;
     isEditing: boolean;
     editTitle: string;
-    editDescription: string;
-    editLabelIds: number[];
-    availableLabels: TaskLabel[];
-    onStartEdit: (task: Task) => void;
+    editNotes: string;
+    onStartEdit: (item: ShoppingItem) => void;
     onCancelEdit: () => void;
     onEditTitleChange: (value: string) => void;
-    onEditDescriptionChange: (value: string) => void;
-    onToggleEditLabel: (labelId: number) => void;
-    onRequestDelete: (task: Task) => void;
-    isDone?: boolean;
+    onEditNotesChange: (value: string) => void;
+    onRequestDelete: (item: ShoppingItem) => void;
+    isOrdered?: boolean;
   };
 
   let {
-    task,
+    item,
     columnId,
     isEditing,
     editTitle,
-    editDescription,
-    editLabelIds,
-    availableLabels,
+    editNotes,
     onStartEdit,
     onCancelEdit,
     onEditTitleChange,
-    onEditDescriptionChange,
-    onToggleEditLabel,
+    onEditNotesChange,
     onRequestDelete,
-    isDone = false,
+    isOrdered = false,
   }: Props = $props();
 
-  const config = $derived(COLUMN_CONFIG[columnId]);
-
-  let showLabelPicker = $state(false);
+  const config = $derived(SHOPPING_COLUMNS[columnId]);
 </script>
 
 {#if isEditing}
   <form
     method="POST"
-    action="?/updateTask"
+    action="?/updateItem"
     class="bg-[var(--color-surface)] border border-[var(--color-accent)] rounded-lg p-3"
     use:enhance={() => {
       return async ({ update }) => {
         await update({ reset: false });
-        // Also update labels
-        const labelFormData = new FormData();
-        labelFormData.append('taskId', String(task.id));
-        labelFormData.append('labelIds', editLabelIds.join(','));
-        await fetch('?/updateTaskLabels', {
-          method: 'POST',
-          body: labelFormData,
-        });
         onCancelEdit();
       };
     }}
   >
-    <input type="hidden" name="taskId" value={task.id} />
+    <input type="hidden" name="itemId" value={item.id} />
     <input
       type="text"
       name="title"
@@ -74,49 +57,13 @@
       autofocus
     />
     <textarea
-      name="description"
-      value={editDescription}
-      oninput={(e) => onEditDescriptionChange(e.currentTarget.value)}
-      placeholder="Description (optional)"
+      name="notes"
+      value={editNotes}
+      oninput={(e) => onEditNotesChange(e.currentTarget.value)}
+      placeholder="Notes (optional)"
       rows="2"
       class="w-full bg-transparent border border-[var(--color-border)] rounded px-2 py-1 outline-none text-sm text-[var(--color-text-muted)] resize-none focus:border-[var(--color-accent)]"
     ></textarea>
-
-    <!-- Label Editor -->
-    <div class="mt-2">
-      <button
-        type="button"
-        onclick={() => (showLabelPicker = !showLabelPicker)}
-        class="text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text)] flex items-center gap-1"
-      >
-        <Tag />
-        Labels
-        {#if editLabelIds.length > 0}
-          <span class="bg-[var(--color-accent)] text-white text-[10px] px-1.5 rounded-full">
-            {editLabelIds.length}
-          </span>
-        {/if}
-      </button>
-
-      {#if showLabelPicker}
-        <div class="mt-2 p-2 bg-[var(--color-bg)] rounded border border-[var(--color-border)]">
-          <div class="flex flex-wrap gap-1">
-            {#each availableLabels as label}
-              <button
-                type="button"
-                onclick={() => onToggleEditLabel(label.id)}
-                class="px-2 py-0.5 text-xs rounded-full border transition-colors {editLabelIds.includes(label.id)
-                  ? 'border-transparent'
-                  : 'border-[var(--color-border)] opacity-60 hover:opacity-100'}"
-                style="background-color: {label.color}20; color: {label.color}; {editLabelIds.includes(label.id) ? `background-color: ${label.color}40` : ''}"
-              >
-                {label.name}
-              </button>
-            {/each}
-          </div>
-        </div>
-      {/if}
-    </div>
 
     <div class="flex gap-2 mt-3">
       <button
@@ -137,28 +84,15 @@
 {:else}
   <div
     class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-3 hover:border-[var(--color-accent)]/50 transition-colors group cursor-grab active:cursor-grabbing"
-    class:opacity-75={isDone}
+    class:opacity-75={isOrdered}
   >
-    {#if task.labels.length > 0}
-      <div class="flex flex-wrap gap-1 mb-2">
-        {#each task.labels as label}
-          <span
-            class="px-2 py-0.5 text-[10px] rounded-full font-medium"
-            style="background-color: {label.color}20; color: {label.color}"
-          >
-            {label.name}
-          </span>
-        {/each}
-      </div>
-    {/if}
-
-    <h3 class="font-medium text-[var(--color-text)] mb-1" class:line-through={isDone}>
-      {task.title}
+    <h3 class="font-medium text-[var(--color-text)] mb-1" class:line-through={isOrdered}>
+      {item.title}
     </h3>
 
-    {#if task.description}
+    {#if item.notes}
       <p class="text-sm text-[var(--color-text-muted)] line-clamp-2 mb-2">
-        {task.description}
+        {item.notes}
       </p>
     {/if}
 
@@ -166,28 +100,28 @@
       <!-- Move buttons -->
       <div class="flex gap-1">
         {#if config.canMoveLeft}
-          <form method="POST" action="?/moveTask" use:enhance>
-            <input type="hidden" name="taskId" value={task.id} />
+          <form method="POST" action="?/moveItem" use:enhance>
+            <input type="hidden" name="itemId" value={item.id} />
             <input type="hidden" name="status" value={config.leftTarget} />
             <input type="hidden" name="sortOrder" value="0" />
             <button
               type="submit"
               class="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
-              title="Move left"
+              title="Move back to To Buy"
             >
               <ChevronLeft />
             </button>
           </form>
         {/if}
         {#if config.canMoveRight}
-          <form method="POST" action="?/moveTask" use:enhance>
-            <input type="hidden" name="taskId" value={task.id} />
+          <form method="POST" action="?/moveItem" use:enhance>
+            <input type="hidden" name="itemId" value={item.id} />
             <input type="hidden" name="status" value={config.rightTarget} />
             <input type="hidden" name="sortOrder" value="0" />
             <button
               type="submit"
               class="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
-              title="Move right"
+              title="Mark as Ordered"
             >
               <ChevronRight />
             </button>
@@ -199,7 +133,7 @@
       <div class="flex gap-1">
         <button
           type="button"
-          onclick={() => onStartEdit(task)}
+          onclick={() => onStartEdit(item)}
           class="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
           title="Edit"
         >
@@ -207,7 +141,7 @@
         </button>
         <button
           type="button"
-          onclick={() => onRequestDelete(task)}
+          onclick={() => onRequestDelete(item)}
           class="p-1 text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
           title="Delete"
         >

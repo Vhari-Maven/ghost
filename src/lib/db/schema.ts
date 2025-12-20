@@ -54,3 +54,24 @@ export type NewTask = typeof tasks.$inferInsert;
 export type TaskLabel = typeof taskLabels.$inferSelect;
 export type NewTaskLabel = typeof taskLabels.$inferInsert;
 export type TaskLabelAssignment = typeof taskLabelAssignments.$inferSelect;
+
+// ============================================
+// Shopping List Tables
+// ============================================
+
+export const SHOPPING_STATUSES = ['to_buy', 'ordered'] as const;
+export type ShoppingStatus = (typeof SHOPPING_STATUSES)[number];
+
+export const shoppingItems = sqliteTable('shopping_items', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  title: text('title').notNull(),
+  notes: text('notes'),
+  status: text('status').notNull().default('to_buy'), // 'to_buy' | 'ordered'
+  sortOrder: integer('sort_order').notNull().default(0),
+  orderedAt: text('ordered_at'), // Set when moved to ordered
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+export type ShoppingItem = typeof shoppingItems.$inferSelect;
+export type NewShoppingItem = typeof shoppingItems.$inferInsert;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Trash } from '$lib/components/kanban/icons';
+  import { Trash } from './icons';
 
   type Props = {
     isOpen: boolean;

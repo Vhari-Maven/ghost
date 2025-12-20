@@ -15,6 +15,13 @@
       "when": 1765721851676,
       "tag": "0001_steady_cassandra_nova",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1766189951271,
+      "tag": "0002_thick_slayback",
+      "breakpoints": true
     }
   ]
 }

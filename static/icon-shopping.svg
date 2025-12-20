@@ -1,39 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-  <!-- HUD corner brackets -->
-  <path d="M2 6 L2 2 L6 2" fill="none" stroke="#0e7490" stroke-width="1" opacity="0.6"/>
-  <path d="M18 2 L22 2 L22 6" fill="none" stroke="#0e7490" stroke-width="1" opacity="0.6"/>
-  <path d="M22 18 L22 22 L18 22" fill="none" stroke="#0e7490" stroke-width="1" opacity="0.6"/>
-  <path d="M6 22 L2 22 L2 18" fill="none" stroke="#0e7490" stroke-width="1" opacity="0.6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="shopGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#67e8f9"/>
+      <stop offset="50%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0e7490"/>
+    </linearGradient>
+  </defs>
 
-  <!-- Cart body - geometric basket shape -->
-  <path
-    d="M4 7 L6 7 L8 16 L18 16 L20 7 L8 7"
-    fill="none"
-    stroke="#06b6d4"
-    stroke-width="1.5"
-    stroke-linejoin="round"
-  />
+  <!-- Outer glow -->
+  <ellipse cx="16" cy="20" rx="13" ry="10" fill="#06b6d4" opacity="0.1"/>
 
-  <!-- Cart handle -->
-  <path
-    d="M4 7 L5 5 L7 5"
-    fill="none"
-    stroke="#06b6d4"
-    stroke-width="1.5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  />
+  <!-- Cart body -->
+  <path d="M6 8 L8 8 L12 22 L26 22" fill="none" stroke="url(#shopGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- Grid lines inside cart (list items suggestion) -->
-  <line x1="9" y1="10" x2="17" y2="10" stroke="#67e8f9" stroke-width="0.75" opacity="0.5"/>
-  <line x1="9" y1="13" x2="16" y2="13" stroke="#67e8f9" stroke-width="0.75" opacity="0.5"/>
+  <!-- Cart basket -->
+  <path d="M10 12 L11 20 L25 20 L27 12 Z" fill="#06b6d4" opacity="0.2"/>
+  <path d="M10 12 L11 20 L25 20 L27 12 Z" fill="none" stroke="url(#shopGrad)" stroke-width="1.5" stroke-linejoin="round"/>
 
-  <!-- Wheels with glow effect -->
-  <circle cx="10" cy="19" r="1.5" fill="#06b6d4"/>
-  <circle cx="10" cy="19" r="2.5" fill="none" stroke="#67e8f9" stroke-width="0.5" opacity="0.4"/>
-  <circle cx="16" cy="19" r="1.5" fill="#06b6d4"/>
-  <circle cx="16" cy="19" r="2.5" fill="none" stroke="#67e8f9" stroke-width="0.5" opacity="0.4"/>
+  <!-- Cart divider lines (items) -->
+  <line x1="15" y1="12" x2="14.5" y2="20" stroke="#67e8f9" stroke-width="1" opacity="0.5"/>
+  <line x1="21" y1="12" x2="20.5" y2="20" stroke="#67e8f9" stroke-width="1" opacity="0.5"/>
 
-  <!-- Scan line overlay -->
-  <line x1="3" y1="12" x2="21" y2="12" stroke="#67e8f9" stroke-width="0.5" opacity="0.15"/>
+  <!-- Wheels -->
+  <circle cx="14" cy="26" r="2.5" fill="#0e7490"/>
+  <circle cx="14" cy="26" r="2.5" fill="none" stroke="#67e8f9" stroke-width="1"/>
+  <circle cx="14" cy="26" r="1" fill="#67e8f9"/>
+
+  <circle cx="23" cy="26" r="2.5" fill="#0e7490"/>
+  <circle cx="23" cy="26" r="2.5" fill="none" stroke="#67e8f9" stroke-width="1"/>
+  <circle cx="23" cy="26" r="1" fill="#67e8f9"/>
+
+  <!-- Handle grip -->
+  <circle cx="6" cy="8" r="1.5" fill="#67e8f9"/>
+
+  <!-- Scan lines -->
+  <g opacity="0.2">
+    <line x1="10" y1="14" x2="27" y2="14" stroke="#67e8f9" stroke-width="0.5"/>
+    <line x1="10.5" y1="17" x2="26" y2="17" stroke="#67e8f9" stroke-width="0.5"/>
+  </g>
 </svg>
