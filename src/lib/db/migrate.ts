@@ -9,13 +9,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..', '..', '..');
 
-// Ensure data directory exists
-mkdirSync(join(projectRoot, 'data'), { recursive: true });
+// Use DATABASE_PATH env var in production, fall back to local data folder
+const dbPath = process.env.DATABASE_PATH || join(projectRoot, 'data', 'ghost.db');
 
-const sqlite = new Database(join(projectRoot, 'data', 'ghost.db'));
+// Ensure parent directory exists
+mkdirSync(dirname(dbPath), { recursive: true });
+
+console.log(`Running migrations on ${dbPath}...`);
+const sqlite = new Database(dbPath);
 const db = drizzle(sqlite);
 
-console.log('Running migrations...');
 migrate(db, { migrationsFolder: join(projectRoot, 'drizzle') });
 console.log('Migrations complete!');
 
