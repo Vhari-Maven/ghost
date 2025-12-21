@@ -40,6 +40,7 @@ export interface Exercise {
   starterWeight?: string; // Recommended starting weight for beginners
   musclesWorked: string[];
   instructions: ExerciseInstructions;
+  videoId?: string; // YouTube video ID for tutorial
 }
 
 export const EXERCISES: Record<string, Exercise> = {
@@ -56,6 +57,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '10-12',
     starterWeight: '50-70 lbs',
     musclesWorked: ['Chest', 'Front Delts', 'Triceps'],
+    videoId: 'KVDPkBDPT9o',
     instructions: {
       setup: 'Adjust the seat so the handles are at mid-chest height. Sit with your back flat against the pad, feet flat on the floor. Grip the handles with palms facing down.',
       execution: [
@@ -95,6 +97,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '12-15',
     starterWeight: '10-20 lbs per side',
     musclesWorked: ['Chest'],
+    videoId: 'yrpiK8R4Vqo',
     instructions: {
       setup: 'Set both pulleys to chest height (or slightly above). Stand in the center of the cable machine, grab a handle in each hand, and step forward so there\'s tension on the cables. Stagger your feet for balance. Start with arms out wide, elbows slightly bent.',
       execution: [
@@ -134,6 +137,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '10-12',
     starterWeight: '15-25 lbs per side',
     musclesWorked: ['Shoulders', 'Triceps'],
+    videoId: 'e1scliIVDQo',
     instructions: {
       setup: 'Set the cables to the lowest position. Grab a handle in each hand and bring them to shoulder height, palms facing forward. Stand with feet shoulder-width apart, core braced.',
       execution: [
@@ -173,6 +177,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '12-15',
     starterWeight: '5-10 lbs',
     musclesWorked: ['Side Delts'],
+    videoId: 'f_OGBg2KxgY',
     instructions: {
       setup: 'Set the cable to the lowest position. Stand sideways to the machine, grab the handle with your far hand (cable crosses in front of your body). Stand tall with a slight lean away from the machine.',
       execution: [
@@ -212,6 +217,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '12-15',
     starterWeight: '20-30 lbs',
     musclesWorked: ['Triceps'],
+    videoId: 'NvZKjiZ8NYc',
     instructions: {
       setup: 'Attach the rope to the high pulley. Stand facing the machine, grab the rope with both hands, palms facing each other. Pin your elbows to your sides.',
       execution: [
@@ -255,6 +261,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '10-12',
     starterWeight: '90-140 lbs',
     musclesWorked: ['Quads', 'Glutes', 'Hamstrings'],
+    videoId: 'nDh_BlnLCGc',
     instructions: {
       setup: 'Sit in the machine with your back firmly against the backrest. Place your feet shoulder-width apart on the footplate, toes slightly pointed out. Adjust the seat position so your knees are at about 90 degrees when starting. Grip the handles on either side of the seat.',
       execution: [
@@ -294,6 +301,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '12-15',
     starterWeight: '30-50 lbs',
     musclesWorked: ['Quads'],
+    videoId: 'xd9m2S_Rw4s',
     instructions: {
       setup: 'Adjust the back pad so your knees align with the machine\'s pivot point. Adjust the ankle pad so it sits on your lower shins. Grip the handles.',
       execution: [
@@ -333,6 +341,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '12-15',
     starterWeight: '30-50 lbs',
     musclesWorked: ['Hamstrings'],
+    videoId: 't9sTSr-JYSs',
     instructions: {
       setup: 'Sit in the machine with your back against the pad. Adjust the thigh pad so it rests on top of your lower thighs, just above the knees. Place your lower legs on top of the ankle roller, which should sit just above your heels. Grip the handles on either side.',
       execution: [
@@ -373,6 +382,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '15-20',
     starterWeight: '50-90 lbs',
     musclesWorked: ['Calves'],
+    videoId: '1cvpm--Y-4I',
     instructions: {
       setup: 'Sit in the leg press machine. Extend your legs almost fully and place just the balls of your feet on the lower edge of the footplate, letting your heels hang off. Use a lighter weight than you would for regular leg press.',
       execution: [
@@ -416,6 +426,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '10-12',
     starterWeight: '60-90 lbs',
     musclesWorked: ['Lats', 'Biceps', 'Rear Delts'],
+    videoId: 'AOpi-p0cJkc',
     instructions: {
       setup: 'Adjust the thigh pad so you\'re locked in snugly. Grab the bar with a grip slightly wider than shoulder width, palms facing away from you.',
       execution: [
@@ -455,6 +466,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '10-12',
     starterWeight: '20-40 lbs per side',
     musclesWorked: ['Lats', 'Rhomboids', 'Rear Delts', 'Biceps'],
+    videoId: 'vwHG9Jfu4sw',
     instructions: {
       setup: 'Set both pulleys to the lowest position. Grab a handle in each hand. Sit on the floor facing the machine with your knees slightly bent, or sit on a bench placed in front of the cables. Start with arms extended, feeling a slight stretch in your back.',
       execution: [
@@ -494,6 +506,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '12-15',
     starterWeight: '5-10 lbs per side',
     musclesWorked: ['Rear Delts', 'Rhomboids'],
+    videoId: 'bkejPHrPkmA',
     instructions: {
       setup: 'Set both pulleys to shoulder height. Stand in the center of the machine. Cross the cables: grab the LEFT handle with your RIGHT hand, and the RIGHT handle with your LEFT hand. Step back until there\'s tension. Start with arms extended in front of you, cables crossed.',
       execution: [
@@ -533,6 +546,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '10-12',
     starterWeight: '20-35 lbs',
     musclesWorked: ['Biceps'],
+    videoId: 'NFzTWp2qpiE',
     instructions: {
       setup: 'Attach a straight bar or EZ bar to the low pulley. Stand facing the machine, grab the bar with an underhand grip, arms extended down.',
       execution: [
@@ -572,6 +586,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultReps: '15-20',
     starterWeight: '15-25 lbs',
     musclesWorked: ['Rear Delts', 'Rotator Cuff', 'Upper Back'],
+    videoId: 'LJN-sT_6OYY',
     instructions: {
       setup: 'Set the cable to face height or slightly above. Attach the rope. Grab the rope with both hands, thumbs pointing back toward you.',
       execution: [
@@ -614,6 +629,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 2,
     defaultReps: '30-60 sec',
     musclesWorked: ['Core', 'Shoulders', 'Glutes'],
+    videoId: 'v25dawSzRTM',
     instructions: {
       setup: 'Get on the floor on your forearms and toes. Elbows should be directly under your shoulders. Clasp your hands together or keep them flat.',
       execution: [
@@ -651,6 +667,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 2,
     defaultReps: '10-15',
     musclesWorked: ['Lower Abs', 'Hip Flexors'],
+    videoId: 'u3dRrxytkBo',
     instructions: {
       setup: 'Position yourself in the Captain\'s Chair with your forearms on the pads. Let your legs hang straight down. Press your back against the back pad.',
       execution: [
@@ -688,6 +705,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 2,
     defaultReps: '15-20 each side',
     musclesWorked: ['Abs', 'Obliques'],
+    videoId: 'PAEo-zRSanM',
     instructions: {
       setup: 'Lie on your back with hands behind your head (don\'t clasp). Lift your shoulders off the ground. Bring your knees up to 90 degrees.',
       execution: [
@@ -729,6 +747,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 1,
     defaultReps: '30 sec each side',
     musclesWorked: ['Hip Flexors', 'Quads'],
+    videoId: 'fDC2KC1XqY8',
     instructions: {
       setup: 'Kneel on one knee with the other foot flat on the floor in front of you (like a lunge position). Keep your torso upright.',
       execution: [
@@ -766,6 +785,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 1,
     defaultReps: '30 sec each leg',
     musclesWorked: ['Hamstrings'],
+    videoId: 'aJvfeuu71gw',
     instructions: {
       setup: 'Sit on the floor with one leg extended and the other bent with foot against your inner thigh.',
       execution: [
@@ -803,6 +823,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 1,
     defaultReps: '30 sec each side',
     musclesWorked: ['Chest', 'Front Delts'],
+    videoId: 'PWGuI3rTRx0',
     instructions: {
       setup: 'Stand in a doorway. Place your forearm against the door frame with your elbow at shoulder height, bent at 90 degrees.',
       execution: [
@@ -840,6 +861,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 1,
     defaultReps: '10 slow cycles',
     musclesWorked: ['Spine', 'Core', 'Back'],
+    videoId: 'vuyUwtHl694',
     instructions: {
       setup: 'Get on all fours with hands under shoulders and knees under hips. Start with a neutral spine.',
       execution: [
@@ -877,6 +899,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 1,
     defaultReps: '30 sec each side',
     musclesWorked: ['Glutes', 'Piriformis', 'Hip External Rotators'],
+    videoId: 'ckHZyA99Das',
     instructions: {
       setup: 'Lie on your back with knees bent, feet flat on the floor.',
       execution: [
@@ -918,6 +941,7 @@ export const EXERCISES: Record<string, Exercise> = {
     defaultSets: 1,
     defaultReps: '25 min',
     musclesWorked: ['Legs', 'Cardiovascular System'],
+    videoId: '6GLC-wdknH0',
     instructions: {
       setup: 'Set treadmill to 5% incline. Set speed to a comfortable walking pace (3.5-3.8 mph).',
       execution: [

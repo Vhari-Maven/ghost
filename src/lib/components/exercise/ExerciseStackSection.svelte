@@ -4,6 +4,7 @@
   import Accordion from '$lib/components/Accordion.svelte';
   import GlossaryText from '$lib/components/GlossaryText.svelte';
   import EquipmentLink from './EquipmentLink.svelte';
+  import VideoModal from './VideoModal.svelte';
 
   let {
     title,
@@ -30,6 +31,9 @@
 
   // Track which exercise instructions are expanded
   let expandedInstructions = $state<Record<string, boolean>>({});
+
+  // Track which video modal is open
+  let activeVideoId = $state<string | null>(null);
 
   // Initialize from server state
   $effect(() => {
@@ -107,22 +111,37 @@
 
         <!-- Instructions toggle button -->
         {#if exercise?.instructions}
-          <button
-            type="button"
-            onclick={() => toggleInstructions(item.id)}
-            class="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-text-muted)]
-              hover:text-[var(--color-text)] transition-colors border-t border-[var(--color-border)]"
-          >
-            <svg
-              class="w-4 h-4 transition-transform {isExpanded ? 'rotate-90' : ''}"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <div class="flex items-center border-t border-[var(--color-border)]">
+            <button
+              type="button"
+              onclick={() => toggleInstructions(item.id)}
+              class="flex-1 flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-text-muted)]
+                hover:text-[var(--color-text)] transition-colors"
             >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-            <span>How to do this exercise</span>
-          </button>
+              <svg
+                class="w-4 h-4 transition-transform {isExpanded ? 'rotate-90' : ''}"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+              <span>How to do this exercise</span>
+            </button>
+
+            {#if exercise.videoId}
+              <button
+                type="button"
+                onclick={() => activeVideoId = exercise.videoId ?? null}
+                class="flex items-center gap-1.5 px-3 py-2 text-sm text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] transition-colors"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span>Watch</span>
+              </button>
+            {/if}
+          </div>
 
           <!-- Expandable instructions -->
           {#if isExpanded}
@@ -220,3 +239,14 @@
     {/each}
   </div>
 </Accordion>
+
+<!-- Video Modal (shared for all items in this section) -->
+{#if activeVideoId}
+  {@const activeExercise = items.find(item => exercises[item.id]?.videoId === activeVideoId)}
+  <VideoModal
+    videoId={activeVideoId}
+    title={activeExercise?.name ?? 'Exercise Demo'}
+    isOpen={true}
+    onclose={() => activeVideoId = null}
+  />
+{/if}

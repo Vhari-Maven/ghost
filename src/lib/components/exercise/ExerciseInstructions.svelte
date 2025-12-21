@@ -2,36 +2,57 @@
   import type { ExerciseInstructions } from '$lib/data/exercises';
   import GlossaryText from '$lib/components/GlossaryText.svelte';
   import EquipmentLink from './EquipmentLink.svelte';
+  import VideoModal from './VideoModal.svelte';
 
   let {
     instructions,
     equipment,
-    starterWeight
+    starterWeight,
+    videoId,
+    exerciseName
   }: {
     instructions: ExerciseInstructions;
     equipment: string[];
     starterWeight?: string;
+    videoId?: string;
+    exerciseName?: string;
   } = $props();
 
   let isOpen = $state(false);
+  let showVideo = $state(false);
 </script>
 
 <div class="border-t border-[var(--color-border)]/50 mt-3 pt-3">
-  <button
-    type="button"
-    onclick={() => isOpen = !isOpen}
-    class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
-  >
-    <svg
-      class="w-4 h-4 transition-transform {isOpen ? 'rotate-90' : ''}"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
+  <div class="flex items-center gap-4">
+    <button
+      type="button"
+      onclick={() => isOpen = !isOpen}
+      class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-accent)] transition-colors"
     >
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-    </svg>
-    <span>{isOpen ? 'Hide' : 'Show'} Instructions</span>
-  </button>
+      <svg
+        class="w-4 h-4 transition-transform {isOpen ? 'rotate-90' : ''}"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+      <span>{isOpen ? 'Hide' : 'Show'} Instructions</span>
+    </button>
+
+    {#if videoId}
+      <button
+        type="button"
+        onclick={() => showVideo = true}
+        class="flex items-center gap-1.5 text-sm text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] transition-colors"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        <span>Watch Demo</span>
+      </button>
+    {/if}
+  </div>
 
   {#if isOpen}
     <div class="mt-4 space-y-4 text-sm animate-in fade-in slide-in-from-top-2 duration-200">
@@ -106,3 +127,7 @@
     </div>
   {/if}
 </div>
+
+{#if videoId}
+  <VideoModal {videoId} title={exerciseName ?? 'Exercise Demo'} bind:isOpen={showVideo} />
+{/if}
