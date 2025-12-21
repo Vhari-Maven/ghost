@@ -364,7 +364,7 @@
             <tbody class="text-[var(--color-text-muted)]">
               <tr class="border-b border-[var(--color-border)]/50">
                 <td class="py-2">Quinoa</td>
-                <td class="py-2">1 cup dry</td>
+                <td class="py-2">½ cup dry</td>
                 <td class="py-2"><span class="text-amber-400">🏠 Pantry</span> airtight</td>
                 <td class="py-2">2–3 years dry</td>
               </tr>
@@ -740,9 +740,9 @@
       <div class="bg-[var(--color-surface)] rounded p-4">
         <h4 class="font-medium text-[var(--color-accent)] mb-2">🍚 Cooking Quinoa</h4>
         <div class="text-sm text-[var(--color-text-muted)] space-y-2">
-          <p><strong class="text-[var(--color-text)]">Stovetop:</strong> Rinse 1 cup dry quinoa, add to pot with 2 cups water and pinch of salt. Bring to boil, reduce to simmer, cover, cook 15 min. Fluff with fork.</p>
-          <p><strong class="text-[var(--color-text)]">Instant Pot:</strong> 1 cup quinoa + 1.25 cups water. High pressure 1 minute, natural release 10 min.</p>
-          <p><strong class="text-[var(--color-text)]">Batch tip:</strong> Make extra on Sunday — cooked quinoa keeps 5–7 days in the fridge.</p>
+          <p><strong class="text-[var(--color-text)]">Stovetop:</strong> Rinse ½ cup dry quinoa, add to pot with 1 cup water and pinch of salt. Bring to boil, reduce to simmer, cover, cook 15 min. Fluff with fork.</p>
+          <p><strong class="text-[var(--color-text)]">Instant Pot:</strong> ½ cup quinoa + ⅔ cup water. High pressure 1 minute, natural release 10 min.</p>
+          <p><strong class="text-[var(--color-text)]">Storage:</strong> Cooked quinoa keeps 5–7 days in the fridge.</p>
         </div>
       </div>
 
