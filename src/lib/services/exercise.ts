@@ -286,14 +286,14 @@ export function formatHistoricalSummary(logs: ExerciseLog[]): string {
   }
 
   const avgReps = reps.length > 0 ? Math.round(reps.reduce((a, b) => a + b, 0) / reps.length) : null;
-  const maxWeight = weights.length > 0 ? Math.max(...weights) : null;
+  const avgWeight = weights.length > 0 ? Math.round(weights.reduce((a, b) => a + b, 0) / weights.length) : null;
 
-  if (avgReps && maxWeight) {
-    return `${setCount}×${avgReps} @ ${maxWeight} lbs`;
+  if (avgReps && avgWeight) {
+    return `${setCount}×${avgReps} @ ${avgWeight} lbs`;
   } else if (avgReps) {
     return `${setCount}×${avgReps} reps`;
-  } else if (maxWeight) {
-    return `${setCount} sets @ ${maxWeight} lbs`;
+  } else if (avgWeight) {
+    return `${setCount} sets @ ${avgWeight} lbs`;
   }
 
   return `${setCount} sets`;
