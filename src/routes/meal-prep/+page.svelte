@@ -1,5 +1,15 @@
 <script lang="ts">
   import Accordion from '$lib/components/Accordion.svelte';
+  import { enhance } from '$app/forms';
+
+  let { data } = $props();
+
+  let showOptionsModal = $state(false);
+
+  // Check if any meals are deselected
+  let hasDeselectedMeals = $derived(
+    !data.settings.breakfast || !data.settings.salmon || !data.settings.beanSoup || !data.settings.medBowl
+  );
 </script>
 
 <div class="max-w-4xl mx-auto">
@@ -8,7 +18,16 @@
       <img src="/icon-meal-prep.svg" alt="" class="w-8 h-8" />
       Meal Prep Plan
     </h1>
-    <span class="text-sm text-[var(--color-text-muted)]">Heart-Healthy Weight Management</span>
+    <button
+      onclick={() => showOptionsModal = true}
+      class="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] hover:bg-[var(--color-surface-hover)] transition-colors"
+    >
+      <span>⚙️</span>
+      <span>Meals</span>
+      {#if hasDeselectedMeals}
+        <span class="w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
+      {/if}
+    </button>
   </div>
 
   <!-- Quick Stats Banner -->
@@ -148,6 +167,7 @@
       </p>
 
       <!-- BREAKFAST (Daily) -->
+      {#if data.settings.breakfast}
       <div>
         <h4 class="font-medium text-[var(--color-accent)] mb-2">🍳 Breakfast <span class="text-xs font-normal text-[var(--color-text-muted)]">— daily, always buy</span></h4>
         <div class="overflow-x-auto">
@@ -201,10 +221,14 @@
           </table>
         </div>
       </div>
+      {/if}
 
+      {#if data.settings.breakfast && data.settings.salmon}
       <div class="border-b border-[var(--color-border)]/30"></div>
+      {/if}
 
       <!-- SALMON DINNERS (Weeknights) -->
+      {#if data.settings.salmon}
       <div>
         <h4 class="font-medium text-[var(--color-accent)] mb-2">🐟 Salmon Dinners <span class="text-xs font-normal text-[var(--color-text-muted)]">— Mon–Sat, always buy</span></h4>
         <div class="overflow-x-auto">
@@ -276,10 +300,14 @@
           </table>
         </div>
       </div>
+      {/if}
 
+      {#if data.settings.salmon && data.settings.beanSoup}
       <div class="border-b border-[var(--color-border)]/30"></div>
+      {/if}
 
       <!-- BEAN SOUP (Monthly) -->
+      {#if data.settings.beanSoup}
       <div>
         <h4 class="font-medium text-[var(--color-accent)] mb-2">🍲 Bean Soup <span class="text-xs font-normal text-[var(--color-text-muted)]">— monthly batch, skip most weeks</span></h4>
         <div class="overflow-x-auto">
@@ -345,10 +373,14 @@
           </table>
         </div>
       </div>
+      {/if}
 
+      {#if data.settings.beanSoup && data.settings.medBowl}
       <div class="border-b border-[var(--color-border)]/30"></div>
+      {/if}
 
       <!-- MEDITERRANEAN BOWL (Saturday Dinner) -->
+      {#if data.settings.medBowl}
       <div>
         <h4 class="font-medium text-[var(--color-accent)] mb-2">🥗 Mediterranean Bowl <span class="text-xs font-normal text-[var(--color-text-muted)]">— Saturday dinner</span></h4>
         <div class="overflow-x-auto">
@@ -390,6 +422,7 @@
           </table>
         </div>
       </div>
+      {/if}
 
       <!-- Legend -->
       <div class="bg-[var(--color-surface)] rounded p-3 text-sm">
@@ -544,6 +577,7 @@
   </Accordion>
 
   <!-- Weeknight Salmon (nightly cooking guide) -->
+  {#if data.settings.salmon}
   <Accordion title="Weeknight Salmon Guide" icon="🐟">
     <div class="space-y-4">
       <p class="text-[var(--color-text-muted)] text-sm italic">
@@ -620,8 +654,10 @@
       </div>
     </div>
   </Accordion>
+  {/if}
 
   <!-- Bean Soup (Monthly) -->
+  {#if data.settings.beanSoup}
   <Accordion title="Bean & Vegetable Soup (Monthly Batch)" icon="🍲">
     <div class="space-y-4">
       <p class="text-[var(--color-text-muted)] text-sm italic">
@@ -698,8 +734,10 @@
       </div>
     </div>
   </Accordion>
+  {/if}
 
   <!-- Mediterranean Bowl (Saturday Dinner) -->
+  {#if data.settings.medBowl}
   <Accordion title="Mediterranean Bowl (Saturday Dinner)" icon="🥗">
     <div class="space-y-4">
       <p class="text-[var(--color-text-muted)] text-sm italic">
@@ -764,6 +802,7 @@
       </div>
     </div>
   </Accordion>
+  {/if}
 
   <!-- Quick Reference (condensed from old Kitchen Tips) -->
   <Accordion title="Quick Reference" icon="📋">
@@ -843,3 +882,88 @@
     Created: December 2025 | Review and adjust after lipid panel results
   </div>
 </div>
+
+<!-- Meal Selection Modal -->
+{#if showOptionsModal}
+  <div
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    onclick={(e) => { if (e.target === e.currentTarget) showOptionsModal = false; }}
+    onkeydown={(e) => { if (e.key === 'Escape') showOptionsModal = false; }}
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <div class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-6 w-full max-w-sm mx-4 shadow-xl">
+      <h2 id="modal-title" class="text-lg font-semibold text-[var(--color-text)] mb-4">Select Meals to Show</h2>
+
+      <form
+        method="POST"
+        action="?/updateSettings"
+        use:enhance={() => {
+          return async ({ update }) => {
+            await update();
+            showOptionsModal = false;
+          };
+        }}
+      >
+        <div class="space-y-3 mb-6">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="breakfast"
+              checked={data.settings.breakfast}
+              class="w-5 h-5 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+            />
+            <span class="text-[var(--color-text)]">🍳 Breakfast</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="salmon"
+              checked={data.settings.salmon}
+              class="w-5 h-5 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+            />
+            <span class="text-[var(--color-text)]">🐟 Salmon + Roasted Vegetables</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="beanSoup"
+              checked={data.settings.beanSoup}
+              class="w-5 h-5 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+            />
+            <span class="text-[var(--color-text)]">🍲 Bean Soup</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              name="medBowl"
+              checked={data.settings.medBowl}
+              class="w-5 h-5 rounded border-[var(--color-border)] text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
+            />
+            <span class="text-[var(--color-text)]">🥗 Mediterranean Bowl</span>
+          </label>
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            type="button"
+            onclick={() => showOptionsModal = false}
+            class="flex-1 px-4 py-2 rounded-lg border border-[var(--color-border)] text-[var(--color-text-muted)] hover:bg-[var(--color-surface)] transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="flex-1 px-4 py-2 rounded-lg bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] transition-colors"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{/if}
