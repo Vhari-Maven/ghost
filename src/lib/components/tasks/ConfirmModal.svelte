@@ -40,14 +40,15 @@
 {#if isOpen}
   <div
     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in"
-    onclick={onCancel}
+    onclick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
+    onkeydown={(e) => { if (e.key === 'Escape') onCancel(); }}
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title"
+    tabindex="-1"
   >
     <div
       class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl p-6 w-[400px] shadow-2xl animate-scale-in"
-      onclick={(e) => e.stopPropagation()}
     >
       <!-- Icon -->
       <div class="flex justify-center mb-4">

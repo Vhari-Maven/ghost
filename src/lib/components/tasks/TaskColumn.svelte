@@ -52,7 +52,9 @@
     addForm,
   }: Props = $props();
 
+  // svelte-ignore state_referenced_locally
   const config = COLUMN_CONFIG[columnId];
+  // svelte-ignore state_referenced_locally
   const isDone = columnId === 'done';
   const DONE_PREVIEW_COUNT = 5;
 
