@@ -1,0 +1,1 @@
+ALTER TABLE `video_games` ADD `cover_url` text;

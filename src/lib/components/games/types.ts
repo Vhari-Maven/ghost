@@ -6,6 +6,7 @@ export type Game = {
   releaseYear: number | null;
   comment: string | null;
   steamAppId: string | null;
+  coverUrl: string | null;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;

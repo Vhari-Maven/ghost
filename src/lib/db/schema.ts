@@ -155,7 +155,8 @@ export const videoGames = sqliteTable('video_games', {
   tier: text('tier').notNull(), // 'S' | 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C'
   releaseYear: integer('release_year'),
   comment: text('comment'),
-  steamAppId: text('steam_app_id'), // For future Steam API integration
+  steamAppId: text('steam_app_id'), // For Steam API integration
+  coverUrl: text('cover_url'), // Custom cover image URL for non-Steam games
   sortOrder: integer('sort_order').notNull().default(0), // Per-tier ordering
   createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
   updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
