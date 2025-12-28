@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
-import { eq } from 'drizzle-orm';
+import { eq, and, gte, lte } from 'drizzle-orm';
 import { fitnessEntries } from './schema';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -174,15 +174,19 @@ describe('Fitness Entries Database', () => {
       db.insert(fitnessEntries).values(entry).run();
     }
 
+    // SQLite string comparison works for ISO dates
     const results = db.select()
       .from(fitnessEntries)
       .where(
-        // SQLite string comparison works for ISO dates
-        // date >= '2025-12-11' AND date <= '2025-12-13'
+        and(
+          gte(fitnessEntries.date, '2025-12-11'),
+          lte(fitnessEntries.date, '2025-12-13')
+        )
       )
       .all();
 
-    expect(results.length).toBe(5);
+    // Should return 3 entries: 12-11, 12-12, 12-13
+    expect(results.length).toBe(3);
   });
 
   it('should toggle boolean fields correctly', () => {
