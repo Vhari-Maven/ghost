@@ -29,20 +29,29 @@
     '#8b5cf6', // purple
     '#ec4899', // pink
   ];
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 {#if isOpen}
   <div
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-    onclick={onClose}
+    onclick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}
     role="dialog"
     aria-modal="true"
+    tabindex="-1"
   >
     <form
       method="POST"
       action="?/createLabel"
       class="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg p-4 w-80"
-      onclick={(e) => e.stopPropagation()}
       use:enhance={() => {
         return async ({ update, result }) => {
           await update({ reset: false });
@@ -54,6 +63,7 @@
     >
       <h3 class="font-semibold mb-3">Create New Label</h3>
 
+      <!-- svelte-ignore a11y_autofocus -->
       <input
         type="text"
         name="name"
@@ -71,6 +81,7 @@
             <button
               type="button"
               onclick={() => onColorChange(color)}
+              aria-label="Select {color} color"
               class="w-6 h-6 rounded-full border-2 transition-transform {labelColor === color ? 'scale-125 border-white' : 'border-transparent hover:scale-110'}"
               style="background-color: {color}"
             ></button>

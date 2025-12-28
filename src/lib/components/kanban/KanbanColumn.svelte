@@ -32,6 +32,7 @@
     addForm,
   }: Props = $props();
 
+  // svelte-ignore state_referenced_locally
   const isCompletedColumn = columnConfig.isCompletedColumn ?? false;
 
   let displayedItems = $derived(

@@ -29,10 +29,14 @@
 
 {#if isOpen}
   <!-- Backdrop -->
-  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
   <div
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
     onclick={handleBackdropClick}
+    onkeydown={(e) => e.key === 'Escape' && close()}
+    role="dialog"
+    aria-modal="true"
+    aria-label="{title} video"
+    tabindex="-1"
   >
     <!-- Modal -->
     <div class="relative w-full max-w-3xl bg-[var(--color-surface)] rounded-lg overflow-hidden shadow-xl">
@@ -42,6 +46,7 @@
         <button
           type="button"
           onclick={close}
+          aria-label="Close video"
           class="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
         >
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

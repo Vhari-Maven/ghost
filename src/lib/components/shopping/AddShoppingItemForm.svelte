@@ -46,6 +46,7 @@
         };
       }}
     >
+      <!-- svelte-ignore a11y_autofocus -->
       <input
         bind:this={titleInput}
         type="text"

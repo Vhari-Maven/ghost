@@ -18,11 +18,15 @@
 
   // Local state for tasks (will be updated by drag-and-drop)
   // Initialize once from server data - NO $effect to sync because that causes snap-back during drag
+  // svelte-ignore state_referenced_locally
   let todoTasks = $state([...data.todoTasks] as Task[]);
+  // svelte-ignore state_referenced_locally
   let inProgressTasks = $state([...data.inProgressTasks] as Task[]);
+  // svelte-ignore state_referenced_locally
   let doneTasks = $state([...data.doneTasks] as Task[]);
 
   // Track last known data reference to detect actual page navigations/reloads
+  // svelte-ignore state_referenced_locally
   let lastDataRef = data;
 
   // Only sync when the data object itself changes (navigation/reload), not on reactivity updates

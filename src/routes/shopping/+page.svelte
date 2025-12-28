@@ -17,10 +17,13 @@
   // ─────────────────────────────────────────────────────────────────────────────
 
   // Local state for items (will be updated by drag-and-drop)
+  // svelte-ignore state_referenced_locally
   let toBuyItems = $state([...data.toBuyItems] as ShoppingItem[]);
+  // svelte-ignore state_referenced_locally
   let orderedItems = $state([...data.orderedItems] as ShoppingItem[]);
 
   // Track last known data reference to detect actual page navigations/reloads
+  // svelte-ignore state_referenced_locally
   let lastDataRef = data;
 
   // Only sync when the data object itself changes (navigation/reload), not on reactivity updates

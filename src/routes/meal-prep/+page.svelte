@@ -885,6 +885,7 @@
 
 <!-- Meal Selection Modal -->
 {#if showOptionsModal}
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <div
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
     onclick={(e) => { if (e.target === e.currentTarget) showOptionsModal = false; }}
@@ -892,6 +893,7 @@
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title"
+    tabindex="-1"
   >
     <div class="bg-[var(--color-bg)] border border-[var(--color-border)] rounded-lg p-6 w-full max-w-sm mx-4 shadow-xl">
       <h2 id="modal-title" class="text-lg font-semibold text-[var(--color-text)] mb-4">Select Meals to Show</h2>
