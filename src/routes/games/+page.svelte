@@ -33,6 +33,10 @@
     C: [...data.gamesByTier.C] as Game[],
   });
 
+  // Local state for unranked games - allows optimistic removal when adding
+  // svelte-ignore state_referenced_locally
+  let unrankedGames = $state<UnrankedGame[]>([...data.unrankedGames]);
+
   // Track last known data reference to detect actual page navigations/reloads
   // svelte-ignore state_referenced_locally
   let lastDataRef = data;
@@ -52,6 +56,7 @@
         'C+': [...data.gamesByTier['C+']] as Game[],
         C: [...data.gamesByTier.C] as Game[],
       };
+      unrankedGames = [...data.unrankedGames];
     }
   });
 
@@ -105,6 +110,14 @@
   function closeAddModal() {
     showAddModal = false;
     addModalPrefill = null;
+  }
+
+  function handleGameAdded(steamAppId: string | null) {
+    // Remove the game from unranked list if it was added from there
+    if (steamAppId) {
+      unrankedGames = unrankedGames.filter((g) => String(g.appid) !== steamAppId);
+    }
+    closeAddModal();
   }
 
   function handleAddFromUnranked(game: UnrankedGame) {
@@ -207,7 +220,7 @@
 
     <!-- Unranked games from Steam library -->
     <UnrankedColumn
-      games={data.unrankedGames}
+      games={unrankedGames}
       onAddGame={handleAddFromUnranked}
     />
   </div>
@@ -222,6 +235,7 @@
 <AddGameModal
   isOpen={showAddModal}
   onClose={closeAddModal}
+  onSuccess={handleGameAdded}
   prefill={addModalPrefill}
 />
 

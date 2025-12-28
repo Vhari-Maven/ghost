@@ -11,10 +11,11 @@
   type Props = {
     isOpen: boolean;
     onClose: () => void;
+    onSuccess?: (steamAppId: string | null) => void;
     prefill?: Prefill | null;
   };
 
-  let { isOpen, onClose, prefill = null }: Props = $props();
+  let { isOpen, onClose, onSuccess, prefill = null }: Props = $props();
 
   let name = $state('');
   let genre = $state('');
@@ -68,11 +69,17 @@
         method="POST"
         action="?/createGame"
         use:enhance={() => {
+          // Capture steamAppId before form resets
+          const addedSteamAppId = steamAppId || null;
           return async ({ update, result }) => {
             await update({ reset: false });
             if (result.type === 'success') {
               resetForm();
-              onClose();
+              if (onSuccess) {
+                onSuccess(addedSteamAppId);
+              } else {
+                onClose();
+              }
             }
           };
         }}
