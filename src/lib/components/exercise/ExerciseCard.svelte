@@ -88,5 +88,7 @@
     instructions={exercise.instructions}
     equipment={exercise.equipment}
     starterWeight={exercise.starterWeight}
+    videoId={exercise.videoId}
+    exerciseName={exercise.name}
   />
 </div>

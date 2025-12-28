@@ -124,3 +124,19 @@ export type ExerciseLog = typeof exerciseLogs.$inferSelect;
 export type NewExerciseLog = typeof exerciseLogs.$inferInsert;
 export type AlwaysDoLog = typeof alwaysDoLogs.$inferSelect;
 export type NewAlwaysDoLog = typeof alwaysDoLogs.$inferInsert;
+
+// ============================================
+// Meal Prep Settings
+// ============================================
+
+export const mealPrepSettings = sqliteTable('meal_prep_settings', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  breakfast: integer('breakfast', { mode: 'boolean' }).notNull().default(true),
+  salmon: integer('salmon', { mode: 'boolean' }).notNull().default(true),
+  beanSoup: integer('bean_soup', { mode: 'boolean' }).notNull().default(true),
+  medBowl: integer('med_bowl', { mode: 'boolean' }).notNull().default(true),
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString())
+});
+
+export type MealPrepSettings = typeof mealPrepSettings.$inferSelect;
+export type NewMealPrepSettings = typeof mealPrepSettings.$inferInsert;
