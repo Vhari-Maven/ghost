@@ -10,6 +10,7 @@
     { href: '/exercise', label: 'Exercise', enabled: true },
     { href: '/meal-prep', label: 'Meal Prep', enabled: true },
     { href: '/shopping', label: 'Shopping', enabled: true },
+    { href: '/games', label: 'Games', enabled: true },
     { href: '/media', label: 'Media', enabled: false },
     { href: '/tasks', label: 'Tasks', enabled: true },
   ];
