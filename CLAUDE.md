@@ -136,15 +136,10 @@ fly deploy
 - Configured via `DATABASE_PATH` env var
 - Backup: `fly sftp shell` → `get /data/ghost.db ./backup.db`
 
-### Production Migration Fixes
-
-If new tables aren't created in production after deploy, the Drizzle migration journal may be out of sync. Use the fix script:
-
-```bash
-fly ssh console -a ghost-dashboard -C "node /app/scripts/fix-migrations.cjs"
-```
-
-This script checks for missing tables and adds them along with the appropriate migration records.
+### Migrations run automatically on app startup:
+- In production, migrations run when the DB first connects (see `src/lib/db/index.ts`)
+- This happens once per deploy when the server boots
+- No manual migration step needed - just `fly deploy`
 
 ## Future Plans
 

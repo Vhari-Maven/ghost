@@ -26,6 +26,3 @@ primary_region = "iad"  # Virginia (Ashburn)
 [mounts]
   source = "ghost_data"
   destination = "/data"
-
-[deploy]
-  release_command = "npx tsx src/lib/db/migrate.ts"
