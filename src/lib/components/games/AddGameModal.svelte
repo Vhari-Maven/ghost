@@ -3,12 +3,18 @@
   import type { GameTier } from './types';
   import { TIER_ORDER, TIER_CONFIGS } from './types';
 
+  type Prefill = {
+    name?: string;
+    steamAppId?: string;
+  };
+
   type Props = {
     isOpen: boolean;
     onClose: () => void;
+    prefill?: Prefill | null;
   };
 
-  let { isOpen, onClose }: Props = $props();
+  let { isOpen, onClose, prefill = null }: Props = $props();
 
   let name = $state('');
   let genre = $state('');
@@ -16,6 +22,14 @@
   let releaseYear = $state('');
   let comment = $state('');
   let steamAppId = $state('');
+
+  // Apply prefill values when modal opens with prefill data
+  $effect(() => {
+    if (isOpen && prefill) {
+      name = prefill.name ?? '';
+      steamAppId = prefill.steamAppId ?? '';
+    }
+  });
 
   function resetForm() {
     name = '';

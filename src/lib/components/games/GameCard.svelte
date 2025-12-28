@@ -12,12 +12,14 @@
   let { game, rank, onEdit, onDelete }: Props = $props();
 
   // Cover image URL: Steam header if available, otherwise custom coverUrl
-  const coverImageUrl = game.steamAppId
-    ? `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
-    : game.coverUrl;
+  let coverImageUrl = $derived(
+    game.steamAppId
+      ? `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
+      : game.coverUrl
+  );
 
   // IGDB covers are portrait - show top portion (usually has logo/title)
-  const isPortraitCover = !game.steamAppId && game.coverUrl;
+  let isPortraitCover = $derived(!game.steamAppId && game.coverUrl);
 
   // Track image load state
   let imageLoaded = $state(false);

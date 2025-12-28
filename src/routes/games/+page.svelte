@@ -1,9 +1,11 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import type { UnrankedGame } from './+page.server';
   import { SOURCES, TRIGGERS } from 'svelte-dnd-action';
   import { ConfirmModal } from '$lib/components/kanban';
   import {
     TierColumn,
+    UnrankedColumn,
     AddGameModal,
     EditGameModal,
     TIER_ORDER,
@@ -58,6 +60,7 @@
   // ─────────────────────────────────────────────────────────────────────────────
 
   let showAddModal = $state(false);
+  let addModalPrefill = $state<{ name: string; steamAppId: string } | null>(null);
   let editingGame = $state<Game | null>(null);
   let gameToDelete = $state<Game | null>(null);
 
@@ -97,6 +100,19 @@
 
   function closeDeleteModal() {
     gameToDelete = null;
+  }
+
+  function closeAddModal() {
+    showAddModal = false;
+    addModalPrefill = null;
+  }
+
+  function handleAddFromUnranked(game: UnrankedGame) {
+    addModalPrefill = {
+      name: game.name,
+      steamAppId: String(game.appid),
+    };
+    showAddModal = true;
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -185,18 +201,28 @@
         onDeleteGame={handleDeleteGame}
       />
     {/each}
+
+    <!-- Separator -->
+    <div class="flex-shrink-0 w-px bg-[var(--color-border)] mx-2"></div>
+
+    <!-- Unranked games from Steam library -->
+    <UnrankedColumn
+      games={data.unrankedGames}
+      onAddGame={handleAddFromUnranked}
+    />
   </div>
 
   <!-- Footer hint -->
   <div class="mt-2 text-xs text-[var(--color-text-muted)]">
-    Drag games between tiers to change ratings • Hover over cards to edit or delete
+    Drag games between tiers to change ratings • Click + on unranked games to add them
   </div>
 </div>
 
 <!-- Add Game Modal -->
 <AddGameModal
   isOpen={showAddModal}
-  onClose={() => (showAddModal = false)}
+  onClose={closeAddModal}
+  prefill={addModalPrefill}
 />
 
 <!-- Edit Game Modal -->

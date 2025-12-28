@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
 import { videoGames, GAME_TIERS, type GameTier } from '$lib/db/schema';
-import { eq, asc, max } from 'drizzle-orm';
+import { eq, asc, max, isNotNull } from 'drizzle-orm';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -93,6 +93,20 @@ export async function getGameById(gameId: number): Promise<GameData | null> {
     .get();
 
   return game ?? null;
+}
+
+/**
+ * Get all Steam App IDs in the database (for filtering unranked games)
+ */
+export async function getAllSteamAppIds(): Promise<string[]> {
+  const games = await db
+    .select({ steamAppId: videoGames.steamAppId })
+    .from(videoGames)
+    .where(isNotNull(videoGames.steamAppId));
+
+  return games
+    .map((g) => g.steamAppId)
+    .filter((id): id is string => id !== null);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
