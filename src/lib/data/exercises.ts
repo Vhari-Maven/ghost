@@ -978,7 +978,7 @@ export const EXERCISES: Record<string, Exercise> = {
 
 export const WORKOUT_TEMPLATES: Record<WorkoutType, string[]> = {
   upper_push: ['chest_press', 'pec_fly', 'shoulder_press_cable', 'lateral_raise_cable', 'tricep_pushdown'],
-  lower: ['leg_press', 'leg_extension', 'leg_curl', 'calf_raise_leg_press'],
+  lower: ['leg_press', 'calf_raise_leg_press', 'leg_extension', 'leg_curl'],
   upper_pull: ['lat_pulldown', 'seated_row', 'rear_delt_fly', 'cable_bicep_curl', 'face_pull'],
   recovery: [] // Only "Always Do" stack on recovery days
 };
