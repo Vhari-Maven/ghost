@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import { count } from 'drizzle-orm';
 import * as schema from './schema';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -16,6 +17,29 @@ const migrationsFolder = join(projectRoot, 'drizzle');
 // Lazy initialization to avoid build-time errors (SvelteKit prerender imports this file)
 let _db: BetterSQLite3Database<typeof schema> | null = null;
 
+// Seed video_games table if empty (runs once after fresh deploy)
+async function seedVideoGamesIfEmpty(db: BetterSQLite3Database<typeof schema>) {
+	const result = db.select({ count: count() }).from(schema.videoGames).get();
+	if (result && result.count > 0) {
+		console.log(`Video games table has ${result.count} games, skipping seed`);
+		return;
+	}
+
+	console.log('Video games table is empty, seeding...');
+	try {
+		// Dynamic import to avoid bundling issues
+		const seedData = await import('./video-games-seed.json');
+		const games = seedData.default || seedData;
+
+		if (Array.isArray(games) && games.length > 0) {
+			db.insert(schema.videoGames).values(games).run();
+			console.log(`Seeded ${games.length} video games`);
+		}
+	} catch (err) {
+		console.error('Failed to seed video games:', err);
+	}
+}
+
 function getDb() {
 	if (!_db) {
 		const sqlite = new Database(dbPath);
@@ -27,6 +51,9 @@ function getDb() {
 			console.log('Running database migrations...');
 			migrate(_db, { migrationsFolder });
 			console.log('Migrations complete!');
+
+			// Seed video games if table is empty
+			seedVideoGamesIfEmpty(_db);
 		}
 	}
 	return _db;
