@@ -34,20 +34,18 @@ export interface WeekDay {
 
 export function buildWeekNavigation(selectedDate: string): WeekDay[] {
   const today = getLocalDateString(new Date());
-  const selected = new Date(selectedDate + 'T00:00:00');
+  const todayDate = new Date(today + 'T00:00:00');
+  const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  // Find the Monday of the week containing the selected date
-  const dayOfWeek = selected.getDay();
-  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-  const monday = new Date(selected);
-  monday.setDate(selected.getDate() + mondayOffset);
+  // Build 7-day window centered on today: 3 days before, today, 3 days after
+  const startDate = new Date(todayDate);
+  startDate.setDate(todayDate.getDate() - 3);
 
   const days: WeekDay[] = [];
-  const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   for (let i = 0; i < 7; i++) {
-    const date = new Date(monday);
-    date.setDate(monday.getDate() + i);
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
     const dateStr = getLocalDateString(date);
     const dow = date.getDay();
     const workout = getWorkoutForDay(dow);
@@ -55,7 +53,7 @@ export function buildWeekNavigation(selectedDate: string): WeekDay[] {
     days.push({
       date: dateStr,
       dayOfWeek: dow,
-      label: dayLabels[i],
+      label: dayLabels[dow],
       dayNum: date.getDate(),
       isToday: dateStr === today,
       isSelected: dateStr === selectedDate,
