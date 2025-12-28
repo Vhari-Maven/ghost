@@ -164,7 +164,7 @@
 
   <div class="grid gap-4">
     <a
-      href="/fitness"
+      href="/morning"
       class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
     >
       <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">

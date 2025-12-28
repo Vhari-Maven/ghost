@@ -233,8 +233,8 @@
     { key: 'breakfast', label: 'Breakfast', type: 'boolean', icon: '/icon-breakfast.svg' },
     { key: 'brush', label: 'Brush', type: 'boolean', icon: '/icon-brush.svg' },
     { key: 'floss', label: 'Floss', type: 'boolean', icon: '/icon-floss.svg' },
-    { key: 'shower', label: 'Shower', type: 'boolean', icon: '/icon-shower.svg' },
     { key: 'shake', label: 'Shake', type: 'boolean', icon: '/icon-shake.svg' },
+    { key: 'shower', label: 'Shower', type: 'boolean', icon: '/icon-shower.svg' },
   ];
 
   const habitColumns = columns.filter(c => c.type === 'boolean');
