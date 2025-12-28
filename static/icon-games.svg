@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="gamesGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#67e8f9"/>
+      <stop offset="50%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer glow -->
+  <ellipse cx="16" cy="18" rx="14" ry="10" fill="#06b6d4" opacity="0.1"/>
+
+  <!-- Controller body -->
+  <path d="M6 12 Q6 8, 12 8 L20 8 Q26 8, 26 12 L28 22 Q28 26, 24 26 L22 26 Q20 26, 19 24 L18 22 L14 22 L13 24 Q12 26, 10 26 L8 26 Q4 26, 4 22 Z"
+        fill="#06b6d4" opacity="0.25"/>
+  <path d="M6 12 Q6 8, 12 8 L20 8 Q26 8, 26 12 L28 22 Q28 26, 24 26 L22 26 Q20 26, 19 24 L18 22 L14 22 L13 24 Q12 26, 10 26 L8 26 Q4 26, 4 22 Z"
+        fill="none" stroke="url(#gamesGrad)" stroke-width="1.5"/>
+
+  <!-- D-pad -->
+  <rect x="8" y="13" width="3" height="7" rx="0.5" fill="url(#gamesGrad)" opacity="0.6"/>
+  <rect x="6" y="15" width="7" height="3" rx="0.5" fill="url(#gamesGrad)" opacity="0.6"/>
+  <rect x="8" y="13" width="3" height="7" rx="0.5" fill="none" stroke="#67e8f9" stroke-width="0.75"/>
+  <rect x="6" y="15" width="7" height="3" rx="0.5" fill="none" stroke="#67e8f9" stroke-width="0.75"/>
+
+  <!-- Action buttons (diamond pattern) -->
+  <circle cx="22" cy="14" r="1.5" fill="url(#gamesGrad)" opacity="0.8"/>
+  <circle cx="22" cy="14" r="1.5" fill="none" stroke="#67e8f9" stroke-width="0.75"/>
+  <circle cx="20" cy="16.5" r="1.5" fill="url(#gamesGrad)" opacity="0.6"/>
+  <circle cx="20" cy="16.5" r="1.5" fill="none" stroke="#67e8f9" stroke-width="0.75"/>
+  <circle cx="24" cy="16.5" r="1.5" fill="url(#gamesGrad)" opacity="0.6"/>
+  <circle cx="24" cy="16.5" r="1.5" fill="none" stroke="#67e8f9" stroke-width="0.75"/>
+  <circle cx="22" cy="19" r="1.5" fill="url(#gamesGrad)" opacity="0.4"/>
+  <circle cx="22" cy="19" r="1.5" fill="none" stroke="#67e8f9" stroke-width="0.75"/>
+
+  <!-- Center detail (start/select area) -->
+  <rect x="14" y="14" width="4" height="2" rx="1" fill="#67e8f9" opacity="0.5"/>
+
+  <!-- Scan lines -->
+  <g opacity="0.2">
+    <line x1="4" y1="12" x2="28" y2="12" stroke="#67e8f9" stroke-width="0.5"/>
+    <line x1="4" y1="17" x2="28" y2="17" stroke="#67e8f9" stroke-width="0.5"/>
+    <line x1="4" y1="22" x2="28" y2="22" stroke="#67e8f9" stroke-width="0.5"/>
+  </g>
+</svg>

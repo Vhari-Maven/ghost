@@ -103,6 +103,7 @@ Each micro-app has a matching hologram-style icon:
 | Morning | `/static/icon-morning.svg` | Half-sun rising over horizon with rays |
 | Exercise | `/static/icon-exercise.svg` | Barbell with circuit-style treatment |
 | Tasks | `/static/icon-tasks.svg` | Clipboard with checkboxes |
+| Games | `/static/icon-games.svg` | Game controller with D-pad and action buttons |
 
 ### Habit Icons
 
@@ -195,6 +196,7 @@ a, button, input, [role="button"] {
 | `static/icon-morning.svg` | Morning tracker icon (sunrise) |
 | `static/icon-exercise.svg` | Exercise tracker icon (barbell) |
 | `static/icon-tasks.svg` | Tasks app icon |
+| `static/icon-games.svg` | Games app icon (controller) |
 | `static/icon-breakfast.svg` | Breakfast habit icon (toast) |
 | `static/icon-brush.svg` | Brush habit icon (toothbrush) |
 | `static/icon-floss.svg` | Floss habit icon (dispenser) |

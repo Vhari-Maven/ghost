@@ -184,7 +184,7 @@
   <!-- Header -->
   <div class="flex items-center justify-between mb-4">
     <h1 class="text-2xl font-bold flex items-center gap-3">
-      <span class="text-2xl">🎮</span>
+      <img src="/icon-games.svg" alt="" class="w-8 h-8" />
       Games
       <span class="text-sm font-normal text-[var(--color-text-muted)]">
         ({totalGames} games)

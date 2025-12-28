@@ -115,5 +115,16 @@
       </h2>
       <p class="text-[var(--color-text-muted)]">Heart-healthy weekly meal plan and grocery list.</p>
     </a>
+
+    <a
+      href="/games"
+      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
+    >
+      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
+        <img src="/icon-games.svg" alt="" class="w-6 h-6" />
+        Games
+      </h2>
+      <p class="text-[var(--color-text-muted)]">Tier list for ranking your video game collection.</p>
+    </a>
   </div>
 </div>
