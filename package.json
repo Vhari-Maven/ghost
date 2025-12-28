@@ -12,7 +12,8 @@
     "test:e2e:ui": "playwright test --ui",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "npx tsx src/lib/db/migrate.ts",
-    "db:seed": "npx tsx src/lib/db/seed.ts"
+    "db:seed": "npx tsx src/lib/db/seed.ts",
+    "db:seed-games": "npx tsx src/lib/db/seed-games.ts"
   },
   "dependencies": {
     "@sveltejs/adapter-node": "^5.4.0",

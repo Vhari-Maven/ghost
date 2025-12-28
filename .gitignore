@@ -34,5 +34,8 @@ npm-debug.log*
 playwright-report/
 test-results/
 
+# Dev scripts (one-off utilities not needed in production)
+src/lib/db/steam-library-check.ts
+
 # Asset archive (unused favicon experiments, etc.)
 static/archive/

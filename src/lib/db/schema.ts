@@ -140,3 +140,27 @@ export const mealPrepSettings = sqliteTable('meal_prep_settings', {
 
 export type MealPrepSettings = typeof mealPrepSettings.$inferSelect;
 export type NewMealPrepSettings = typeof mealPrepSettings.$inferInsert;
+
+// ============================================
+// Video Games Tables
+// ============================================
+
+export const GAME_TIERS = ['S', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C'] as const;
+export type GameTier = (typeof GAME_TIERS)[number];
+
+export const videoGames = sqliteTable('video_games', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  genre: text('genre'),
+  tier: text('tier').notNull(), // 'S' | 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C'
+  releaseYear: integer('release_year'),
+  comment: text('comment'),
+  steamAppId: text('steam_app_id'), // For Steam API integration
+  coverUrl: text('cover_url'), // Custom cover image URL for non-Steam games
+  sortOrder: integer('sort_order').notNull().default(0), // Per-tier ordering
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+export type VideoGame = typeof videoGames.$inferSelect;
+export type NewVideoGame = typeof videoGames.$inferInsert;
