@@ -100,7 +100,8 @@ Each micro-app has a matching hologram-style icon:
 
 | Icon | File | Description |
 |------|------|-------------|
-| Fitness | `/static/icon-fitness.svg` | Barbell with circuit-style treatment |
+| Morning | `/static/icon-morning.svg` | Half-sun rising over horizon with rays |
+| Exercise | `/static/icon-exercise.svg` | Barbell with circuit-style treatment |
 | Tasks | `/static/icon-tasks.svg` | Clipboard with checkboxes |
 
 ### Habit Icons
@@ -191,7 +192,8 @@ a, button, input, [role="button"] {
 | `src/app.css` | Global styles and CSS variables |
 | `static/favicon.svg` | Main app icon (holographic eye) |
 | `static/favicon-eye-hologram.svg` | Same as above (named reference) |
-| `static/icon-fitness.svg` | Fitness app icon |
+| `static/icon-morning.svg` | Morning tracker icon (sunrise) |
+| `static/icon-exercise.svg` | Exercise tracker icon (barbell) |
 | `static/icon-tasks.svg` | Tasks app icon |
 | `static/icon-breakfast.svg` | Breakfast habit icon (toast) |
 | `static/icon-brush.svg` | Brush habit icon (toothbrush) |

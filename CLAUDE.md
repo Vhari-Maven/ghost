@@ -75,8 +75,8 @@ Uses SvelteKit's `use:enhance` for progressive enhancement with optimistic updat
 
 ## Current Micro-Apps
 
-### Fitness Tracker (`/fitness`)
-Tracks daily metrics and habits:
+### Morning Tracker (`/fitness`)
+Tracks daily metrics and morning habits:
 - **Numeric fields**: weight, walkDistance, walkIncline
 - **Boolean habits**: breakfast, brush, floss, shower, shake
 - **Features**: ±5 day view, streak calculation, copy yesterday's walk data

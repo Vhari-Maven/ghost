@@ -168,8 +168,8 @@
       class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
     >
       <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-fitness.svg" alt="" class="w-6 h-6" />
-        Fitness Tracker
+        <img src="/icon-morning.svg" alt="" class="w-6 h-6" />
+        Morning Tracker
       </h2>
       <p class="text-[var(--color-text-muted)]">Track your weight, walks, and morning routine.</p>
     </a>
@@ -180,7 +180,7 @@
         class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
       >
         <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-          <span class="text-2xl">🏋️</span>
+          <img src="/icon-exercise.svg" alt="" class="w-6 h-6" />
           Exercise Tracker
         </h2>
         <p class="text-[var(--color-text-muted)]">7-day workout rotation with detailed exercise guides.</p>
@@ -196,13 +196,16 @@
       </button>
     </div>
 
-    <div class="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg opacity-50">
+    <a
+      href="/shopping"
+      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
+    >
       <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
         <img src="/icon-shopping.svg" alt="" class="w-6 h-6" />
         Shopping List
       </h2>
-      <p class="text-[var(--color-text-muted)]">Coming soon...</p>
-    </div>
+      <p class="text-[var(--color-text-muted)]">Kanban-style shopping list with drag-and-drop.</p>
+    </a>
 
     <div class="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg opacity-50">
       <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">

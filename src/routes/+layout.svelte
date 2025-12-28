@@ -6,7 +6,7 @@
   let { children } = $props();
 
   const navItems = [
-    { href: '/fitness', label: 'Fitness', enabled: true },
+    { href: '/fitness', label: 'Morning', enabled: true },
     { href: '/exercise', label: 'Exercise', enabled: true },
     { href: '/meal-prep', label: 'Meal Prep', enabled: true },
     { href: '/shopping', label: 'Shopping', enabled: true },
