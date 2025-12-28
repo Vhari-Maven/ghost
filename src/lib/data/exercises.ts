@@ -421,7 +421,7 @@ export const EXERCISES: Record<string, Exercise> = {
     id: 'lat_pulldown',
     name: 'Lat Pulldown Machine',
     category: 'compound',
-    equipment: ['Precor Lat Pulldown'],
+    equipment: ['Precor Lat Pulldown / Seated Row'],
     defaultSets: 3,
     defaultReps: '10-12',
     starterWeight: '60-90 lbs',
@@ -459,40 +459,40 @@ export const EXERCISES: Record<string, Exercise> = {
 
   seated_row: {
     id: 'seated_row',
-    name: 'Cable Seated Row',
+    name: 'Seated Row Machine',
     category: 'compound',
-    equipment: ['Functional Trainer (Cable Machine)', 'Bench (optional)'],
+    equipment: ['Precor Lat Pulldown / Seated Row'],
     defaultSets: 3,
     defaultReps: '10-12',
-    starterWeight: '20-40 lbs per side',
+    starterWeight: '50-70 lbs',
     musclesWorked: ['Lats', 'Rhomboids', 'Rear Delts', 'Biceps'],
     videoId: 'vwHG9Jfu4sw',
     instructions: {
-      setup: 'Set both pulleys to the lowest position. Grab a handle in each hand. Sit on the floor facing the machine with your knees slightly bent, or sit on a bench placed in front of the cables. Start with arms extended, feeling a slight stretch in your back.',
+      setup: 'Sit on the seat pad facing the machine. Place your feet on the foot plates with knees slightly bent. Lean forward to grab the handles, then sit back upright with your chest against the chest pad. Start with arms extended, feeling a slight stretch in your back.',
       execution: [
-        'Pull both handles toward your torso by driving your elbows back',
+        'Pull the handles toward your torso by driving your elbows back',
         'Squeeze your shoulder blades together as you pull',
         'Pull until your elbows are behind your body and hands are near your sides',
         'Hold the contraction for 1 second',
         'Slowly extend your arms back to the starting position with control'
       ],
       formCues: [
-        'Keep your chest up and proud throughout',
+        'Keep your chest pressed lightly against the pad throughout',
         'Don\'t round your lower back - maintain a slight arch',
         'Pull with your back, not just your arms - feel the squeeze between your shoulder blades',
         'Control the weight on the return - don\'t let it yank you forward'
       ],
       commonMistakes: [
-        'Using momentum by swinging the torso back and forth',
+        'Pulling your chest off the pad to use momentum',
         'Shrugging the shoulders up toward the ears',
         'Not fully extending the arms between reps (short range of motion)',
         'Pulling too high (toward chest instead of stomach)'
       ],
       tips: [
-        'START HERE: Try 20-40 lbs per side',
+        'START HERE: Try 50-70 lbs',
         'This works the "thickness" of your back',
-        'You can also do this one arm at a time for extra core work',
-        'Add 5 lbs per side when you can do 3x12 with good form'
+        'The chest pad helps you isolate your back muscles',
+        'Add 10 lbs when you can do 3x12 with good form'
       ]
     }
   },
