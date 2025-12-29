@@ -26,7 +26,7 @@ function formatExerciseMarkdown(exercise: Exercise, prescription?: string): stri
   }
   lines.push(`- **Muscles:** ${exercise.musclesWorked.join(', ')}`);
   if (exercise.videoId) {
-    lines.push(`- **Video ID:** ${exercise.videoId}`);
+    lines.push(`- **Video:** https://www.youtube.com/watch?v=${exercise.videoId}`);
   }
   lines.push('');
 
