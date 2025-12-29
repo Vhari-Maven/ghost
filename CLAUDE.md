@@ -10,17 +10,18 @@ Ghost is a personal dashboard application with a micro-app architecture. Each fe
 
 - **SvelteKit 5** with TypeScript - uses runes (`$state`, `$props`, `$derived`) and `{@render}` for snippets
 - **Tailwind CSS 4** - utility-first styling via `@tailwindcss/vite` plugin
-- **SQLite** via `better-sqlite3` - local database stored at `data/ghost.db`
+- **Bun** - JavaScript runtime, package manager, and bundler
+- **SQLite** via `bun:sqlite` - Bun's built-in SQLite driver, local database stored at `data/ghost.db`
 - **Drizzle ORM** - type-safe database queries and migrations
 
 ## Common Commands
 
 ```bash
-npm run dev          # Start dev server on localhost:5173
-npm run db:generate  # Generate migrations after schema changes
-npm run db:migrate   # Apply pending migrations
-npm run db:seed      # Seed database with sample data
-npm run db:seed-games # Seed video games database
+bun run dev          # Start dev server on localhost:5173
+bun run db:generate  # Generate migrations after schema changes
+bun run db:migrate   # Apply pending migrations
+bun run db:seed      # Seed database with sample data
+bun run db:seed-games # Seed video games database
 ```
 
 ## Architecture Patterns
@@ -36,8 +37,8 @@ For complex features, extract reusable components and services:
 
 ### Database Schema
 All tables are defined in `src/lib/db/schema.ts` using Drizzle's SQLite schema builder. After changes:
-1. Run `npm run db:generate` to create migration
-2. Run `npm run db:migrate` to apply it
+1. Run `bun run db:generate` to create migration
+2. Run `bun run db:migrate` to apply it
 
 ### Form Handling
 Uses SvelteKit's `use:enhance` for progressive enhancement with optimistic updates. Pattern:
@@ -71,7 +72,7 @@ Uses SvelteKit's `use:enhance` for progressive enhancement with optimistic updat
 1. Create route directory: `src/routes/{app-name}/`
 2. Add `+page.svelte` and `+page.server.ts`
 3. Add database tables to `src/lib/db/schema.ts`
-4. Run `npm run db:generate && npm run db:migrate`
+4. Run `bun run db:generate && bun run db:migrate`
 5. Enable nav link in `src/routes/+layout.svelte` (set `enabled: true`)
 
 ## Current Micro-Apps
@@ -122,8 +123,8 @@ Meal planning guide with nutrition tracking and prep instructions:
 ## Testing
 
 ```bash
-npm test            # Run unit tests (Vitest)
-npm run test:e2e    # Run E2E tests (Playwright)
+bun test            # Run unit tests (Vitest)
+bun run test:e2e    # Run E2E tests (Playwright)
 ```
 
 E2E tests use Page Object Model pattern - see `tests/helpers/` for reusable test utilities.
@@ -137,7 +138,7 @@ The app is deployed on **Fly.io** with **Cloudflare Access** for authentication.
 - **Region**: `iad` (Virginia)
 
 ### Key deployment files:
-- `Dockerfile` - Multi-stage Node.js build with better-sqlite3
+- `Dockerfile` - Multi-stage Bun build with `bun:sqlite`
 - `fly.toml` - Fly.io configuration
 - `src/hooks.server.ts` - Blocks direct access to fly.dev (requires Cloudflare proxy)
 - `DEPLOY.md` - Full deployment guide

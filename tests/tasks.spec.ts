@@ -115,7 +115,7 @@ test.describe('Tasks Kanban Board', () => {
 
   test('should navigate to tasks page from nav', async ({ page }) => {
     await page.goto('/');
-    await page.locator('a', { hasText: 'Tasks' }).click();
+    await page.getByRole('link', { name: 'Tasks', exact: true }).click();
 
     await expect(page).toHaveURL('/tasks');
     await expect(page.locator('h1')).toHaveText('Tasks');

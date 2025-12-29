@@ -1,38 +1,30 @@
 # Build stage
-FROM node:20-slim AS builder
+FROM oven/bun:1 AS builder
 
 WORKDIR /app
 
-# Install dependencies for better-sqlite3 native build
-RUN apt-get update && apt-get install -y \
-    python3 \
-    make \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy package files
-COPY package*.json ./
+COPY package.json bun.lock ./
 
 # Install all dependencies (including dev for build)
-RUN npm ci
+RUN bun install --frozen-lockfile
 
 # Copy source code
 COPY . .
 
 # Build the app
-RUN npm run build
+RUN bun run build
 
-# Prune dev dependencies
-RUN npm prune --production
+# Prune dev dependencies for production
+RUN rm -rf node_modules && bun install --production --frozen-lockfile
 
 # Production stage
-FROM node:20-slim
+FROM oven/bun:1-slim
 
 WORKDIR /app
 
-# Install runtime dependencies for better-sqlite3 and timezone support
+# Install timezone support
 RUN apt-get update && apt-get install -y \
-    libsqlite3-0 \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
@@ -58,4 +50,4 @@ ENV DATABASE_PATH=/data/ghost.db
 EXPOSE 3000
 
 # Run the app
-CMD ["node", "build"]
+CMD ["bun", "./build"]

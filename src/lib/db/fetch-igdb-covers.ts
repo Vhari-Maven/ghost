@@ -1,12 +1,12 @@
 /**
  * Fetch cover images from IGDB for non-Steam games
- * Run with: npx tsx src/lib/db/fetch-igdb-covers.ts
+ * Run with: bun src/lib/db/fetch-igdb-covers.ts
  *
  * Requires TWITCH_CLIENT_ID and TWITCH_CLIENT_SECRET in .env
  */
 
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { Database } from 'bun:sqlite';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { eq, isNull } from 'drizzle-orm';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';

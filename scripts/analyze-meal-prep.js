@@ -1,7 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 // Analyze meal-prep page for ingredient mismatches
-// Usage: node scripts/analyze-meal-prep.js
+// Usage: bun scripts/analyze-meal-prep.js
 
 import fs from 'fs';
 import path from 'path';

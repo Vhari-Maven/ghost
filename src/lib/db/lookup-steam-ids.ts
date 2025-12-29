@@ -1,13 +1,13 @@
 /**
  * Script to look up Steam App IDs for games in the database
- * Run with: npx tsx src/lib/db/lookup-steam-ids.ts
+ * Run with: bun src/lib/db/lookup-steam-ids.ts
  *
  * Uses Steam's search suggest endpoint to find game IDs.
  * Outputs matches to console for review. Use --update flag to write to DB.
  */
 
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { Database } from 'bun:sqlite';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { eq, isNull } from 'drizzle-orm';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';

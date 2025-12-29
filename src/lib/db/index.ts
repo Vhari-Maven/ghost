@@ -1,6 +1,6 @@
-import Database from 'better-sqlite3';
-import { drizzle, type BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import { Database } from 'bun:sqlite';
+import { drizzle, type BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite';
+import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
 import { count } from 'drizzle-orm';
 import * as schema from './schema';
 import { fileURLToPath } from 'url';
@@ -15,10 +15,10 @@ const dbPath = process.env.DATABASE_PATH || join(projectRoot, 'data', 'ghost.db'
 const migrationsFolder = join(projectRoot, 'drizzle');
 
 // Lazy initialization to avoid build-time errors (SvelteKit prerender imports this file)
-let _db: BetterSQLite3Database<typeof schema> | null = null;
+let _db: BunSQLiteDatabase<typeof schema> | null = null;
 
 // Seed video_games table if empty (runs once after fresh deploy)
-async function seedVideoGamesIfEmpty(db: BetterSQLite3Database<typeof schema>) {
+async function seedVideoGamesIfEmpty(db: BunSQLiteDatabase<typeof schema>) {
 	const result = db.select({ count: count() }).from(schema.videoGames).get();
 	if (result && result.count > 0) {
 		console.log(`Video games table has ${result.count} games, skipping seed`);
@@ -43,7 +43,7 @@ async function seedVideoGamesIfEmpty(db: BetterSQLite3Database<typeof schema>) {
 function getDb() {
 	if (!_db) {
 		const sqlite = new Database(dbPath);
-		sqlite.pragma('journal_mode = WAL');
+		sqlite.exec('PRAGMA journal_mode = WAL');
 		_db = drizzle(sqlite, { schema });
 
 		// Run migrations on first connection (handles new tables after deploy)
@@ -59,7 +59,7 @@ function getDb() {
 	return _db;
 }
 
-export const db = new Proxy({} as BetterSQLite3Database<typeof schema>, {
+export const db = new Proxy({} as BunSQLiteDatabase<typeof schema>, {
 	get(_, prop) {
 		return Reflect.get(getDb(), prop);
 	}

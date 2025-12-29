@@ -211,6 +211,10 @@ export class TasksPage {
     const taskCard = this.taskCard(taskName, from);
     const targetZone = this.dropZone(to);
 
+    // Scroll both elements into view for reliable coordinates
+    await taskCard.scrollIntoViewIfNeeded();
+    await targetZone.scrollIntoViewIfNeeded();
+
     const taskBox = await taskCard.boundingBox();
     const targetBox = await targetZone.boundingBox();
 
@@ -218,20 +222,22 @@ export class TasksPage {
       throw new Error(`Could not get bounding boxes for drag operation`);
     }
 
-    // Calculate center points
+    // Start from center of task card
     const startX = taskBox.x + taskBox.width / 2;
     const startY = taskBox.y + taskBox.height / 2;
+
+    // Drop near the TOP of the target zone (not center) to avoid landing on existing items
     const endX = targetBox.x + targetBox.width / 2;
-    const endY = targetBox.y + targetBox.height / 2;
+    const endY = targetBox.y + 20; // Near top of drop zone
 
     // Perform the drag with explicit mouse events for svelte-dnd-action compatibility
     await this.page.mouse.move(startX, startY);
     await this.page.mouse.down();
-    await this.page.waitForTimeout(100); // Let dnd-action register the drag
-    await this.page.mouse.move(endX, endY, { steps: 10 });
-    await this.page.waitForTimeout(100);
+    await this.page.waitForTimeout(150); // Let dnd-action register the drag
+    await this.page.mouse.move(endX, endY, { steps: 15 }); // More steps for smoother drag
+    await this.page.waitForTimeout(150);
     await this.page.mouse.up();
-    await this.page.waitForTimeout(300); // Let the drop be processed
+    await this.page.waitForTimeout(500); // More time for drop processing and server sync
   }
 
   /** Delete a task using the confirmation modal */

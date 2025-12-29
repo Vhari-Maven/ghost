@@ -82,14 +82,14 @@ If you need to run migrations after deploying schema changes, SSH in and run:
 ```bash
 fly ssh console
 cd /app
-node -e "import('./src/lib/db/migrate.ts')"
+bun src/lib/db/migrate.ts
 ```
 
 Or add a release command to `fly.toml`:
 
 ```toml
 [deploy]
-  release_command = "node -e \"import('./src/lib/db/migrate.ts')\""
+  release_command = "bun src/lib/db/migrate.ts"
 ```
 
 ## Adding Cloudflare Access (Optional)
