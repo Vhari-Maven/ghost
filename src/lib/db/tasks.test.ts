@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import { Database } from 'bun:sqlite';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
 import { eq, and } from 'drizzle-orm';
 import { tasks, taskLabels, taskLabelAssignments } from './schema';
 import { fileURLToPath } from 'url';
@@ -13,11 +13,12 @@ const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..', '..', '..');
 const testDbPath = join(projectRoot, 'data', 'test-tasks.db');
 
-let sqlite: Database.Database;
+let sqlite: Database;
 let db: ReturnType<typeof drizzle>;
 
 beforeAll(() => {
   sqlite = new Database(testDbPath);
+  sqlite.exec('PRAGMA foreign_keys = ON');
   db = drizzle(sqlite);
   migrate(db, { migrationsFolder: join(projectRoot, 'drizzle') });
 });

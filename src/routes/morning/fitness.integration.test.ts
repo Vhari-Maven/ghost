@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import { Database } from 'bun:sqlite';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { migrate } from 'drizzle-orm/bun-sqlite/migrator';
 import { eq, and, gte, lte } from 'drizzle-orm';
 import { fitnessEntries } from '$lib/db/schema';
 import { fileURLToPath } from 'url';
@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..', '..', '..');
 const testDbPath = join(projectRoot, 'data', 'integration-test.db');
 
-let sqlite: Database.Database;
+let sqlite: Database;
 let db: ReturnType<typeof drizzle>;
 
 // Simulate the server-side action logic from +page.server.ts

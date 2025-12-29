@@ -44,34 +44,34 @@ A personal dashboard for tracking fitness, habits, and more. Built with SvelteKi
 
 ## Tech Stack
 
+- **Runtime**: Bun
 - **Frontend**: SvelteKit 5 + TypeScript
 - **Styling**: Tailwind CSS 4
-- **Database**: SQLite via better-sqlite3
+- **Database**: SQLite via `bun:sqlite` (Bun's built-in driver)
 - **ORM**: Drizzle
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+
-- npm
+- [Bun](https://bun.sh/) 1.0+
 
 ### Installation
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Generate database migrations
-npm run db:generate
+bun run db:generate
 
 # Run migrations
-npm run db:migrate
+bun run db:migrate
 
 # (Optional) Seed with sample data
-npm run db:seed
+bun run db:seed
 
 # Start dev server
-npm run dev
+bun run dev
 ```
 
 The app will be available at `http://localhost:5173`
@@ -80,15 +80,15 @@ The app will be available at `http://localhost:5173`
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm test` | Run unit tests (Vitest) |
-| `npm run test:e2e` | Run E2E tests (Playwright) |
-| `npm run db:generate` | Generate Drizzle migrations |
-| `npm run db:migrate` | Apply database migrations |
-| `npm run db:seed` | Seed database with sample data |
-| `npm run db:seed-games` | Seed video games database |
+| `bun run dev` | Start development server |
+| `bun run build` | Build for production |
+| `bun run preview` | Preview production build |
+| `bun test` | Run unit tests (Vitest) |
+| `bun run test:e2e` | Run E2E tests (Playwright) |
+| `bun run db:generate` | Generate Drizzle migrations |
+| `bun run db:migrate` | Apply database migrations |
+| `bun run db:seed` | Seed database with sample data |
+| `bun run db:seed-games` | Seed video games database |
 
 ## Project Structure
 
@@ -135,8 +135,8 @@ The SQLite database is stored at `data/ghost.db`. It's gitignored by default sin
 To reset the database:
 ```bash
 rm data/ghost.db
-npm run db:migrate
-npm run db:seed  # optional
+bun run db:migrate
+bun run db:seed  # optional
 ```
 
 ## Deployment

@@ -1,10 +1,10 @@
 /**
  * Seed script to import video games from the archived document
- * Run with: npm run db:seed-games
+ * Run with: bun run db:seed-games
  */
 
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { Database } from 'bun:sqlite';
+import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { videoGames, type GameTier } from './schema';
