@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/claude-code) when working 
 
 ## Project Overview
 
-Ghost is a personal dashboard application with a micro-app architecture. Each feature (fitness tracker, shopping list, media queue, tasks) is a self-contained module that shares a common database and UI framework.
+Ghost is a personal dashboard application with a micro-app architecture. Each feature (morning tracker, exercise tracker, shopping list, tasks, video games, meal prep) is a self-contained module that shares a common database and UI framework.
 
 ## Tech Stack
 
@@ -20,6 +20,7 @@ npm run dev          # Start dev server on localhost:5173
 npm run db:generate  # Generate migrations after schema changes
 npm run db:migrate   # Apply pending migrations
 npm run db:seed      # Seed database with sample data
+npm run db:seed-games # Seed video games database
 ```
 
 ## Architecture Patterns
@@ -103,6 +104,21 @@ Kanban-style shopping list with two columns (To Buy, Ordered):
 - **Drag-and-drop**: Reorder items within columns
 - **Architecture**: Uses shared kanban framework in `src/lib/components/kanban/`
 
+### Video Games (`/games`)
+Tier-ranking system for video games with Steam integration:
+- **9-tier system**: S, A+, A, A-, B+, B, B-, C+, C rankings
+- **Steam integration**: Fetch unranked games from Steam library via API
+- **Drag-and-drop**: Reorder games within tiers
+- **Features**: Add/edit/delete games, year tracking, Steam appId linking
+- **Architecture**: Components in `src/lib/components/games/`, service layer in `src/lib/services/games.ts`
+
+### Meal Prep (`/meal-prep`)
+Meal planning guide with nutrition tracking and prep instructions:
+- **Meal toggles**: Settings to show/hide specific meals (breakfast, salmon dinners, bean soup, mediterranean bowl)
+- **Accordion sections**: Overview, daily meals, grocery lists, batch prep guide, cooking instructions
+- **Nutrition focus**: Calorie targets, macro breakdowns, lipid health goals
+- **Architecture**: Settings stored in `mealPrepSettings` table, service layer in `src/lib/services/meal-prep-settings.ts`
+
 ## Testing
 
 ```bash
@@ -143,4 +159,4 @@ fly deploy
 
 ## Future Plans
 
-- Media queue micro-app
+- Media queue micro-app (nav item exists, currently disabled)
