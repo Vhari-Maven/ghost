@@ -15,6 +15,9 @@ COPY . .
 # Build the app
 RUN bun run build
 
+# Prune dev dependencies for production
+RUN rm -rf node_modules && bun install --production --frozen-lockfile
+
 # Production stage
 FROM oven/bun:1-slim
 
