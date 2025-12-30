@@ -169,8 +169,36 @@
   function handleUnrankedFinalize(
     e: CustomEvent<{ items: Game[]; info: { source: string; trigger: string } }>
   ) {
-    unrankedGames = e.detail.items;
-    // No persistence needed for unranked - they're not in DB
+    const { items, info } = e.detail;
+
+    // Check for ranked games dropped into unranked
+    const rankedGamesDropped = items.filter((g) => !isUnrankedGame(g));
+
+    if (rankedGamesDropped.length > 0 && info.source === SOURCES.POINTER && info.trigger === TRIGGERS.DROPPED_INTO_ZONE) {
+      // Process each ranked game dropped into unranked
+      const transformedItems = items.map((game) => {
+        if (!isUnrankedGame(game) && game.steamAppId) {
+          // Delete from DB (fire and forget)
+          const formData = new FormData();
+          formData.append('gameId', String(game.id));
+          fetch('?/deleteGame', { method: 'POST', body: formData });
+
+          // Transform to unranked game (negative ID based on steamAppId)
+          const appId = parseInt(game.steamAppId, 10);
+          return {
+            ...game,
+            id: -appId,
+            tier: 'unranked',
+          };
+        }
+        return game;
+      });
+
+      // Filter out non-Steam ranked games (they can't become unranked)
+      unrankedGames = transformedItems.filter((g) => isUnrankedGame(g));
+    } else {
+      unrankedGames = items;
+    }
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
