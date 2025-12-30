@@ -46,6 +46,7 @@ async function fetchUnrankedGames(): Promise<Game[]> {
       appid: number;
       name: string;
       playtime_forever?: number;
+      rtime_last_played?: number;
     };
 
     const unranked: Game[] = data.response.games
@@ -66,14 +67,13 @@ async function fetchUnrankedGames(): Promise<Game[]> {
           sortOrder: 0,
           createdAt: now,
           updatedAt: now,
+          // Steam-specific data for unranked games
+          playtimeHours: Math.round((g.playtime_forever || 0) / 60),
+          lastPlayed: g.rtime_last_played || null,
         })
       )
-      // Sort by playtime descending (using original playtime data)
-      .sort((a: Game, b: Game) => {
-        const aPlaytime = data.response.games.find((g: SteamGame) => g.appid === -a.id)?.playtime_forever || 0;
-        const bPlaytime = data.response.games.find((g: SteamGame) => g.appid === -b.id)?.playtime_forever || 0;
-        return bPlaytime - aPlaytime;
-      });
+      // Sort by playtime descending
+      .sort((a: Game, b: Game) => (b.playtimeHours || 0) - (a.playtimeHours || 0));
 
     return unranked;
   } catch (error) {

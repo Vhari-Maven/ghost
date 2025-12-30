@@ -17,6 +17,26 @@
   // Unranked games have negative IDs and shouldn't show edit/delete
   let isUnranked = $derived(isUnrankedGame(game));
 
+  // Format Unix timestamp as relative time
+  function formatLastPlayed(timestamp: number | null): string {
+    if (!timestamp) return '';
+    const now = Date.now() / 1000;
+    const diff = now - timestamp;
+
+    const hours = Math.floor(diff / 3600);
+    const days = Math.floor(diff / 86400);
+    const weeks = Math.floor(diff / 604800);
+    const months = Math.floor(diff / 2592000);
+    const years = Math.floor(diff / 31536000);
+
+    if (years > 0) return `${years}y ago`;
+    if (months > 0) return `${months}mo ago`;
+    if (weeks > 0) return `${weeks}w ago`;
+    if (days > 0) return `${days}d ago`;
+    if (hours > 0) return `${hours}h ago`;
+    return 'just now';
+  }
+
   // Cover image URL: Steam header if available, otherwise custom coverUrl
   let coverImageUrl = $derived(
     game.steamAppId
@@ -87,7 +107,12 @@
         onload={() => (imageLoaded = true)}
         onerror={() => (imageError = true)}
       />
-      {#if rank}
+      {#if isUnranked && game.playtimeHours}
+        <!-- Playtime badge for unranked games -->
+        <span class="absolute top-1 left-1 text-[10px] font-mono font-bold text-[var(--color-text-muted)] bg-black/80 px-1.5 py-0.5 rounded">
+          {game.playtimeHours}h
+        </span>
+      {:else if rank}
         <span class="absolute top-1 left-1 text-[10px] font-mono font-bold text-[var(--color-accent)] bg-black/90 border border-[var(--color-accent)]/50 px-1.5 py-0.5 rounded shadow-lg">
           {rank}
         </span>
@@ -111,6 +136,11 @@
     {#if loading}
       <!-- Shimmer placeholder for metadata while creating -->
       <div class="mt-1 h-4 w-24 rounded shimmer"></div>
+    {:else if isUnranked && game.lastPlayed}
+      <!-- Last played for unranked games -->
+      <p class="text-[10px] text-[var(--color-text-muted)] mt-0.5">
+        {formatLastPlayed(game.lastPlayed)}
+      </p>
     {:else if game.genre || game.releaseYear}
       <p class="text-xs text-[var(--color-text-muted)] mt-1">
         {#if game.genre}{game.genre}{/if}

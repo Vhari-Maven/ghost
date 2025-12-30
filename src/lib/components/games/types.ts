@@ -10,6 +10,9 @@ export type Game = {
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
+  // Optional fields for unranked games (from Steam API)
+  playtimeHours?: number;
+  lastPlayed?: number | null; // Unix timestamp
 };
 
 export type GameTier = 'S' | 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C';
