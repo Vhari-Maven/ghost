@@ -18,6 +18,7 @@ Ghost is a personal dashboard application with a micro-app architecture. Each fe
 
 ```bash
 bun run dev          # Start dev server on localhost:5173
+bun run check        # Run TypeScript/Svelte type checking
 bun run db:generate  # Generate migrations after schema changes
 bun run db:migrate   # Apply pending migrations
 bun run db:seed      # Seed database with sample data
@@ -123,6 +124,7 @@ Meal planning guide with nutrition tracking and prep instructions:
 ## Testing
 
 ```bash
+bun run check       # Type check (svelte-check)
 bun test            # Run unit tests (Vitest)
 bun run test:e2e    # Run E2E tests (Playwright)
 ```
