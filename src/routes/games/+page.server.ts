@@ -12,15 +12,11 @@ import {
   parseYear,
   getAllSteamAppIds,
 } from '$lib/services/games';
+import type { Game } from '$lib/components/games';
 
-export type UnrankedGame = {
-  appid: number;
-  name: string;
-  playtimeHours: number;
-  lastPlayed: number | null; // Unix timestamp
-};
-
-async function fetchUnrankedGames(): Promise<UnrankedGame[]> {
+// Unranked games are represented as Game objects with negative IDs
+// This allows them to participate in the same drag-and-drop zones as ranked games
+async function fetchUnrankedGames(): Promise<Game[]> {
   const apiKey = env.STEAM_API_KEY;
   const steamId = env.STEAM_USER_ID;
 
@@ -42,26 +38,42 @@ async function fetchUnrankedGames(): Promise<UnrankedGame[]> {
     const existingAppIds = await getAllSteamAppIds();
     const existingSet = new Set(existingAppIds);
 
+    const now = new Date().toISOString();
+
     // Filter to games with >2 hours playtime that aren't in tier list
-    const unranked = data.response.games
+    // Transform to Game shape with negative ID (marks as unranked/not in DB)
+    type SteamGame = {
+      appid: number;
+      name: string;
+      playtime_forever?: number;
+    };
+
+    const unranked: Game[] = data.response.games
       .filter(
         (g: { appid: number; playtime_forever?: number }) =>
           !existingSet.has(String(g.appid)) && (g.playtime_forever || 0) > 120
       )
       .map(
-        (g: {
-          appid: number;
-          name: string;
-          playtime_forever?: number;
-          rtime_last_played?: number;
-        }) => ({
-          appid: g.appid,
+        (g: SteamGame): Game => ({
+          id: -g.appid, // Negative ID marks this as unranked
           name: g.name,
-          playtimeHours: Math.round((g.playtime_forever || 0) / 60),
-          lastPlayed: g.rtime_last_played || null,
+          genre: null,
+          tier: 'unranked',
+          releaseYear: null,
+          comment: null,
+          steamAppId: String(g.appid),
+          coverUrl: null,
+          sortOrder: 0,
+          createdAt: now,
+          updatedAt: now,
         })
       )
-      .sort((a: UnrankedGame, b: UnrankedGame) => b.playtimeHours - a.playtimeHours);
+      // Sort by playtime descending (using original playtime data)
+      .sort((a: Game, b: Game) => {
+        const aPlaytime = data.response.games.find((g: SteamGame) => g.appid === -a.id)?.playtime_forever || 0;
+        const bPlaytime = data.response.games.find((g: SteamGame) => g.appid === -b.id)?.playtime_forever || 0;
+        return bPlaytime - aPlaytime;
+      });
 
     return unranked;
   } catch (error) {
@@ -154,7 +166,23 @@ export const actions: Actions = {
       steamAppId,
     });
 
-    return { success: true, gameId: result.gameId };
+    // Return full game data so client can update state without reload
+    return {
+      success: true,
+      game: {
+        id: result.gameId,
+        name,
+        genre,
+        tier,
+        releaseYear: parseYear(releaseYearStr),
+        comment,
+        steamAppId,
+        coverUrl: null,
+        sortOrder: 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    };
   },
 
   updateGame: async ({ request }) => {

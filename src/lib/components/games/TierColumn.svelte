@@ -3,13 +3,14 @@
   import { flip } from 'svelte/animate';
   import GameCard from './GameCard.svelte';
   import type { Game, GameTier, TierConfig } from './types';
-  import { TIER_CONFIGS } from './types';
+  import { TIER_CONFIGS, isUnrankedGame } from './types';
 
   type Props = {
     tierId: GameTier;
     games: Game[];
     rankOffset?: number; // Number of games before this tier (for global rank display)
     flipDurationMs?: number;
+    pendingIds?: Set<number>; // IDs of games being created (show loading state)
     onDndConsider: (tierId: GameTier, e: CustomEvent<{ items: Game[] }>) => void;
     onDndFinalize: (tierId: GameTier, e: CustomEvent<{ items: Game[]; info: { source: string; trigger: string } }>) => void;
     onEditGame: (game: Game) => void;
@@ -21,6 +22,7 @@
     games,
     rankOffset = 0,
     flipDurationMs = 200,
+    pendingIds = new Set(),
     onDndConsider,
     onDndFinalize,
     onEditGame,
@@ -64,6 +66,7 @@
         <GameCard
           {game}
           rank={rankOffset + index + 1}
+          loading={isUnrankedGame(game) && pendingIds.has(game.id)}
           onEdit={onEditGame}
           onDelete={onDeleteGame}
         />

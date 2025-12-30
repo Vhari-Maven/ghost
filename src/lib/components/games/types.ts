@@ -14,6 +14,11 @@ export type Game = {
 
 export type GameTier = 'S' | 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C';
 
+// Unranked games from Steam have negative IDs (based on -appid)
+export function isUnrankedGame(game: Game): boolean {
+  return game.id < 0;
+}
+
 export type TierConfig = {
   id: GameTier;
   title: string;

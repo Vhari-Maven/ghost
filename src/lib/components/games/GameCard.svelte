@@ -1,15 +1,21 @@
 <script lang="ts">
   import { Edit, Trash } from '$lib/components/kanban/icons';
   import type { Game } from './types';
+  import { isUnrankedGame } from './types';
 
   type Props = {
     game: Game;
     rank?: number;
-    onEdit: (game: Game) => void;
-    onDelete: (game: Game) => void;
+    loading?: boolean; // Show shimmer for metadata while creating
+    onEdit?: (game: Game) => void;
+    onDelete?: (game: Game) => void;
+    onAdd?: (game: Game) => void; // For unranked games - click to add
   };
 
-  let { game, rank, onEdit, onDelete }: Props = $props();
+  let { game, rank, loading = false, onEdit, onDelete, onAdd }: Props = $props();
+
+  // Unranked games have negative IDs and shouldn't show edit/delete
+  let isUnranked = $derived(isUnrankedGame(game));
 
   // Cover image URL: Steam header if available, otherwise custom coverUrl
   let coverImageUrl = $derived(
@@ -29,25 +35,40 @@
 <div
   class="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg overflow-hidden hover:border-[var(--color-accent)]/50 transition-colors group cursor-grab active:cursor-grabbing"
 >
-  <!-- Edit / Delete buttons (top right, on hover) -->
-  <div class="absolute top-1 right-1 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-    <button
-      type="button"
-      onclick={() => onEdit(game)}
-      class="p-1 bg-black/80 rounded text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
-      title="Edit"
-    >
-      <Edit />
-    </button>
-    <button
-      type="button"
-      onclick={() => onDelete(game)}
-      class="p-1 bg-black/80 rounded text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
-      title="Delete"
-    >
-      <Trash />
-    </button>
-  </div>
+  <!-- Action buttons (top right, on hover) - hidden while loading -->
+  {#if !loading}
+    <div class="absolute top-1 right-1 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+      {#if isUnranked && onAdd}
+        <!-- Add button for unranked games -->
+        <button
+          type="button"
+          onclick={() => onAdd(game)}
+          class="p-1 bg-[var(--color-accent)] rounded text-white text-xs font-bold"
+          title="Add to tier list"
+        >
+          +
+        </button>
+      {:else if !isUnranked && onEdit && onDelete}
+        <!-- Edit / Delete buttons for ranked games -->
+        <button
+          type="button"
+          onclick={() => onEdit(game)}
+          class="p-1 bg-black/80 rounded text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors"
+          title="Edit"
+        >
+          <Edit />
+        </button>
+        <button
+          type="button"
+          onclick={() => onDelete(game)}
+          class="p-1 bg-black/80 rounded text-[var(--color-text-muted)] hover:text-red-400 transition-colors"
+          title="Delete"
+        >
+          <Trash />
+        </button>
+      {/if}
+    </div>
+  {/if}
 
   <!-- Cover Image -->
   {#if coverImageUrl && !imageError}
@@ -87,7 +108,10 @@
       </h3>
     </div>
 
-    {#if game.genre || game.releaseYear}
+    {#if loading}
+      <!-- Shimmer placeholder for metadata while creating -->
+      <div class="mt-1 h-4 w-24 rounded shimmer"></div>
+    {:else if game.genre || game.releaseYear}
       <p class="text-xs text-[var(--color-text-muted)] mt-1">
         {#if game.genre}{game.genre}{/if}
         {#if game.genre && game.releaseYear} &middot; {/if}

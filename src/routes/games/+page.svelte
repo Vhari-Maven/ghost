@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import type { UnrankedGame } from './+page.server';
   import { SOURCES, TRIGGERS } from 'svelte-dnd-action';
+  import { deserialize } from '$app/forms';
   import { ConfirmModal } from '$lib/components/kanban';
   import {
     TierColumn,
@@ -9,6 +9,7 @@
     AddGameModal,
     EditGameModal,
     TIER_ORDER,
+    isUnrankedGame,
     type Game,
     type GameTier,
   } from '$lib/components/games';
@@ -16,7 +17,7 @@
   let { data }: { data: PageData } = $props();
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // Game State (per tier)
+  // Game State (per tier + unranked)
   // ─────────────────────────────────────────────────────────────────────────────
 
   // Local state for each tier - initialized from server data
@@ -33,9 +34,9 @@
     C: [...data.gamesByTier.C] as Game[],
   });
 
-  // Local state for unranked games - allows optimistic removal when adding
+  // Local state for unranked games (now Game[] with negative IDs)
   // svelte-ignore state_referenced_locally
-  let unrankedGames = $state<UnrankedGame[]>([...data.unrankedGames]);
+  let unrankedGames = $state<Game[]>([...data.unrankedGames]);
 
   // Track last known data reference to detect actual page navigations/reloads
   // svelte-ignore state_referenced_locally
@@ -69,9 +70,12 @@
   let editingGame = $state<Game | null>(null);
   let gameToDelete = $state<Game | null>(null);
 
+  // Track games being created (to show loading state)
+  let pendingGameIds = $state(new Set<number>());
+
   const flipDurationMs = 200;
 
-  // Total game count
+  // Total game count (excludes unranked)
   let totalGames = $derived(
     Object.values(tierGames).reduce((sum, games) => sum + games.length, 0)
   );
@@ -92,10 +96,14 @@
   // ─────────────────────────────────────────────────────────────────────────────
 
   function handleEditGame(game: Game) {
+    // Don't allow editing unranked games (not yet in DB)
+    if (isUnrankedGame(game)) return;
     editingGame = game;
   }
 
   function handleDeleteGame(game: Game) {
+    // Don't allow deleting unranked games (not yet in DB)
+    if (isUnrankedGame(game)) return;
     gameToDelete = game;
   }
 
@@ -115,21 +123,22 @@
   function handleGameAdded(steamAppId: string | null) {
     // Remove the game from unranked list if it was added from there
     if (steamAppId) {
-      unrankedGames = unrankedGames.filter((g) => String(g.appid) !== steamAppId);
+      unrankedGames = unrankedGames.filter((g) => g.steamAppId !== steamAppId);
     }
     closeAddModal();
   }
 
-  function handleAddFromUnranked(game: UnrankedGame) {
+  // Click-to-add fallback for unranked games
+  function handleAddFromUnranked(game: Game) {
     addModalPrefill = {
       name: game.name,
-      steamAppId: String(game.appid),
+      steamAppId: game.steamAppId!,
     };
     showAddModal = true;
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // Drag and Drop Handlers
+  // Drag and Drop Handlers (Tier Columns)
   // ─────────────────────────────────────────────────────────────────────────────
 
   function handleDndConsider(tierId: GameTier, e: CustomEvent<{ items: Game[] }>) {
@@ -149,10 +158,85 @@
     }
   }
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Drag and Drop Handlers (Unranked Column)
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  function handleUnrankedConsider(e: CustomEvent<{ items: Game[] }>) {
+    unrankedGames = e.detail.items;
+  }
+
+  function handleUnrankedFinalize(
+    e: CustomEvent<{ items: Game[]; info: { source: string; trigger: string } }>
+  ) {
+    unrankedGames = e.detail.items;
+    // No persistence needed for unranked - they're not in DB
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Persistence
+  // ─────────────────────────────────────────────────────────────────────────────
+
   async function persistTierOrder(tierId: GameTier, items: Game[]) {
-    // First, update tier for any games that changed tiers
-    for (let i = 0; i < items.length; i++) {
-      const game = items[i];
+    // Separate unranked (negative ID) and existing games
+    const unranked = items.filter(isUnrankedGame);
+    const existing = items.filter((g) => !isUnrankedGame(g));
+
+    // Create unranked games first (they were dragged from Unranked column)
+    for (const game of unranked) {
+      // Skip if already being created
+      if (pendingGameIds.has(game.id)) continue;
+      pendingGameIds.add(game.id);
+      pendingGameIds = new Set(pendingGameIds); // Trigger reactivity
+
+      try {
+        const formData = new FormData();
+        formData.append('name', game.name);
+        formData.append('tier', tierId);
+        formData.append('steamAppId', game.steamAppId!);
+
+        const response = await fetch('?/createGame', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = deserialize(await response.text());
+        const gameData = result.type === 'success' ? (result.data as { game?: Game })?.game : null;
+
+        if (gameData) {
+          // Replace the unranked game with the real game in tierGames
+          const realGame: Game = {
+            id: gameData.id,
+            name: gameData.name,
+            genre: gameData.genre,
+            tier: tierId,
+            releaseYear: gameData.releaseYear,
+            comment: gameData.comment,
+            steamAppId: gameData.steamAppId,
+            coverUrl: gameData.coverUrl,
+            sortOrder: items.indexOf(game),
+            createdAt: gameData.createdAt,
+            updatedAt: gameData.updatedAt,
+          };
+
+          tierGames[tierId] = tierGames[tierId].map((g) =>
+            g.id === game.id ? realGame : g
+          );
+        }
+      } catch (error) {
+        console.error('Failed to create game:', error);
+        // Restore to unranked on error
+        tierGames[tierId] = tierGames[tierId].filter((g) => g.id !== game.id);
+        unrankedGames = [...unrankedGames, game];
+      } finally {
+        pendingGameIds.delete(game.id);
+        pendingGameIds = new Set(pendingGameIds);
+      }
+    }
+
+    // Move existing games that changed tiers
+    for (let i = 0; i < existing.length; i++) {
+      const game = existing[i];
       if (game.tier !== tierId) {
         const formData = new FormData();
         formData.append('gameId', String(game.id));
@@ -164,19 +248,22 @@
           body: formData,
         });
 
-        // Update local tier so subsequent operations know the new tier
+        // Update local tier
         game.tier = tierId;
       }
     }
 
-    // Then persist the tier order
-    const formData = new FormData();
-    formData.append('gameIds', JSON.stringify(items.map((g) => g.id)));
+    // Reorder all real games in the tier
+    const realGames = tierGames[tierId].filter((g) => !isUnrankedGame(g));
+    if (realGames.length > 0) {
+      const formData = new FormData();
+      formData.append('gameIds', JSON.stringify(realGames.map((g) => g.id)));
 
-    await fetch('?/reorderTier', {
-      method: 'POST',
-      body: formData,
-    });
+      await fetch('?/reorderTier', {
+        method: 'POST',
+        body: formData,
+      });
+    }
   }
 </script>
 
@@ -208,6 +295,7 @@
         games={tierGames[tierId]}
         rankOffset={tierRankOffsets()[tierId]}
         {flipDurationMs}
+        pendingIds={pendingGameIds}
         onDndConsider={handleDndConsider}
         onDndFinalize={handleDndFinalize}
         onEditGame={handleEditGame}
@@ -221,13 +309,16 @@
     <!-- Unranked games from Steam library -->
     <UnrankedColumn
       games={unrankedGames}
+      {flipDurationMs}
+      onDndConsider={handleUnrankedConsider}
+      onDndFinalize={handleUnrankedFinalize}
       onAddGame={handleAddFromUnranked}
     />
   </div>
 
   <!-- Footer hint -->
   <div class="mt-2 text-xs text-[var(--color-text-muted)]">
-    Drag games between tiers to change ratings • Click + on unranked games to add them
+    Drag games between tiers to change ratings • Drag from Unranked to add games
   </div>
 </div>
 
