@@ -8,6 +8,7 @@
   const navItems = [
     { href: '/morning', label: 'Morning', enabled: true },
     { href: '/exercise', label: 'Exercise', enabled: true },
+    { href: '/analytics', label: 'Analytics', enabled: true },
     { href: '/meal-prep', label: 'Meal Prep', enabled: true },
     { href: '/shopping', label: 'Shopping', enabled: true },
     { href: '/games', label: 'Games', enabled: true },
