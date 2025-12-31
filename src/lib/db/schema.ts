@@ -1,4 +1,4 @@
-import { sqliteTable, text, real, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, real, integer, index } from 'drizzle-orm/sqlite-core';
 
 export const fitnessEntries = sqliteTable('fitness_entries', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -179,7 +179,9 @@ export const oauthTokens = sqliteTable('oauth_tokens', {
   userId: text('user_id'), // Provider's user ID
   createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
   updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString())
-});
+}, (table) => ({
+  providerIdx: index('oauth_tokens_provider_idx').on(table.provider)
+}));
 
 export type OAuthToken = typeof oauthTokens.$inferSelect;
 export type NewOAuthToken = typeof oauthTokens.$inferInsert;

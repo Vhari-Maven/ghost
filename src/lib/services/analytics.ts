@@ -3,7 +3,7 @@ import { exerciseSessions, exerciseLogs, fitnessEntries, fitbitDailyData } from 
 import type { WorkoutType } from '$lib/db/schema';
 import { eq, and, gte, desc, sql } from 'drizzle-orm';
 import { EXERCISES } from '$lib/data/exercises';
-import { getLocalDateString } from './exercise';
+import { getLocalDateString } from '$lib/utils/date';
 
 // ============================================
 // Types
@@ -47,6 +47,24 @@ export interface MonthlySummary {
     totalVolume: number;
     sessions: number;
   }>;
+}
+
+// ============================================
+// Constants
+// ============================================
+
+const VALID_WORKOUT_TYPES: readonly WorkoutType[] = ['upper_push', 'lower', 'upper_pull', 'recovery'];
+
+// Trend calculation thresholds
+const EXERCISE_TREND_THRESHOLD_PERCENT = 5; // For exercise volume trends
+const MORNING_TREND_THRESHOLD_PERCENT = 2; // For morning tracker trends (more sensitive)
+
+// ============================================
+// Validation Utilities
+// ============================================
+
+function isValidWorkoutType(value: unknown): value is WorkoutType {
+  return typeof value === 'string' && VALID_WORKOUT_TYPES.includes(value as WorkoutType);
 }
 
 // ============================================
@@ -221,9 +239,11 @@ export async function getWorkoutConsistency(
 
     if (session) {
       const counts = countMap.get(session.sessionId);
+      // Validate workout type with fallback to null if invalid
+      const workoutType = isValidWorkoutType(session.workoutType) ? session.workoutType : null;
       result.push({
         date: dateStr,
-        workoutType: session.workoutType as WorkoutType,
+        workoutType,
         completed: session.completedAt != null,
         exerciseCount: counts?.exerciseCount || 0,
         totalSets: counts?.setCount || 0
@@ -302,8 +322,10 @@ export async function getPeriodSummary(
     recovery: 0
   };
   for (const session of activeSessions) {
-    const type = session.workoutType as WorkoutType;
-    workoutsByType[type] = (workoutsByType[type] || 0) + 1;
+    // Only count valid workout types
+    if (isValidWorkoutType(session.workoutType)) {
+      workoutsByType[session.workoutType] = (workoutsByType[session.workoutType] || 0) + 1;
+    }
   }
 
   // Get top 5 exercises by volume
@@ -363,11 +385,11 @@ export function calculateTrend(
     percentChange = Math.round(((avgLast - avgFirst) / avgFirst) * 100);
   }
 
-  // Determine trend (5% threshold for "maintaining")
+  // Determine trend using threshold
   let trend: 'improving' | 'maintaining' | 'declining';
-  if (percentChange > 5) {
+  if (percentChange > EXERCISE_TREND_THRESHOLD_PERCENT) {
     trend = 'improving';
-  } else if (percentChange < -5) {
+  } else if (percentChange < -EXERCISE_TREND_THRESHOLD_PERCENT) {
     trend = 'declining';
   } else {
     trend = 'maintaining';
@@ -553,7 +575,7 @@ function calculateMorningTrend(
   const percentChange = Math.round(((avgLast - avgFirst) / avgFirst) * 100);
 
   let trend: 'improving' | 'maintaining' | 'declining';
-  if (Math.abs(percentChange) <= 2) {
+  if (Math.abs(percentChange) <= MORNING_TREND_THRESHOLD_PERCENT) {
     trend = 'maintaining';
   } else if (percentChange > 0) {
     trend = 'improving';

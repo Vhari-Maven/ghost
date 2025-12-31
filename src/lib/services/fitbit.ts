@@ -3,6 +3,7 @@ import { oauthTokens, fitbitDailyData } from '$lib/db/schema';
 import type { FitbitDailyData, NewFitbitDailyData } from '$lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { env } from '$env/dynamic/private';
+import { getLocalDateString } from '$lib/utils/date';
 
 // ============================================
 // Constants
@@ -10,6 +11,12 @@ import { env } from '$env/dynamic/private';
 
 const FITBIT_API_BASE = 'https://api.fitbit.com';
 const FITBIT_TOKEN_URL = 'https://api.fitbit.com/oauth2/token';
+
+// Token expiration buffer (refresh 5 minutes before expiry)
+const TOKEN_EXPIRY_BUFFER_MS = 5 * 60 * 1000;
+
+// Rate limiting delay between API calls (200ms)
+const API_RATE_LIMIT_DELAY_MS = 200;
 
 // ============================================
 // Types
@@ -131,11 +138,10 @@ export async function getFitbitAccessToken(): Promise<string | null> {
   const tokenData = await getFitbitTokenData();
   if (!tokenData) return null;
 
-  // Check if token is expired (with 5 minute buffer)
+  // Check if token is expired (with buffer)
   const now = Date.now();
-  const bufferMs = 5 * 60 * 1000;
 
-  if (tokenData.expiresAt - bufferMs <= now) {
+  if (tokenData.expiresAt - TOKEN_EXPIRY_BUFFER_MS <= now) {
     console.log('[Fitbit] Token expired, refreshing...');
     const refreshed = await refreshFitbitToken(tokenData.refreshToken);
     if (!refreshed) {
@@ -493,8 +499,8 @@ export async function syncFitbitDateRange(
 
     // Rate limiting: Fitbit allows 150 requests/hour
     // Each date makes 3 API calls, so ~50 dates/hour max
-    // Add a small delay to be safe
-    await new Promise(r => setTimeout(r, 200));
+    // Add a delay to avoid hitting rate limits
+    await new Promise(r => setTimeout(r, API_RATE_LIMIT_DELAY_MS));
 
     current.setDate(current.getDate() + 1);
   }
@@ -530,13 +536,3 @@ export async function getFitbitDataForDate(date: string): Promise<FitbitDailyDat
     .get() || null;
 }
 
-// ============================================
-// Utility Functions
-// ============================================
-
-function getLocalDateString(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}

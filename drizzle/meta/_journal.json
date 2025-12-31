@@ -57,6 +57,13 @@
       "when": 1767189487311,
       "tag": "0007_fast_cardiac",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1735656000000,
+      "tag": "0008_add_oauth_provider_index",
+      "breakpoints": true
     }
   ]
 }
