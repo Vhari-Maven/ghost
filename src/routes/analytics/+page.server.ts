@@ -5,7 +5,10 @@ import {
   getPeriodSummary,
   getMorningTrackerStats,
   getWalkingProgress,
-  getWeightProgress
+  getWeightProgress,
+  getHeartRateZonesProgress,
+  getSleepProgress,
+  getCaloriesProgress
 } from '$lib/services/analytics';
 import { EXERCISES } from '$lib/data/exercises';
 
@@ -16,13 +19,26 @@ export const load: PageServerLoad = async ({ url }) => {
   const validDays = [7, 14, 30, 90];
   const days = validDays.includes(daysBack) ? daysBack : 30;
 
-  const [exerciseProgress, consistency, summary, morningStats, walkingProgress, weightProgress] = await Promise.all([
+  const [
+    exerciseProgress,
+    consistency,
+    summary,
+    morningStats,
+    walkingProgress,
+    weightProgress,
+    heartRateZones,
+    sleepProgress,
+    caloriesProgress
+  ] = await Promise.all([
     getAllExerciseProgress(days),
     getWorkoutConsistency(days),
     getPeriodSummary(days),
     getMorningTrackerStats(days),
     getWalkingProgress(days),
-    getWeightProgress(days)
+    getWeightProgress(days),
+    getHeartRateZonesProgress(days),
+    getSleepProgress(days),
+    getCaloriesProgress(days)
   ]);
 
   // Get unique categories from exercises that have progress data
@@ -35,6 +51,9 @@ export const load: PageServerLoad = async ({ url }) => {
     morningStats,
     walkingProgress,
     weightProgress,
+    heartRateZones,
+    sleepProgress,
+    caloriesProgress,
     days,
     categories,
     exerciseDefinitions: EXERCISES

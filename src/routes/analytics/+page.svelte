@@ -6,6 +6,8 @@
   import ConsistencyCalendar from '$lib/components/analytics/ConsistencyCalendar.svelte';
   import ProgressChart from '$lib/components/analytics/ProgressChart.svelte';
   import MorningChart from '$lib/components/analytics/MorningChart.svelte';
+  import HeartRateZonesChart from '$lib/components/analytics/HeartRateZonesChart.svelte';
+  import SleepChart from '$lib/components/analytics/SleepChart.svelte';
 
   let { data }: { data: PageData } = $props();
 
@@ -13,30 +15,52 @@
   let selectedMetric = $state<string>('walking');
 
   // Determine chart type based on selection
-  const chartType = $derived(
-    selectedMetric === 'walking' || selectedMetric === 'weight' ? 'morning' : 'exercise'
-  );
+  const chartType = $derived(() => {
+    if (selectedMetric === 'walking' || selectedMetric === 'weight' || selectedMetric === 'calories') {
+      return 'morning';
+    }
+    if (selectedMetric === 'heart-rate-zones') {
+      return 'heart-rate-zones';
+    }
+    if (selectedMetric === 'sleep') {
+      return 'sleep';
+    }
+    return 'exercise';
+  });
 
   // Get the selected exercise's progress data (for exercise charts)
   const selectedExerciseProgress = $derived(
     data.exerciseProgress.find(p => p.exerciseId === selectedMetric) || null
   );
 
-  // Get morning data based on selection
+  // Get morning data based on selection (including calories)
   const selectedMorningProgress = $derived(
     selectedMetric === 'walking' ? data.walkingProgress :
-    selectedMetric === 'weight' ? data.weightProgress : null
+    selectedMetric === 'weight' ? data.weightProgress :
+    selectedMetric === 'calories' ? data.caloriesProgress : null
   );
 
   // Get trend info for current selection
   const currentTrend = $derived(() => {
-    if (chartType === 'morning' && selectedMorningProgress) {
+    if (selectedMetric === 'heart-rate-zones') {
+      return {
+        trend: data.heartRateZones.trend,
+        percentChange: data.heartRateZones.percentChange
+      };
+    }
+    if (selectedMetric === 'sleep') {
+      return {
+        trend: data.sleepProgress.trend,
+        percentChange: data.sleepProgress.percentChange
+      };
+    }
+    if (chartType() === 'morning' && selectedMorningProgress) {
       return {
         trend: selectedMorningProgress.trend,
         percentChange: selectedMorningProgress.percentChange
       };
     }
-    if (chartType === 'exercise' && selectedExerciseProgress) {
+    if (chartType() === 'exercise' && selectedExerciseProgress) {
       return {
         trend: selectedExerciseProgress.trend,
         percentChange: selectedExerciseProgress.percentChange
@@ -44,6 +68,13 @@
     }
     return null;
   });
+
+  // Check if we have any Fitbit data
+  const hasFitbitData = $derived(
+    data.heartRateZones.dataPoints.length > 0 ||
+    data.sleepProgress.dataPoints.length > 0 ||
+    data.caloriesProgress.dataPoints.length > 0
+  );
 
   // Calculate consistency percentage
   const consistencyPercent = $derived(() => {
@@ -141,6 +172,19 @@
           <option value="walking">Walking</option>
           <option value="weight">Body Weight</option>
         </optgroup>
+        {#if hasFitbitData}
+          <optgroup label="Fitbit">
+            {#if data.heartRateZones.dataPoints.length > 0}
+              <option value="heart-rate-zones">Heart Rate Zones</option>
+            {/if}
+            {#if data.sleepProgress.dataPoints.length > 0}
+              <option value="sleep">Sleep</option>
+            {/if}
+            {#if data.caloriesProgress.dataPoints.length > 0}
+              <option value="calories">Calories Burned</option>
+            {/if}
+          </optgroup>
+        {/if}
         {#if data.exerciseProgress.length > 0}
           {@const categories = [...new Set(data.exerciseProgress.map(e => e.category))]}
           {#each categories as category}
@@ -171,9 +215,13 @@
       </div>
     {/if}
 
-    {#if chartType === 'morning' && selectedMorningProgress}
+    {#if chartType() === 'heart-rate-zones'}
+      <HeartRateZonesChart data={data.heartRateZones} />
+    {:else if chartType() === 'sleep'}
+      <SleepChart data={data.sleepProgress} />
+    {:else if chartType() === 'morning' && selectedMorningProgress}
       <MorningChart data={selectedMorningProgress} showCumulative={selectedMetric === 'walking'} />
-    {:else if chartType === 'exercise' && selectedExerciseProgress}
+    {:else if chartType() === 'exercise' && selectedExerciseProgress}
       <ProgressChart data={selectedExerciseProgress} />
     {:else}
       <div class="h-64 flex items-center justify-center text-[var(--color-text-muted)]">

@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { exerciseSessions, exerciseLogs, fitnessEntries } from '$lib/db/schema';
+import { exerciseSessions, exerciseLogs, fitnessEntries, fitbitDailyData } from '$lib/db/schema';
 import type { WorkoutType } from '$lib/db/schema';
 import { eq, and, gte, desc, sql } from 'drizzle-orm';
 import { EXERCISES } from '$lib/data/exercises';
@@ -562,4 +562,244 @@ function calculateMorningTrend(
   }
 
   return { trend, percentChange };
+}
+
+// ============================================
+// Fitbit Heart Rate Zones
+// ============================================
+
+export interface HeartRateZonesPoint {
+  date: string;
+  outOfRange: number;
+  fatBurn: number;
+  cardio: number;
+  peak: number;
+  total: number;
+  restingHeartRate: number | null;
+}
+
+export interface HeartRateZonesSeries {
+  id: string;
+  name: string;
+  dataPoints: HeartRateZonesPoint[];
+  trend: 'improving' | 'maintaining' | 'declining' | 'insufficient_data';
+  percentChange: number | null;
+  periodAverage: {
+    outOfRange: number;
+    fatBurn: number;
+    cardio: number;
+    peak: number;
+  };
+}
+
+export async function getHeartRateZonesProgress(
+  daysBack: number = 30
+): Promise<HeartRateZonesSeries> {
+  const startDate = getDateDaysAgo(daysBack);
+
+  const entries = await db
+    .select({
+      date: fitbitDailyData.date,
+      outOfRange: fitbitDailyData.zoneOutOfRange,
+      fatBurn: fitbitDailyData.zoneFatBurn,
+      cardio: fitbitDailyData.zoneCardio,
+      peak: fitbitDailyData.zonePeak,
+      restingHeartRate: fitbitDailyData.restingHeartRate
+    })
+    .from(fitbitDailyData)
+    .where(gte(fitbitDailyData.date, startDate))
+    .orderBy(fitbitDailyData.date);
+
+  const dataPoints: HeartRateZonesPoint[] = entries
+    .filter(e => e.outOfRange != null || e.fatBurn != null || e.cardio != null || e.peak != null)
+    .map(e => ({
+      date: e.date,
+      outOfRange: e.outOfRange || 0,
+      fatBurn: e.fatBurn || 0,
+      cardio: e.cardio || 0,
+      peak: e.peak || 0,
+      total: (e.outOfRange || 0) + (e.fatBurn || 0) + (e.cardio || 0) + (e.peak || 0),
+      restingHeartRate: e.restingHeartRate
+    }));
+
+  // Calculate trend based on active minutes (fatBurn + cardio + peak)
+  const activeMinutes = dataPoints.map(p => p.fatBurn + p.cardio + p.peak);
+  const { trend, percentChange } = calculateMorningTrend(activeMinutes);
+
+  // Calculate period averages
+  const avgOutOfRange = dataPoints.length > 0
+    ? Math.round(dataPoints.reduce((sum, p) => sum + p.outOfRange, 0) / dataPoints.length)
+    : 0;
+  const avgFatBurn = dataPoints.length > 0
+    ? Math.round(dataPoints.reduce((sum, p) => sum + p.fatBurn, 0) / dataPoints.length)
+    : 0;
+  const avgCardio = dataPoints.length > 0
+    ? Math.round(dataPoints.reduce((sum, p) => sum + p.cardio, 0) / dataPoints.length)
+    : 0;
+  const avgPeak = dataPoints.length > 0
+    ? Math.round(dataPoints.reduce((sum, p) => sum + p.peak, 0) / dataPoints.length)
+    : 0;
+
+  return {
+    id: 'heart-rate-zones',
+    name: 'Heart Rate Zones',
+    dataPoints,
+    trend,
+    percentChange,
+    periodAverage: {
+      outOfRange: avgOutOfRange,
+      fatBurn: avgFatBurn,
+      cardio: avgCardio,
+      peak: avgPeak
+    }
+  };
+}
+
+// ============================================
+// Fitbit Sleep Progress
+// ============================================
+
+export interface SleepProgressPoint {
+  date: string;
+  duration: number; // minutes
+  efficiency: number | null;
+  deep: number;
+  light: number;
+  rem: number;
+  awake: number;
+  deepPercent: number;
+}
+
+export interface SleepProgressSeries {
+  id: string;
+  name: string;
+  unit: string;
+  dataPoints: SleepProgressPoint[];
+  trend: 'improving' | 'maintaining' | 'declining' | 'insufficient_data';
+  percentChange: number | null;
+  periodAverage: {
+    duration: number;
+    efficiency: number;
+    deepPercent: number;
+  };
+}
+
+export async function getSleepProgress(
+  daysBack: number = 30
+): Promise<SleepProgressSeries> {
+  const startDate = getDateDaysAgo(daysBack);
+
+  const entries = await db
+    .select({
+      date: fitbitDailyData.date,
+      duration: fitbitDailyData.sleepDuration,
+      efficiency: fitbitDailyData.sleepEfficiency,
+      deep: fitbitDailyData.sleepDeep,
+      light: fitbitDailyData.sleepLight,
+      rem: fitbitDailyData.sleepRem,
+      awake: fitbitDailyData.sleepAwake
+    })
+    .from(fitbitDailyData)
+    .where(gte(fitbitDailyData.date, startDate))
+    .orderBy(fitbitDailyData.date);
+
+  const dataPoints: SleepProgressPoint[] = entries
+    .filter(e => e.duration != null)
+    .map(e => {
+      const duration = e.duration || 0;
+      const deep = e.deep || 0;
+      const deepPercent = duration > 0 ? Math.round((deep / duration) * 100) : 0;
+
+      return {
+        date: e.date,
+        duration,
+        efficiency: e.efficiency,
+        deep,
+        light: e.light || 0,
+        rem: e.rem || 0,
+        awake: e.awake || 0,
+        deepPercent
+      };
+    });
+
+  // Calculate trend based on sleep duration
+  const durations = dataPoints.map(p => p.duration);
+  const { trend, percentChange } = calculateMorningTrend(durations);
+
+  // Calculate period averages
+  const avgDuration = dataPoints.length > 0
+    ? Math.round(dataPoints.reduce((sum, p) => sum + p.duration, 0) / dataPoints.length)
+    : 0;
+  const efficiencies = dataPoints.filter(p => p.efficiency != null).map(p => p.efficiency!);
+  const avgEfficiency = efficiencies.length > 0
+    ? Math.round(efficiencies.reduce((a, b) => a + b, 0) / efficiencies.length)
+    : 0;
+  const avgDeepPercent = dataPoints.length > 0
+    ? Math.round(dataPoints.reduce((sum, p) => sum + p.deepPercent, 0) / dataPoints.length)
+    : 0;
+
+  return {
+    id: 'sleep',
+    name: 'Sleep',
+    unit: 'hours',
+    dataPoints,
+    trend,
+    percentChange,
+    periodAverage: {
+      duration: avgDuration,
+      efficiency: avgEfficiency,
+      deepPercent: avgDeepPercent
+    }
+  };
+}
+
+// ============================================
+// Fitbit Calories Progress
+// ============================================
+
+export async function getCaloriesProgress(
+  daysBack: number = 30
+): Promise<MorningProgressSeries> {
+  const startDate = getDateDaysAgo(daysBack);
+
+  const entries = await db
+    .select({
+      date: fitbitDailyData.date,
+      calories: fitbitDailyData.caloriesBurned
+    })
+    .from(fitbitDailyData)
+    .where(gte(fitbitDailyData.date, startDate))
+    .orderBy(fitbitDailyData.date);
+
+  let cumulative = 0;
+  const dataPoints: MorningProgressPoint[] = entries
+    .filter(e => e.calories != null)
+    .map(e => {
+      cumulative += e.calories!;
+      return {
+        date: e.date,
+        value: e.calories,
+        cumulative
+      };
+    });
+
+  // Calculate trend
+  const values = dataPoints.map(p => p.value).filter((v): v is number => v !== null);
+  const { trend, percentChange } = calculateMorningTrend(values);
+
+  const periodTotal = cumulative;
+  const periodAverage = values.length > 0
+    ? Math.round(values.reduce((a, b) => a + b, 0) / values.length)
+    : null;
+
+  return {
+    id: 'calories',
+    name: 'Calories Burned',
+    unit: 'cal',
+    dataPoints,
+    trend,
+    percentChange,
+    periodTotal,
+    periodAverage
+  };
 }

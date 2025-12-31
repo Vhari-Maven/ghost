@@ -1,4 +1,8 @@
 import type { Handle } from '@sveltejs/kit';
+import { initScheduler } from '$lib/scheduler';
+
+// Initialize scheduler on server startup
+initScheduler();
 
 export const handle: Handle = async ({ event, resolve }) => {
 	// In production, only allow requests through Cloudflare (blocks direct fly.dev access)
