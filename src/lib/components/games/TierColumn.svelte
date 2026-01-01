@@ -55,7 +55,7 @@
 
   <!-- Drag-and-drop zone -->
   <div
-    class="flex-1 rounded-b-lg p-1.5 space-y-1.5 overflow-y-auto min-h-[200px] custom-scrollbar"
+    class="flex-1 rounded-b-lg p-1.5 space-y-1.5 overflow-y-auto min-h-[200px]"
     style="background-color: {config.bgColor}"
     use:dndzone={{ items: games, flipDurationMs, dropTargetStyle: {} }}
     onconsider={(e) => onDndConsider(tierId, e)}
