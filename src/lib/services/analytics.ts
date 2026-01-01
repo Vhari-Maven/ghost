@@ -825,3 +825,54 @@ export async function getCaloriesProgress(
     periodAverage
   };
 }
+
+// ============================================
+// Fitbit Steps Progress
+// ============================================
+
+export async function getStepsProgress(
+  daysBack: number = 30
+): Promise<MorningProgressSeries> {
+  const startDate = getDateDaysAgo(daysBack);
+
+  const entries = await db
+    .select({
+      date: fitbitDailyData.date,
+      steps: fitbitDailyData.steps
+    })
+    .from(fitbitDailyData)
+    .where(gte(fitbitDailyData.date, startDate))
+    .orderBy(fitbitDailyData.date);
+
+  let cumulative = 0;
+  const dataPoints: MorningProgressPoint[] = entries
+    .filter(e => e.steps != null)
+    .map(e => {
+      cumulative += e.steps!;
+      return {
+        date: e.date,
+        value: e.steps,
+        cumulative
+      };
+    });
+
+  // Calculate trend
+  const values = dataPoints.map(p => p.value).filter((v): v is number => v !== null);
+  const { trend, percentChange } = calculateMorningTrend(values);
+
+  const periodTotal = cumulative;
+  const periodAverage = values.length > 0
+    ? Math.round(values.reduce((a, b) => a + b, 0) / values.length)
+    : null;
+
+  return {
+    id: 'steps',
+    name: 'Steps',
+    unit: 'steps',
+    dataPoints,
+    trend,
+    percentChange,
+    periodTotal,
+    periodAverage
+  };
+}

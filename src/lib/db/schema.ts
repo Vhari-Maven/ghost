@@ -206,8 +206,9 @@ export const fitbitDailyData = sqliteTable('fitbit_daily_data', {
   sleepLight: integer('sleep_light'), // minutes
   sleepRem: integer('sleep_rem'), // minutes
   sleepAwake: integer('sleep_awake'), // minutes
-  // Calories
+  // Activity
   caloriesBurned: integer('calories_burned'),
+  steps: integer('steps'),
   // Metadata
   syncedAt: text('synced_at').notNull().$defaultFn(() => new Date().toISOString())
 });

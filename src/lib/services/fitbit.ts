@@ -83,6 +83,7 @@ interface FitbitActivityResponse {
     caloriesOut: number;
     activityCalories: number;
     caloriesBMR: number;
+    steps: number;
   };
 }
 
@@ -373,9 +374,12 @@ export async function fetchSleep(date: string): Promise<{
 }
 
 /**
- * Fetch calories burned for a specific date
+ * Fetch activity data (calories and steps) for a specific date
  */
-export async function fetchCalories(date: string): Promise<number | null> {
+export async function fetchActivity(date: string): Promise<{
+  calories: number;
+  steps: number;
+} | null> {
   const token = await getFitbitAccessToken();
   if (!token) return null;
 
@@ -388,14 +392,17 @@ export async function fetchCalories(date: string): Promise<number | null> {
     );
 
     if (!response.ok) {
-      console.error('[Fitbit] Calories fetch failed:', response.status);
+      console.error('[Fitbit] Activity fetch failed:', response.status);
       return null;
     }
 
     const data: FitbitActivityResponse = await response.json();
-    return data.summary?.caloriesOut || null;
+    return {
+      calories: data.summary?.caloriesOut || 0,
+      steps: data.summary?.steps || 0
+    };
   } catch (error) {
-    console.error('[Fitbit] Calories fetch error:', error);
+    console.error('[Fitbit] Activity fetch error:', error);
     return null;
   }
 }
@@ -412,10 +419,10 @@ export async function syncFitbitDate(date: string): Promise<SyncResult> {
 
   try {
     // Fetch all data types in parallel
-    const [heartRate, sleep, calories] = await Promise.all([
+    const [heartRate, sleep, activity] = await Promise.all([
       fetchHeartRate(date),
       fetchSleep(date),
-      fetchCalories(date)
+      fetchActivity(date)
     ]);
 
     // Build the data object
@@ -432,7 +439,8 @@ export async function syncFitbitDate(date: string): Promise<SyncResult> {
       sleepLight: sleep?.light ?? null,
       sleepRem: sleep?.rem ?? null,
       sleepAwake: sleep?.awake ?? null,
-      caloriesBurned: calories ?? null,
+      caloriesBurned: activity?.calories ?? null,
+      steps: activity?.steps ?? null,
       syncedAt: new Date().toISOString()
     };
 
@@ -452,7 +460,7 @@ export async function syncFitbitDate(date: string): Promise<SyncResult> {
       await db.insert(fitbitDailyData).values(dataToStore);
     }
 
-    console.log(`[Fitbit] Synced ${date}: HR zones=${heartRate ? 'yes' : 'no'}, sleep=${sleep ? 'yes' : 'no'}, calories=${calories ?? 'no'}`);
+    console.log(`[Fitbit] Synced ${date}: HR zones=${heartRate ? 'yes' : 'no'}, sleep=${sleep ? 'yes' : 'no'}, calories=${activity?.calories ?? 'no'}, steps=${activity?.steps ?? 'no'}`);
 
     return {
       date,

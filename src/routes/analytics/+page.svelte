@@ -16,7 +16,7 @@
 
   // Determine chart type based on selection
   const chartType = $derived(() => {
-    if (selectedMetric === 'walking' || selectedMetric === 'weight' || selectedMetric === 'calories') {
+    if (selectedMetric === 'walking' || selectedMetric === 'weight' || selectedMetric === 'calories' || selectedMetric === 'steps') {
       return 'morning';
     }
     if (selectedMetric === 'heart-rate-zones') {
@@ -33,11 +33,12 @@
     data.exerciseProgress.find(p => p.exerciseId === selectedMetric) || null
   );
 
-  // Get morning data based on selection (including calories)
+  // Get morning data based on selection (including Fitbit activity data)
   const selectedMorningProgress = $derived(
     selectedMetric === 'walking' ? data.walkingProgress :
     selectedMetric === 'weight' ? data.weightProgress :
-    selectedMetric === 'calories' ? data.caloriesProgress : null
+    selectedMetric === 'calories' ? data.caloriesProgress :
+    selectedMetric === 'steps' ? data.stepsProgress : null
   );
 
   // Get trend info for current selection
@@ -73,7 +74,8 @@
   const hasFitbitData = $derived(
     data.heartRateZones.dataPoints.length > 0 ||
     data.sleepProgress.dataPoints.length > 0 ||
-    data.caloriesProgress.dataPoints.length > 0
+    data.caloriesProgress.dataPoints.length > 0 ||
+    data.stepsProgress.dataPoints.length > 0
   );
 
   // Calculate consistency percentage
@@ -195,6 +197,9 @@
             {#if data.caloriesProgress.dataPoints.length > 0}
               <option value="calories">Calories Burned</option>
             {/if}
+            {#if data.stepsProgress.dataPoints.length > 0}
+              <option value="steps">Steps</option>
+            {/if}
           </optgroup>
         {/if}
         {#if data.exerciseProgress.length > 0}
@@ -222,6 +227,11 @@
         {#if selectedMetric === 'weight' && data.weightProgress.periodAverage}
           <span class="text-sm text-[var(--color-text-muted)]">
             · {data.weightProgress.periodAverage} lbs avg
+          </span>
+        {/if}
+        {#if selectedMetric === 'steps' && data.stepsProgress.periodAverage}
+          <span class="text-sm text-[var(--color-text-muted)]">
+            · {data.stepsProgress.periodAverage.toLocaleString()} avg daily
           </span>
         {/if}
       </div>
