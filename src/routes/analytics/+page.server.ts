@@ -81,7 +81,7 @@ export const load: PageServerLoad = async ({ url }) => {
       },
       morningStats: { avgWeight: null, totalMiles: 0, daysWithWeight: 0, daysWithWalk: 0 },
       walkingProgress: { id: 'walking', name: 'Walking', unit: 'miles', dataPoints: [], trend: 'insufficient_data' as const, percentChange: null, periodTotal: 0, periodAverage: null },
-      weightProgress: { id: 'weight', name: 'Body Weight', unit: 'lbs', dataPoints: [], trend: 'insufficient_data' as const, percentChange: null, periodTotal: 0, periodAverage: null },
+      weightProgress: { id: 'weight', name: 'Body Weight', unit: 'lbs', dataPoints: [], trend: 'insufficient_data' as const, percentChange: null, periodTotal: 0, periodAverage: null, movingAverage7Day: undefined },
       heartRateZones: { id: 'heart-rate-zones', name: 'Heart Rate Zones', dataPoints: [], trend: 'insufficient_data' as const, percentChange: null, periodAverage: { outOfRange: 0, fatBurn: 0, cardio: 0, peak: 0 } },
       sleepProgress: { id: 'sleep', name: 'Sleep', unit: 'hours', dataPoints: [], trend: 'insufficient_data' as const, percentChange: null, periodAverage: { duration: 0, efficiency: 0, deepPercent: 0 } },
       caloriesProgress: { id: 'calories', name: 'Calories Burned', unit: 'cal', dataPoints: [], trend: 'insufficient_data' as const, percentChange: null, periodTotal: 0, periodAverage: null },

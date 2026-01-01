@@ -447,6 +447,7 @@ export interface MorningProgressPoint {
   date: string;
   value: number | null;
   cumulative: number;
+  movingAvg7Day?: number; // 7-day moving average (for weight)
 }
 
 export interface MorningProgressSeries {
@@ -458,6 +459,7 @@ export interface MorningProgressSeries {
   percentChange: number | null;
   periodTotal: number;
   periodAverage: number | null;
+  movingAverage7Day?: number; // Latest 7-day moving average (for weight)
 }
 
 export async function getWalkingProgress(
@@ -525,13 +527,23 @@ export async function getWeightProgress(
     .where(gte(fitnessEntries.date, startDate))
     .orderBy(fitnessEntries.date);
 
-  const dataPoints: MorningProgressPoint[] = entries
-    .filter(e => e.weight != null)
-    .map(e => ({
+  const filteredEntries = entries.filter(e => e.weight != null);
+
+  // Calculate 7-day moving average for each point
+  const dataPoints: MorningProgressPoint[] = filteredEntries.map((e, index) => {
+    // Get up to last 7 readings (including current)
+    const windowStart = Math.max(0, index - 6);
+    const window = filteredEntries.slice(windowStart, index + 1);
+    const windowValues = window.map(w => w.weight!);
+    const movingAvg = windowValues.reduce((a, b) => a + b, 0) / windowValues.length;
+
+    return {
       date: e.date,
       value: e.weight,
-      cumulative: e.weight! // For weight, cumulative doesn't make sense, so just use current
-    }));
+      cumulative: e.weight!, // For weight, cumulative doesn't make sense, so just use current
+      movingAvg7Day: Math.round(movingAvg * 10) / 10
+    };
+  });
 
   // Calculate trend (for weight, declining might be good!)
   const values = dataPoints.map(p => p.value).filter((v): v is number => v !== null);
@@ -541,6 +553,11 @@ export async function getWeightProgress(
     ? Math.round(values.reduce((a, b) => a + b, 0) / values.length * 10) / 10
     : null;
 
+  // Latest 7-day moving average
+  const movingAverage7Day = dataPoints.length > 0
+    ? dataPoints[dataPoints.length - 1].movingAvg7Day
+    : undefined;
+
   return {
     id: 'weight',
     name: 'Body Weight',
@@ -549,7 +566,8 @@ export async function getWeightProgress(
     trend,
     percentChange,
     periodTotal: 0, // Not applicable for weight
-    periodAverage
+    periodAverage,
+    movingAverage7Day
   };
 }
 

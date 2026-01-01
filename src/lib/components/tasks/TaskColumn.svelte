@@ -85,7 +85,7 @@
 
   <!-- Drag-and-drop zone -->
   <div
-    class="flex-1 bg-[var(--color-surface)]/30 rounded-lg p-2 space-y-2 overflow-y-auto min-h-[100px]"
+    class="flex-1 bg-[var(--color-surface)]/30 rounded-lg p-2 space-y-2 overflow-y-auto min-h-[100px] custom-scrollbar"
     use:dndzone={{ items: tasks, flipDurationMs, dropTargetStyle: {} }}
     onconsider={(e) => onDndConsider(columnId, e)}
     onfinalize={(e) => onDndFinalize(columnId, e)}

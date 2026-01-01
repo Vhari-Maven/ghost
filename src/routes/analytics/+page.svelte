@@ -224,9 +224,9 @@
             · {data.walkingProgress.periodTotal} miles total
           </span>
         {/if}
-        {#if selectedMetric === 'weight' && data.weightProgress.periodAverage}
+        {#if selectedMetric === 'weight' && data.weightProgress.movingAverage7Day}
           <span class="text-sm text-[var(--color-text-muted)]">
-            · {data.weightProgress.periodAverage} lbs avg
+            · {data.weightProgress.movingAverage7Day} lbs (7-day avg)
           </span>
         {/if}
         {#if selectedMetric === 'steps' && data.stepsProgress.periodAverage}

@@ -52,15 +52,17 @@
       });
     }
 
-    // Add average line for weight
-    if (data.id === 'weight' && data.periodAverage) {
+    // Add 7-day moving average line for weight
+    if (data.id === 'weight') {
+      const movingAvgData = data.dataPoints.map(p => p.movingAvg7Day ?? null);
       datasets.push({
-        label: `Period Average (${data.periodAverage} ${data.unit})`,
-        data: Array(labels.length).fill(data.periodAverage),
+        label: '7-Day Avg',
+        data: movingAvgData,
         borderColor: 'rgb(168, 85, 247)', // purple
         backgroundColor: 'transparent',
         fill: false,
-        borderDash: [10, 5],
+        tension: 0.3,
+        borderWidth: 2,
         pointRadius: 0,
         yAxisID: 'y'
       });
