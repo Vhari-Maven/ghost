@@ -64,6 +64,13 @@
       "when": 1735656000000,
       "tag": "0008_add_oauth_provider_index",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1767262407283,
+      "tag": "0009_numerous_mentallo",
+      "breakpoints": true
     }
   ]
 }

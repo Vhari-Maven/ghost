@@ -83,6 +83,7 @@ interface FitbitActivityResponse {
     caloriesOut: number;
     activityCalories: number;
     caloriesBMR: number;
+    steps: number;
   };
 }
 
@@ -273,19 +274,21 @@ export async function deleteFitbitToken(): Promise<void> {
 
 /**
  * Fetch heart rate data for a specific date
+ * @param date - ISO date string
+ * @param token - Optional pre-fetched access token (avoids race conditions when called in parallel)
  */
-export async function fetchHeartRate(date: string): Promise<{
+export async function fetchHeartRate(date: string, token?: string): Promise<{
   zones: { outOfRange: number; fatBurn: number; cardio: number; peak: number };
   restingHeartRate: number | null;
 } | null> {
-  const token = await getFitbitAccessToken();
-  if (!token) return null;
+  const accessToken = token ?? await getFitbitAccessToken();
+  if (!accessToken) return null;
 
   try {
     const response = await fetch(
       `${FITBIT_API_BASE}/1/user/-/activities/heart/date/${date}/1d.json`,
       {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${accessToken}` }
       }
     );
 
@@ -322,8 +325,10 @@ export async function fetchHeartRate(date: string): Promise<{
 
 /**
  * Fetch sleep data for a specific date
+ * @param date - ISO date string
+ * @param token - Optional pre-fetched access token (avoids race conditions when called in parallel)
  */
-export async function fetchSleep(date: string): Promise<{
+export async function fetchSleep(date: string, token?: string): Promise<{
   duration: number; // minutes
   efficiency: number; // percentage
   deep: number;
@@ -331,14 +336,14 @@ export async function fetchSleep(date: string): Promise<{
   rem: number;
   awake: number;
 } | null> {
-  const token = await getFitbitAccessToken();
-  if (!token) return null;
+  const accessToken = token ?? await getFitbitAccessToken();
+  if (!accessToken) return null;
 
   try {
     const response = await fetch(
       `${FITBIT_API_BASE}/1.2/user/-/sleep/date/${date}.json`,
       {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${accessToken}` }
       }
     );
 
@@ -373,29 +378,37 @@ export async function fetchSleep(date: string): Promise<{
 }
 
 /**
- * Fetch calories burned for a specific date
+ * Fetch activity data (calories and steps) for a specific date
+ * @param date - ISO date string
+ * @param token - Optional pre-fetched access token (avoids race conditions when called in parallel)
  */
-export async function fetchCalories(date: string): Promise<number | null> {
-  const token = await getFitbitAccessToken();
-  if (!token) return null;
+export async function fetchActivity(date: string, token?: string): Promise<{
+  calories: number;
+  steps: number;
+} | null> {
+  const accessToken = token ?? await getFitbitAccessToken();
+  if (!accessToken) return null;
 
   try {
     const response = await fetch(
       `${FITBIT_API_BASE}/1/user/-/activities/date/${date}.json`,
       {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': `Bearer ${accessToken}` }
       }
     );
 
     if (!response.ok) {
-      console.error('[Fitbit] Calories fetch failed:', response.status);
+      console.error('[Fitbit] Activity fetch failed:', response.status);
       return null;
     }
 
     const data: FitbitActivityResponse = await response.json();
-    return data.summary?.caloriesOut || null;
+    return {
+      calories: data.summary?.caloriesOut || 0,
+      steps: data.summary?.steps || 0
+    };
   } catch (error) {
-    console.error('[Fitbit] Calories fetch error:', error);
+    console.error('[Fitbit] Activity fetch error:', error);
     return null;
   }
 }
@@ -411,11 +424,18 @@ export async function syncFitbitDate(date: string): Promise<SyncResult> {
   console.log(`[Fitbit] Syncing data for ${date}...`);
 
   try {
-    // Fetch all data types in parallel
-    const [heartRate, sleep, calories] = await Promise.all([
-      fetchHeartRate(date),
-      fetchSleep(date),
-      fetchCalories(date)
+    // Get token ONCE before parallel fetches to avoid race condition
+    // where multiple refreshes invalidate each other's tokens
+    const token = await getFitbitAccessToken();
+    if (!token) {
+      return { date, success: false, error: 'No valid Fitbit token' };
+    }
+
+    // Fetch all data types in parallel (passing the same token to each)
+    const [heartRate, sleep, activity] = await Promise.all([
+      fetchHeartRate(date, token),
+      fetchSleep(date, token),
+      fetchActivity(date, token)
     ]);
 
     // Build the data object
@@ -432,7 +452,8 @@ export async function syncFitbitDate(date: string): Promise<SyncResult> {
       sleepLight: sleep?.light ?? null,
       sleepRem: sleep?.rem ?? null,
       sleepAwake: sleep?.awake ?? null,
-      caloriesBurned: calories ?? null,
+      caloriesBurned: activity?.calories ?? null,
+      steps: activity?.steps ?? null,
       syncedAt: new Date().toISOString()
     };
 
@@ -452,7 +473,7 @@ export async function syncFitbitDate(date: string): Promise<SyncResult> {
       await db.insert(fitbitDailyData).values(dataToStore);
     }
 
-    console.log(`[Fitbit] Synced ${date}: HR zones=${heartRate ? 'yes' : 'no'}, sleep=${sleep ? 'yes' : 'no'}, calories=${calories ?? 'no'}`);
+    console.log(`[Fitbit] Synced ${date}: HR zones=${heartRate ? 'yes' : 'no'}, sleep=${sleep ? 'yes' : 'no'}, calories=${activity?.calories ?? 'no'}, steps=${activity?.steps ?? 'no'}`);
 
     return {
       date,
