@@ -32,7 +32,7 @@
 
   <!-- Drag-and-drop zone -->
   <div
-    class="flex-1 rounded-b-lg p-1.5 space-y-1.5 overflow-y-auto min-h-[200px] custom-scrollbar bg-[var(--color-surface)]/50"
+    class="flex-1 rounded-b-lg p-1.5 space-y-1.5 overflow-y-auto min-h-[200px] bg-[var(--color-surface)]/50"
     use:dndzone={{ items: games, flipDurationMs, dropTargetStyle: {} }}
     onconsider={(e) => onDndConsider(e)}
     onfinalize={(e) => onDndFinalize(e)}

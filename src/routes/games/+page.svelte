@@ -316,7 +316,7 @@
   </div>
 
   <!-- Tier Board -->
-  <div class="flex-1 flex gap-2 overflow-x-auto pb-4 custom-scrollbar">
+  <div class="flex-1 flex gap-2 overflow-x-auto pb-4">
     {#each TIER_ORDER as tierId}
       <TierColumn
         {tierId}

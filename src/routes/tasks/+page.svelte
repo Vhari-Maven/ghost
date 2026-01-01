@@ -264,7 +264,7 @@
     </h1>
   </div>
 
-  <div class="flex-1 flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
+  <div class="flex-1 flex gap-4 overflow-x-auto pb-4">
     <!-- Todo Column -->
     <TaskColumn
       columnId="todo"
