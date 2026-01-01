@@ -121,6 +121,35 @@ Meal planning guide with nutrition tracking and prep instructions:
 - **Nutrition focus**: Calorie targets, macro breakdowns, lipid health goals
 - **Architecture**: Settings stored in `mealPrepSettings` table, service layer in `src/lib/services/meal-prep-settings.ts`
 
+### Analytics (`/analytics`)
+Dashboard for tracking progress across exercise and morning tracker metrics:
+- **Exercise progress**: Track weight, reps, volume for all exercises over time
+- **Morning metrics**: Walking distance, body weight trends
+- **Fitbit integration**: Heart rate zones, sleep data, calories burned from Pixel Watch
+- **Workout consistency**: Calendar view showing workout streaks
+- **Flexible time periods**: View data for 7, 14, 30, or 90 days
+- **Charts**: Interactive Chart.js visualizations with trend analysis
+- **Architecture**: Analytics service in `src/lib/services/analytics.ts`, Fitbit service in `src/lib/services/fitbit.ts`
+
+#### Fitbit Integration
+The analytics dashboard can sync health data from a Pixel Watch via Fitbit's API:
+
+**Setup requirements:**
+- `FITBIT_CLIENT_ID` and `FITBIT_CLIENT_SECRET` environment variables must be set
+- OAuth 2.0 flow handles authorization (see `/api/fitbit/authorize` and `/api/fitbit/callback`)
+- Tokens stored in `oauth_tokens` table with automatic refresh logic
+
+**Automatic sync:**
+- Daily sync runs at **12:00 PM Eastern Time** via `node-cron` scheduler
+- Scheduler initialized in `src/lib/scheduler.ts`, called from `src/hooks.server.ts`
+- **Important**: Timezone is hardcoded to `America/New_York` in the cron schedule
+- Manual sync and backfill options available in Settings page
+
+**Data synced:**
+- Heart rate zones (minutes in each zone: out of range, fat burn, cardio, peak)
+- Sleep duration and stages (deep, light, REM, awake)
+- Calories burned
+
 ## Testing
 
 ```bash

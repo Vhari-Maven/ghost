@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import DayNavigation from '$lib/components/exercise/DayNavigation.svelte';
   import WorkoutHeader from '$lib/components/exercise/WorkoutHeader.svelte';
   import ExerciseStackSection from '$lib/components/exercise/ExerciseStackSection.svelte';
   import ExerciseCard from '$lib/components/exercise/ExerciseCard.svelte';
 
   let { data } = $props();
+
+  let isCompleting = $state(false);
 </script>
 
 <div class="max-w-3xl mx-auto">
@@ -117,11 +120,42 @@
   </div>
 
   <!-- Session completion -->
-  {#if !data.isFuture && data.session.completedAt}
-    <div class="mt-6 text-center py-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-      <span class="text-green-400 font-medium">
-        ✓ Workout completed on {new Date(data.session.completedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-      </span>
-    </div>
+  {#if !data.isFuture}
+    {#if data.session.completedAt}
+      <div class="mt-6 text-center py-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+        <span class="text-green-400 font-medium">
+          ✓ Workout completed at {new Date(data.session.completedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+        </span>
+      </div>
+    {:else}
+      <form
+        method="POST"
+        action="?/completeSession"
+        use:enhance={() => {
+          isCompleting = true;
+          return async ({ update }) => {
+            await update();
+            isCompleting = false;
+          };
+        }}
+        class="mt-6"
+      >
+        <input type="hidden" name="sessionId" value={data.session.id} />
+        <button
+          type="submit"
+          disabled={isCompleting}
+          class="w-full py-4 rounded-lg font-medium text-lg transition-all
+                 bg-[var(--color-accent)] text-white
+                 hover:bg-[var(--color-accent-hover)] hover:shadow-lg hover:shadow-[var(--color-glow)]
+                 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {#if isCompleting}
+            Completing...
+          {:else}
+            ✓ Complete Workout
+          {/if}
+        </button>
+      </form>
+    {/if}
   {/if}
 </div>

@@ -1,4 +1,4 @@
-import { sqliteTable, text, real, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, real, integer, index } from 'drizzle-orm/sqlite-core';
 
 export const fitnessEntries = sqliteTable('fitness_entries', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -164,3 +164,53 @@ export const videoGames = sqliteTable('video_games', {
 
 export type VideoGame = typeof videoGames.$inferSelect;
 export type NewVideoGame = typeof videoGames.$inferInsert;
+
+// ============================================
+// OAuth Tokens (for Fitbit, etc.)
+// ============================================
+
+export const oauthTokens = sqliteTable('oauth_tokens', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  provider: text('provider').notNull(), // 'fitbit'
+  accessToken: text('access_token').notNull(),
+  refreshToken: text('refresh_token').notNull(),
+  expiresAt: integer('expires_at').notNull(), // Unix timestamp in milliseconds
+  scope: text('scope'),
+  userId: text('user_id'), // Provider's user ID
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString())
+}, (table) => ({
+  providerIdx: index('oauth_tokens_provider_idx').on(table.provider)
+}));
+
+export type OAuthToken = typeof oauthTokens.$inferSelect;
+export type NewOAuthToken = typeof oauthTokens.$inferInsert;
+
+// ============================================
+// Fitbit Daily Data
+// ============================================
+
+export const fitbitDailyData = sqliteTable('fitbit_daily_data', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  date: text('date').notNull().unique(),
+  // Heart rate zones (minutes in each)
+  zoneOutOfRange: integer('zone_out_of_range'),
+  zoneFatBurn: integer('zone_fat_burn'),
+  zoneCardio: integer('zone_cardio'),
+  zonePeak: integer('zone_peak'),
+  restingHeartRate: integer('resting_heart_rate'),
+  // Sleep
+  sleepDuration: integer('sleep_duration'), // total minutes
+  sleepEfficiency: integer('sleep_efficiency'), // percentage 0-100
+  sleepDeep: integer('sleep_deep'), // minutes
+  sleepLight: integer('sleep_light'), // minutes
+  sleepRem: integer('sleep_rem'), // minutes
+  sleepAwake: integer('sleep_awake'), // minutes
+  // Calories
+  caloriesBurned: integer('calories_burned'),
+  // Metadata
+  syncedAt: text('synced_at').notNull().$defaultFn(() => new Date().toISOString())
+});
+
+export type FitbitDailyData = typeof fitbitDailyData.$inferSelect;
+export type NewFitbitDailyData = typeof fitbitDailyData.$inferInsert;
