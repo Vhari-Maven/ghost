@@ -14,7 +14,7 @@ import {
 import { EXERCISES } from '$lib/data/exercises';
 
 export const load: PageServerLoad = async ({ url }) => {
-  const daysBack = parseInt(url.searchParams.get('days') || '30');
+  const daysBack = parseInt(url.searchParams.get('days') || '7');
 
   // Validate days parameter (allow 7, 14, 30, 90)
   const validDays = [7, 14, 30, 90];

@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import StatCard from '$lib/components/analytics/StatCard.svelte';
   import TrendBadge from '$lib/components/analytics/TrendBadge.svelte';
   import PeriodSelector from '$lib/components/analytics/PeriodSelector.svelte';
   import ConsistencyCalendar from '$lib/components/analytics/ConsistencyCalendar.svelte';
@@ -12,7 +11,7 @@
   let { data }: { data: PageData } = $props();
 
   // Selected metric for the progress chart
-  let selectedMetric = $state<string>('walking');
+  let selectedMetric = $state<string>('weight');
 
   // Determine chart type based on selection
   const chartType = $derived(() => {
@@ -140,28 +139,20 @@
     <PeriodSelector currentDays={data.days} />
   </div>
 
-  <!-- Summary Stats -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <StatCard
-      label="Workouts"
-      value={data.summary.totalWorkouts}
-      subtitle="this period"
-    />
-    <StatCard
-      label="Consistency"
-      value="{consistencyPercent()}%"
-      subtitle="of days active"
-    />
-    <StatCard
-      label="Avg Weight"
-      value={data.morningStats.avgWeight ? `${data.morningStats.avgWeight} lbs` : '—'}
-      subtitle="{data.morningStats.daysWithWeight} weigh-ins"
-    />
-    <StatCard
-      label="Total Miles"
-      value={data.morningStats.totalMiles}
-      subtitle="{data.morningStats.daysWithWalk} walk days"
-    />
+  <!-- Summary Stats (compact) -->
+  <div class="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm">
+    <span class="text-[var(--color-text-muted)]">
+      <strong class="text-[var(--color-text)] font-semibold">{data.summary.totalWorkouts}</strong> Workouts
+    </span>
+    <span class="text-[var(--color-text-muted)]">
+      <strong class="text-[var(--color-text)] font-semibold">{consistencyPercent()}%</strong> Consistency
+    </span>
+    <span class="text-[var(--color-text-muted)]">
+      <strong class="text-[var(--color-text)] font-semibold">{data.morningStats.avgWeight ? `${data.morningStats.avgWeight} lbs` : '—'}</strong> avg weight
+    </span>
+    <span class="text-[var(--color-text-muted)]">
+      <strong class="text-[var(--color-text)] font-semibold">{data.morningStats.totalMiles}</strong> mi walked
+    </span>
   </div>
 
   <!-- Workout Calendar -->

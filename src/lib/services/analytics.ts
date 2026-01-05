@@ -708,6 +708,7 @@ export interface SleepProgressPoint {
   rem: number;
   awake: number;
   deepPercent: number;
+  movingAvg7Day?: number; // 7-day moving average of duration (minutes)
 }
 
 export interface SleepProgressSeries {
@@ -743,24 +744,32 @@ export async function getSleepProgress(
     .where(gte(fitbitDailyData.date, startDate))
     .orderBy(fitbitDailyData.date);
 
-  const dataPoints: SleepProgressPoint[] = entries
-    .filter(e => e.duration != null)
-    .map(e => {
-      const duration = e.duration || 0;
-      const deep = e.deep || 0;
-      const deepPercent = duration > 0 ? Math.round((deep / duration) * 100) : 0;
+  const filteredEntries = entries.filter(e => e.duration != null);
 
-      return {
-        date: e.date,
-        duration,
-        efficiency: e.efficiency,
-        deep,
-        light: e.light || 0,
-        rem: e.rem || 0,
-        awake: e.awake || 0,
-        deepPercent
-      };
-    });
+  // Calculate 7-day moving average for each point
+  const dataPoints: SleepProgressPoint[] = filteredEntries.map((e, index) => {
+    const duration = e.duration || 0;
+    const deep = e.deep || 0;
+    const deepPercent = duration > 0 ? Math.round((deep / duration) * 100) : 0;
+
+    // Get up to last 7 readings (including current) for moving average
+    const windowStart = Math.max(0, index - 6);
+    const window = filteredEntries.slice(windowStart, index + 1);
+    const windowDurations = window.map(w => w.duration || 0);
+    const movingAvg = windowDurations.reduce((a, b) => a + b, 0) / windowDurations.length;
+
+    return {
+      date: e.date,
+      duration,
+      efficiency: e.efficiency,
+      deep,
+      light: e.light || 0,
+      rem: e.rem || 0,
+      awake: e.awake || 0,
+      deepPercent,
+      movingAvg7Day: Math.round(movingAvg)
+    };
+  });
 
   // Calculate trend based on sleep duration
   const durations = dataPoints.map(p => p.duration);

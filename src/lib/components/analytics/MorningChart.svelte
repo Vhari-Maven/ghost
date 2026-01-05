@@ -20,6 +20,14 @@
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
+  // Calculate suggested minimum for weight charts (gives context without starting at zero)
+  function getWeightSuggestedMin(): number {
+    const values = data.dataPoints.map(p => p.value).filter(v => v !== null) as number[];
+    if (values.length === 0) return 0;
+    const min = Math.min(...values);
+    return Math.floor(min) - 5;
+  }
+
   // Create chart configuration
   function getChartConfig() {
     const labels = data.dataPoints.map(p => formatDate(p.date));
@@ -81,6 +89,8 @@
         type: 'linear',
         display: true,
         position: 'left',
+        beginAtZero: data.id === 'walking',
+        suggestedMin: data.id === 'weight' ? getWeightSuggestedMin() : undefined,
         title: {
           display: true,
           text: data.id === 'walking' ? 'Distance (miles)' : 'Weight (lbs)',

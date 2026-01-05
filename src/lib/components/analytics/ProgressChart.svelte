@@ -17,6 +17,14 @@
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
 
+  // Calculate suggested minimum (gives context without starting at zero)
+  function getSuggestedMin(values: (number | null)[], buffer: number = 10): number {
+    const filtered = values.filter((v): v is number => v !== null && v > 0);
+    if (filtered.length === 0) return 0;
+    const min = Math.min(...filtered);
+    return Math.max(0, Math.floor(min) - buffer);
+  }
+
   // Create chart configuration
   function getChartConfig() {
     const labels = data.dataPoints.map(p => formatDate(p.date));
@@ -88,6 +96,7 @@
             type: 'linear' as const,
             display: true,
             position: 'left' as const,
+            suggestedMin: getSuggestedMin(weights, 10),
             title: {
               display: true,
               text: 'Weight (lbs)',
@@ -104,6 +113,7 @@
             type: 'linear' as const,
             display: true,
             position: 'right' as const,
+            suggestedMin: getSuggestedMin(volumes, 100),
             title: {
               display: true,
               text: 'Volume (lbs)',

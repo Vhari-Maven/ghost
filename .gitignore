@@ -36,6 +36,7 @@ playwright-report/
 test-results/
 
 # Dev scripts (one-off utilities not needed in production)
+scripts/
 src/lib/db/steam-library-check.ts
 
 # Asset archive (unused favicon experiments, etc.)

@@ -33,6 +33,39 @@
     return `${hours}h ${mins}m`;
   }
 
+  // Compact format for bar labels (7:30)
+  function formatMinutesCompact(minutes: number): string {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}:${mins.toString().padStart(2, '0')}`;
+  }
+
+  // Custom plugin to draw total sleep time above each bar
+  const totalLabelPlugin = {
+    id: 'totalLabel',
+    afterDatasetsDraw(chart: Chart) {
+      const { ctx } = chart;
+      const meta = chart.getDatasetMeta(3); // Get Awake dataset (index 3, the top of the stacked bars)
+
+      ctx.save();
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.fillStyle = 'rgb(229, 234, 235)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+
+      meta.data.forEach((bar, index) => {
+        const point = data.dataPoints[index];
+        if (point) {
+          const total = point.duration;
+          const label = formatMinutesCompact(total);
+          ctx.fillText(label, bar.x, bar.y - 6);
+        }
+      });
+
+      ctx.restore();
+    }
+  };
+
   // Create chart configuration
   function getChartConfig() {
     const labels = data.dataPoints.map(p => formatDate(p.date));
@@ -69,12 +102,28 @@
             backgroundColor: STAGE_COLORS.awake.bg,
             borderColor: STAGE_COLORS.awake.border,
             borderWidth: 1
+          },
+          {
+            label: '7-Day Avg',
+            type: 'line' as const,
+            data: data.dataPoints.map(p => p.movingAvg7Day ?? null),
+            borderColor: 'rgb(250, 204, 21)', // yellow
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            pointRadius: 0,
+            tension: 0.3,
+            stack: undefined // Don't stack with bars
           }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 20 // Room for total sleep labels above bars
+          }
+        },
         interaction: {
           mode: 'index' as const,
           intersect: false
@@ -91,6 +140,7 @@
           },
           y: {
             stacked: true,
+            beginAtZero: true,
             title: {
               display: true,
               text: 'Minutes',
@@ -137,6 +187,9 @@
                   if (point.efficiency) {
                     lines.push(`Efficiency: ${point.efficiency}%`);
                   }
+                  if (point.movingAvg7Day) {
+                    lines.push(`7-Day Avg: ${formatMinutes(point.movingAvg7Day)}`);
+                  }
                   return lines;
                 }
                 return [];
@@ -156,7 +209,10 @@
       chart.destroy();
     }
 
-    chart = new Chart(canvas, getChartConfig());
+    chart = new Chart(canvas, {
+      ...getChartConfig(),
+      plugins: [totalLabelPlugin]
+    });
   }
 
   onMount(() => {
