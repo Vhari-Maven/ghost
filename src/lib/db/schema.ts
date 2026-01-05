@@ -142,6 +142,19 @@ export type MealPrepSettings = typeof mealPrepSettings.$inferSelect;
 export type NewMealPrepSettings = typeof mealPrepSettings.$inferInsert;
 
 // ============================================
+// Fitness Goals
+// ============================================
+
+export const fitnessGoals = sqliteTable('fitness_goals', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  targetWeight: real('target_weight'), // Target weight in lbs
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString())
+});
+
+export type FitnessGoals = typeof fitnessGoals.$inferSelect;
+export type NewFitnessGoals = typeof fitnessGoals.$inferInsert;
+
+// ============================================
 // Video Games Tables
 // ============================================
 

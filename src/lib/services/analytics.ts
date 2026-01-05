@@ -4,6 +4,7 @@ import type { WorkoutType } from '$lib/db/schema';
 import { eq, and, gte, desc, sql } from 'drizzle-orm';
 import { EXERCISES } from '$lib/data/exercises';
 import { getLocalDateString } from '$lib/utils/date';
+import { getTargetWeight } from '$lib/services/fitness-goals';
 
 // ============================================
 // Types
@@ -58,6 +59,17 @@ const VALID_WORKOUT_TYPES: readonly WorkoutType[] = ['upper_push', 'lower', 'upp
 // Trend calculation thresholds
 const EXERCISE_TREND_THRESHOLD_PERCENT = 5; // For exercise volume trends
 const MORNING_TREND_THRESHOLD_PERCENT = 2; // For morning tracker trends (more sensitive)
+
+// Period-aware thresholds for weight (percent change)
+const WEIGHT_TREND_THRESHOLDS: Record<number, number> = {
+  7: 1,     // 1% threshold for 7 days (~1.8 lbs at 178 lbs)
+  14: 1.5,  // 1.5% threshold for 14 days (~2.7 lbs)
+  30: 2,    // 2% threshold for 30 days (~3.5 lbs)
+  90: 2.5   // 2.5% threshold for 90 days (~4.5 lbs)
+};
+
+// Tolerance around target weight to consider "at goal" (in lbs)
+const TARGET_WEIGHT_TOLERANCE = 3;
 
 // ============================================
 // Validation Utilities
@@ -545,9 +557,10 @@ export async function getWeightProgress(
     };
   });
 
-  // Calculate trend (for weight, declining might be good!)
+  // Calculate goal-aware trend for weight
   const values = dataPoints.map(p => p.value).filter((v): v is number => v !== null);
-  const { trend, percentChange } = calculateMorningTrend(values);
+  const targetWeight = await getTargetWeight();
+  const { trend, percentChange } = calculateWeightTrend(values, daysBack, targetWeight);
 
   const periodAverage = values.length > 0
     ? Math.round(values.reduce((a, b) => a + b, 0) / values.length * 10) / 10
@@ -599,6 +612,69 @@ function calculateMorningTrend(
     trend = 'improving';
   } else {
     trend = 'declining';
+  }
+
+  return { trend, percentChange };
+}
+
+// Goal-aware weight trend calculation
+// - If above target: losing weight = improving, gaining = declining
+// - If at target (±tolerance): maintaining = good
+// - If below target: gaining weight = improving, losing = declining
+function calculateWeightTrend(
+  values: number[],
+  daysBack: number,
+  targetWeight: number | null
+): { trend: 'improving' | 'maintaining' | 'declining' | 'insufficient_data'; percentChange: number | null } {
+  if (values.length < 2) {
+    return { trend: 'insufficient_data', percentChange: null };
+  }
+
+  const third = Math.max(1, Math.floor(values.length / 3));
+  const firstValues = values.slice(0, third);
+  const lastValues = values.slice(-third);
+
+  const avgFirst = firstValues.reduce((a, b) => a + b, 0) / firstValues.length;
+  const avgLast = lastValues.reduce((a, b) => a + b, 0) / lastValues.length;
+  const currentWeight = avgLast;
+
+  if (avgFirst === 0) {
+    return { trend: 'insufficient_data', percentChange: null };
+  }
+
+  const percentChange = Math.round(((avgLast - avgFirst) / avgFirst) * 100);
+  const weightChange = avgLast - avgFirst; // Positive = gained weight, negative = lost weight
+
+  // Get period-appropriate threshold
+  const threshold = WEIGHT_TREND_THRESHOLDS[daysBack] ?? WEIGHT_TREND_THRESHOLDS[30];
+
+  let trend: 'improving' | 'maintaining' | 'declining';
+
+  // Check if change is within threshold (maintaining)
+  if (Math.abs(percentChange) <= threshold) {
+    trend = 'maintaining';
+  } else if (targetWeight === null) {
+    // No target set - use simple logic (losing = improving for weight loss default)
+    trend = weightChange < 0 ? 'improving' : 'declining';
+  } else {
+    // Goal-aware logic
+    const atTarget = Math.abs(currentWeight - targetWeight) <= TARGET_WEIGHT_TOLERANCE;
+    const aboveTarget = currentWeight > targetWeight + TARGET_WEIGHT_TOLERANCE;
+    const belowTarget = currentWeight < targetWeight - TARGET_WEIGHT_TOLERANCE;
+
+    if (atTarget) {
+      // At goal - maintaining is good, any significant change needs context
+      trend = 'maintaining';
+    } else if (aboveTarget) {
+      // Above target - losing weight is improving
+      trend = weightChange < 0 ? 'improving' : 'declining';
+    } else if (belowTarget) {
+      // Below target - gaining weight toward goal is improving
+      trend = weightChange > 0 ? 'improving' : 'declining';
+    } else {
+      // Fallback
+      trend = 'maintaining';
+    }
   }
 
   return { trend, percentChange };

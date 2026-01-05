@@ -8,12 +8,14 @@ import {
   syncFitbitDateRange,
   getLastSyncTime
 } from '$lib/services/fitbit';
+import { getFitnessGoals, setTargetWeight } from '$lib/services/fitness-goals';
 import { getLocalDateString } from '$lib/utils/date';
 
 export const load: PageServerLoad = async ({ url }) => {
   const connected = await isFitbitConnected();
   const tokenData = connected ? await getFitbitTokenData() : null;
   const lastSync = await getLastSyncTime();
+  const fitnessGoals = await getFitnessGoals();
 
   // Check for URL params (success/error messages)
   const success = url.searchParams.get('success');
@@ -26,6 +28,7 @@ export const load: PageServerLoad = async ({ url }) => {
       lastSync,
       expiresAt: tokenData?.expiresAt || null
     },
+    fitnessGoals,
     message: {
       success: success === 'fitbit_connected' ? 'Fitbit connected successfully!' : null,
       error: error || null
@@ -78,5 +81,24 @@ export const actions: Actions = {
       success: true,
       message: `Synced ${successful} of ${results.length} days`
     };
+  },
+
+  updateTargetWeight: async ({ request }) => {
+    const formData = await request.formData();
+    const weightStr = formData.get('targetWeight')?.toString();
+
+    if (!weightStr || weightStr.trim() === '') {
+      // Clear the target weight
+      await setTargetWeight(null);
+      return { success: true, message: 'Target weight cleared' };
+    }
+
+    const weight = parseFloat(weightStr);
+    if (isNaN(weight) || weight < 50 || weight > 500) {
+      return fail(400, { error: 'Please enter a valid weight between 50 and 500 lbs' });
+    }
+
+    await setTargetWeight(weight);
+    return { success: true, message: `Target weight set to ${weight} lbs` };
   }
 };

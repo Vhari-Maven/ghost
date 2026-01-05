@@ -224,4 +224,50 @@
       When connected, Fitbit data syncs automatically every day at <span class="text-[var(--color-text)] font-medium">12:00 PM Eastern</span>.
     </p>
   </section>
+
+  <!-- Fitness Goals -->
+  <section class="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+      <h2 class="text-lg font-semibold text-[var(--color-text)]">Fitness Goals</h2>
+    </div>
+
+    <form method="POST" action="?/updateTargetWeight" use:enhance class="space-y-4">
+      <div>
+        <label for="targetWeight" class="block text-sm font-medium text-[var(--color-text-muted)] mb-2">
+          Target Weight (lbs)
+        </label>
+        <div class="flex items-center gap-3">
+          <input
+            type="number"
+            id="targetWeight"
+            name="targetWeight"
+            value={data.fitnessGoals.targetWeight ?? ''}
+            placeholder="e.g., 160"
+            step="0.1"
+            min="50"
+            max="500"
+            class="w-32 px-3 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg
+                   text-[var(--color-text)] placeholder-[var(--color-text-muted)]
+                   hover:border-[var(--color-border-hover)] focus:border-[var(--color-accent)]
+                   focus:outline-none transition-colors"
+          />
+          <button
+            type="submit"
+            class="px-4 py-2 bg-[var(--color-accent)] text-[var(--color-bg)] font-medium rounded-lg
+                   hover:bg-[var(--color-accent)]/80 transition-colors"
+          >
+            Save
+          </button>
+        </div>
+        <p class="mt-2 text-sm text-[var(--color-text-muted)]">
+          Weight trends will be calculated relative to this goal. Leave empty to disable goal-based tracking.
+        </p>
+      </div>
+    </form>
+  </section>
 </div>

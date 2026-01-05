@@ -71,6 +71,13 @@
       "when": 1767262407283,
       "tag": "0009_numerous_mentallo",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1767641604649,
+      "tag": "0010_chubby_ravenous",
+      "breakpoints": true
     }
   ]
 }
