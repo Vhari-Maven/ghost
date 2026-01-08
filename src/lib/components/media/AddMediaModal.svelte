@@ -158,7 +158,13 @@
 				<!-- TMDB Search -->
 				<div class="mb-4 relative">
 					<label for="search" class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-						Search TMDB
+						Search
+						<a
+							href="https://www.themoviedb.org/"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-[var(--color-accent)] hover:underline"
+						>TMDB</a>
 					</label>
 					<div class="relative">
 						<input
