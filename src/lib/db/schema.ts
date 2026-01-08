@@ -179,6 +179,34 @@ export type VideoGame = typeof videoGames.$inferSelect;
 export type NewVideoGame = typeof videoGames.$inferInsert;
 
 // ============================================
+// Media (TV Shows & Movies) Tables
+// ============================================
+
+export const MEDIA_TYPES = ['tv', 'movie'] as const;
+export type MediaType = (typeof MEDIA_TYPES)[number];
+
+export const MEDIA_TIERS = ['S', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C'] as const;
+export type MediaTier = (typeof MEDIA_TIERS)[number];
+
+export const media = sqliteTable('media', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  mediaType: text('media_type').notNull(), // 'tv' | 'movie'
+  tier: text('tier').notNull(), // 'S' | 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C'
+  genre: text('genre'),
+  releaseYear: integer('release_year'),
+  tmdbId: text('tmdb_id'), // For TMDB API integration
+  posterUrl: text('poster_url'), // TMDB poster URL
+  comment: text('comment'),
+  sortOrder: integer('sort_order').notNull().default(0), // Per-tier ordering (separate per mediaType)
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+  updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
+export type Media = typeof media.$inferSelect;
+export type NewMedia = typeof media.$inferInsert;
+
+// ============================================
 // OAuth Tokens (for Fitbit, etc.)
 // ============================================
 

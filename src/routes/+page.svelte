@@ -86,13 +86,16 @@
       <p class="text-[var(--color-text-muted)]">Kanban-style shopping list with drag-and-drop.</p>
     </a>
 
-    <div class="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg opacity-50">
+    <a
+      href="/media"
+      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
+    >
       <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
         <img src="/icon-media.svg" alt="" class="w-6 h-6" />
-        Media Queue
+        Media
       </h2>
-      <p class="text-[var(--color-text-muted)]">Coming soon...</p>
-    </div>
+      <p class="text-[var(--color-text-muted)]">Tier list for ranking TV series and movies.</p>
+    </a>
 
     <a
       href="/tasks"
