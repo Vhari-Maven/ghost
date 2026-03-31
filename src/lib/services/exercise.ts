@@ -240,23 +240,39 @@ export async function getLastWorkoutOfType(
   workoutType: WorkoutType,
   beforeDate: string
 ): Promise<HistoricalWorkout | null> {
-  const lastSession = await db.select()
-    .from(exerciseSessions)
+  // Use an inner join (same pattern as analytics) to find the most recent session
+  // that has completed exercise logs. This skips missed workouts with no limit on
+  // how far back it searches.
+  const lastLoggedSession = await db
+    .selectDistinct({ sessionId: exerciseLogs.sessionId, date: exerciseSessions.date })
+    .from(exerciseLogs)
+    .innerJoin(exerciseSessions, eq(exerciseLogs.sessionId, exerciseSessions.id))
     .where(and(
       eq(exerciseSessions.workoutType, workoutType),
-      lt(exerciseSessions.date, beforeDate)
+      lt(exerciseSessions.date, beforeDate),
+      eq(exerciseLogs.completed, true)
     ))
     .orderBy(desc(exerciseSessions.date))
     .limit(1)
     .get();
 
-  if (!lastSession) return null;
+  if (!lastLoggedSession) return null;
+
+  const session = await db.select()
+    .from(exerciseSessions)
+    .where(eq(exerciseSessions.id, lastLoggedSession.sessionId))
+    .get();
+
+  if (!session) return null;
 
   const logs = await db.select()
     .from(exerciseLogs)
-    .where(eq(exerciseLogs.sessionId, lastSession.id));
+    .where(and(
+      eq(exerciseLogs.sessionId, session.id),
+      eq(exerciseLogs.completed, true)
+    ));
 
-  return { session: lastSession, logs };
+  return { session, logs };
 }
 
 // Group exercise logs by exercise ID for easy lookup
