@@ -14,6 +14,7 @@
     { href: '/games', label: 'Games', enabled: true },
     { href: '/media', label: 'Media', enabled: true },
     { href: '/tasks', label: 'Tasks', enabled: true },
+    { href: '/retirement', label: 'Retirement', enabled: true },
   ];
 
   function isActive(href: string, currentPath: string): boolean {
