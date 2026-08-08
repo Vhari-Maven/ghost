@@ -20,6 +20,19 @@
   /* Glow effect for hover states */
   --color-glow: rgba(6, 182, 212, 0.15);
   --color-glow-strong: rgba(6, 182, 212, 0.25);
+
+  /* Status */
+  --color-success: #0ca30c;
+  --color-error: #e66767;
+
+  /* Data-viz series — categorical, in fixed slot order (never cycled).
+     Validated CVD-safe as a set against --color-surface; keep the order and
+     re-validate if a hue changes. */
+  --color-viz-1: #0891b2;
+  --color-viz-2: #d95926;
+  --color-viz-3: #9085e9;
+  --color-viz-4: #c98500;
+  --color-viz-5: #d55181;
 }
 
 body {

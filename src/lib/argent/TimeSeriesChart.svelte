@@ -1,7 +1,7 @@
 <script lang="ts">
 interface Series {
 	name: string;
-	// CSS custom property reference, e.g. 'var(--viz-1)'
+	// CSS custom property reference, e.g. 'var(--color-viz-1)'
 	color: string;
 	values: number[]; // cents, one per year
 }
@@ -254,8 +254,8 @@ const tooltipLeftPct = $derived(
 	.chart {
 		margin: 0;
 		padding: 1rem;
-		background: var(--card);
-		border: 1px solid var(--border);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: 0.5rem;
 	}
 
@@ -272,7 +272,7 @@ const tooltipLeftPct = $derived(
 
 	.value-label {
 		font-size: 0.8rem;
-		color: var(--muted);
+		color: var(--color-text-muted);
 	}
 
 	.legend {
@@ -280,7 +280,7 @@ const tooltipLeftPct = $derived(
 		gap: 1rem;
 		flex-wrap: wrap;
 		font-size: 0.8rem;
-		color: var(--ink-secondary);
+		color: var(--color-text-muted);
 		margin-bottom: 0.25rem;
 	}
 
@@ -300,7 +300,7 @@ const tooltipLeftPct = $derived(
 	.line-key {
 		width: 14px;
 		height: 0;
-		border-top: 2px solid var(--ink);
+		border-top: 2px solid var(--color-text);
 		display: inline-block;
 	}
 
@@ -317,46 +317,48 @@ const tooltipLeftPct = $derived(
 	}
 
 	svg:focus-visible {
-		outline: 2px solid var(--viz-1);
+		outline: 2px solid var(--color-accent);
 		outline-offset: 2px;
 	}
 
 	.grid {
-		stroke: var(--border);
+		stroke: var(--color-border);
 		stroke-width: 1;
 	}
 
 	.axis {
-		stroke: var(--axis);
+		/* No dedicated axis token exists; the stronger border step is the
+		   closest match. Promote to a --color-axis token if charts multiply. */
+		stroke: var(--color-border-hover);
 		stroke-width: 1;
 	}
 
 	.tick,
 	.end-label {
 		font-size: 11px;
-		fill: var(--muted);
+		fill: var(--color-text-muted);
 		font-variant-numeric: tabular-nums;
 	}
 
 	.end-label {
-		fill: var(--ink-secondary);
+		fill: var(--color-text);
 		font-weight: 600;
 	}
 
 	.gap {
-		stroke: var(--card);
+		stroke: var(--color-surface);
 		stroke-width: 2;
 	}
 
 	.overlay {
-		stroke: var(--ink);
+		stroke: var(--color-text);
 		stroke-width: 2;
 		stroke-linejoin: round;
 		stroke-linecap: round;
 	}
 
 	.crosshair {
-		stroke: var(--muted);
+		stroke: var(--color-text-muted);
 		stroke-width: 1;
 	}
 
@@ -364,8 +366,8 @@ const tooltipLeftPct = $derived(
 		position: absolute;
 		top: 8px;
 		pointer-events: none;
-		background: var(--card);
-		border: 1px solid var(--border);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border-hover);
 		border-radius: 0.4rem;
 		padding: 0.5rem 0.65rem;
 		font-size: 0.8rem;
@@ -375,7 +377,7 @@ const tooltipLeftPct = $derived(
 	}
 
 	.tooltip-head {
-		color: var(--muted);
+		color: var(--color-text-muted);
 		margin-bottom: 0.3rem;
 	}
 
@@ -399,6 +401,6 @@ const tooltipLeftPct = $derived(
 	}
 
 	.name {
-		color: var(--ink-secondary);
+		color: var(--color-text-muted);
 	}
 </style>
