@@ -45,6 +45,36 @@ Ghost uses a **cyberpunk/hologram aesthetic** - dark backgrounds with cyan accen
 | `--color-glow` | `rgba(6, 182, 212, 0.15)` | Subtle glow effects |
 | `--color-glow-strong` | `rgba(6, 182, 212, 0.25)` | Stronger glow effects |
 
+### Status Colors
+
+| Variable | Value | Usage |
+|----------|-------|-------|
+| `--color-success` | `#0ca30c` | Positive states (funded plan, save actions) |
+| `--color-error` | `#e66767` | Errors, warnings, destructive actions |
+
+Status colors are reserved for state — never use them as chart series colors.
+
+### Data-Viz Series Colors
+
+For multi-series charts (`/analytics`, `/retirement`). Slots are assigned in
+**fixed order** (series 1 always gets `--viz-1`, etc.) and never cycled or
+reused for status. The set is validated colorblind-safe against
+`--color-surface` — if you change a hue, re-validate the whole set as adjacent
+pairs, don't eyeball it.
+
+| Variable | Value | Hue |
+|----------|-------|-----|
+| `--color-viz-1` | `#0891b2` | cyan (brand family) |
+| `--color-viz-2` | `#d95926` | orange |
+| `--color-viz-3` | `#9085e9` | violet |
+| `--color-viz-4` | `#c98500` | yellow |
+| `--color-viz-5` | `#d55181` | magenta |
+
+Charts with more than five series fold the tail into an "Everything else"
+series rather than generating new hues. Legends are always present for two or
+more series, and text (labels, values) stays in text tokens, never the series
+color.
+
 ## Visual Elements
 
 ### Background

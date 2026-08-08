@@ -57,22 +57,22 @@ const display = $derived((cents: number, i: number) =>
 const wealthStacks = $derived([
 	{
 		name: 'Cash',
-		color: 'var(--viz-4)',
+		color: 'var(--color-viz-4)',
 		values: rows.map((r, i) => display(r.cashCents, i)),
 	},
 	{
 		name: 'Taxable',
-		color: 'var(--viz-1)',
+		color: 'var(--color-viz-1)',
 		values: rows.map((r, i) => display(r.taxableCents, i)),
 	},
 	{
 		name: 'Tax-deferred',
-		color: 'var(--viz-2)',
+		color: 'var(--color-viz-2)',
 		values: rows.map((r, i) => display(r.deferredCents, i)),
 	},
 	{
 		name: 'Roth',
-		color: 'var(--viz-3)',
+		color: 'var(--color-viz-3)',
 		values: rows.map((r, i) => display(r.rothCents, i)),
 	},
 ]);
@@ -80,27 +80,27 @@ const wealthStacks = $derived([
 const incomeStacks = $derived([
 	{
 		name: 'Salary',
-		color: 'var(--viz-1)',
+		color: 'var(--color-viz-1)',
 		values: rows.map((r, i) => display(r.salaryCents, i)),
 	},
 	{
 		name: 'FERS annuity',
-		color: 'var(--viz-2)',
+		color: 'var(--color-viz-2)',
 		values: rows.map((r, i) => display(r.fersAnnuityCents + r.srsCents, i)),
 	},
 	{
 		name: 'Social Security',
-		color: 'var(--viz-3)',
+		color: 'var(--color-viz-3)',
 		values: rows.map((r, i) => display(r.ssBenefitCents, i)),
 	},
 	{
 		name: 'Investment returns',
-		color: 'var(--viz-4)',
+		color: 'var(--color-viz-4)',
 		values: rows.map((r, i) => display(r.investmentGrowthCents, i)),
 	},
 	{
 		name: 'Employer benefits (in-kind)',
-		color: 'var(--viz-5)',
+		color: 'var(--color-viz-5)',
 		values: rows.map((r, i) =>
 			display(r.healthInKindCents + r.employerTspCents, i),
 		),
@@ -142,10 +142,10 @@ const expenseCategoryOrder = $derived.by(() => {
 
 const expenseStacks = $derived.by(() => {
 	const vizColors = [
-		'var(--viz-1)',
-		'var(--viz-2)',
-		'var(--viz-3)',
-		'var(--viz-4)',
+		'var(--color-viz-1)',
+		'var(--color-viz-2)',
+		'var(--color-viz-3)',
+		'var(--color-viz-4)',
 	];
 	const top = expenseCategoryOrder.slice(0, 4);
 	const rest = expenseCategoryOrder.slice(4);
@@ -157,7 +157,7 @@ const expenseStacks = $derived.by(() => {
 	if (rest.length > 0) {
 		stacks.push({
 			name: 'Everything else',
-			color: 'var(--viz-5)',
+			color: 'var(--color-viz-5)',
 			values: rows.map((r, i) =>
 				display(
 					rest.reduce((s, n) => s + (r.expensesByCategory[n] ?? 0), 0),
@@ -172,27 +172,27 @@ const expenseStacks = $derived.by(() => {
 const taxStacks = $derived([
 	{
 		name: 'Federal income',
-		color: 'var(--viz-1)',
+		color: 'var(--color-viz-1)',
 		values: rows.map((r, i) => display(r.federalTaxCents, i)),
 	},
 	{
 		name: 'FICA',
-		color: 'var(--viz-2)',
+		color: 'var(--color-viz-2)',
 		values: rows.map((r, i) => display(r.ficaCents, i)),
 	},
 	{
 		name: 'State',
-		color: 'var(--viz-3)',
+		color: 'var(--color-viz-3)',
 		values: rows.map((r, i) => display(r.stateTaxCents, i)),
 	},
 	{
 		name: 'Capital gains',
-		color: 'var(--viz-4)',
+		color: 'var(--color-viz-4)',
 		values: rows.map((r, i) => display(r.capitalGainsTaxCents, i)),
 	},
 	{
 		name: 'Early-withdrawal penalty',
-		color: 'var(--viz-5)',
+		color: 'var(--color-viz-5)',
 		values: rows.map((r, i) => display(r.earlyWithdrawalPenaltyCents, i)),
 	},
 ]);
@@ -225,70 +225,88 @@ const fersAnnuityDisplay = $derived.by(() => {
 });
 
 const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
+
+// Shared Tailwind fragments (ghost design language — see DESIGN.md)
+const input =
+	'bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] outline-none focus:border-[var(--color-accent)] transition-colors';
+const btn =
+	'px-3.5 py-1.5 bg-[var(--color-accent)] text-white rounded text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors';
+const knob = 'flex flex-col gap-1.5 text-sm text-[var(--color-text-muted)]';
+const th =
+	'text-left py-1.5 px-2.5 text-[var(--color-text-muted)] font-medium whitespace-nowrap';
+const td = 'py-1.5 px-2.5 whitespace-nowrap';
+const num = 'text-right tabular-nums';
 </script>
 
-<h1>Projection</h1>
+<h2 class="text-xl font-semibold mb-3">Projection</h2>
 
-<form method="POST" action="?/save" use:enhance class="knobs">
-	<div class="knob-row">
-		<label class="knob wide">
-			<span>Retirement age <strong>{retirementAge}</strong></span>
-			<input type="range" min="40" max="70" bind:value={retirementAge} />
+<form
+	method="POST"
+	action="?/save"
+	use:enhance
+	class="py-3.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg mb-4"
+>
+	<div class="flex items-end gap-5 flex-wrap">
+		<label class="{knob} min-w-64">
+			<span>Retirement age <strong class="text-[var(--color-text)]">{retirementAge}</strong></span>
+			<input type="range" min="40" max="70" bind:value={retirementAge} class="accent-[var(--color-accent)]" />
 			<input type="hidden" name="retirementAge" value={retirementAge} />
 		</label>
-		<label class="knob">
+		<label class={knob}>
 			<span>SS claim age</span>
-			<input type="number" min="62" max="70" bind:value={ssClaimingAge} />
+			<input class="{input} w-20" type="number" min="62" max="70" bind:value={ssClaimingAge} />
 			<input type="hidden" name="ssClaimingAge" value={ssClaimingAge} />
 		</label>
-		<label class="knob">
+		<label class={knob}>
 			<span>Return %/yr</span>
-			<input type="number" step="0.5" min="0" max="15" bind:value={returnPctInput} />
+			<input class="{input} w-20" type="number" step="0.5" min="0" max="15" bind:value={returnPctInput} />
 			<input type="hidden" name="nominalReturnPct" value={returnPctInput / 100} />
 		</label>
-		<label class="knob">
+		<label class={knob}>
 			<span>Inflation %/yr</span>
-			<input type="number" step="0.25" min="0" max="10" bind:value={inflationPctInput} />
+			<input class="{input} w-20" type="number" step="0.25" min="0" max="10" bind:value={inflationPctInput} />
 			<input type="hidden" name="inflationPct" value={inflationPctInput / 100} />
 		</label>
-		<label class="knob toggle">
+		<label class={knob}>
 			<span>Display</span>
-			<span class="toggle-row">
-				<input type="checkbox" bind:checked={showReal} />
+			<span class="flex items-center gap-1.5 py-1.5">
+				<input type="checkbox" bind:checked={showReal} class="accent-[var(--color-accent)]" />
 				today's $
 			</span>
 		</label>
-		<button type="submit">Save as defaults</button>
-		{#if form?.error}<span class="error">{form.error}</span>{/if}
+		<button type="submit" class={btn}>Save as defaults</button>
+		{#if form?.error}<span class="text-sm text-[var(--color-error)]">{form.error}</span>{/if}
 	</div>
 
-	<details class="more">
-		<summary>More assumptions</summary>
-		<div class="knob-row">
-			<label class="knob">
+	<details class="mt-2.5">
+		<summary class="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] py-1 select-none">
+			More assumptions
+		</summary>
+		<div class="flex items-end gap-5 flex-wrap pt-2.5">
+			<label class={knob}>
 				<span>Birth date</span>
-				<input type="date" name="birthDate" bind:value={birthDate} />
+				<input class={input} type="date" name="birthDate" bind:value={birthDate} />
 			</label>
-			<label class="knob">
+			<label class={knob}>
 				<span>State tax %</span>
-				<input type="number" step="0.25" min="0" max="15" bind:value={stateTaxPctInput} />
+				<input class="{input} w-20" type="number" step="0.25" min="0" max="15" bind:value={stateTaxPctInput} />
 				<input type="hidden" name="stateTaxPct" value={stateTaxPctInput / 100} />
 			</label>
-			<label class="knob">
+			<label class={knob}>
 				<span>End-of-plan age</span>
-				<input type="number" name="endAge" min="70" max="110" bind:value={endAge} />
+				<input class="{input} w-20" type="number" name="endAge" min="70" max="110" bind:value={endAge} />
 			</label>
-			<label class="knob toggle">
+			<label class={knob}>
 				<span>Wage growth</span>
-				<span class="toggle-row">
-					<input type="checkbox" bind:checked={wageTracksInflation} />
+				<span class="flex items-center gap-1.5 py-1.5">
+					<input type="checkbox" bind:checked={wageTracksInflation} class="accent-[var(--color-accent)]" />
 					track inflation
 				</span>
 			</label>
 			{#if !wageTracksInflation}
-				<label class="knob">
+				<label class={knob}>
 					<span>Wage growth %/yr</span>
-					<input type="number" step="0.25" min="0" max="10" bind:value={wageGrowthPctInput} />
+					<input class="{input} w-20" type="number" step="0.25" min="0" max="10" bind:value={wageGrowthPctInput} />
 				</label>
 			{/if}
 			<input
@@ -300,35 +318,35 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 	</details>
 </form>
 
-<section class="tiles">
-	<div class="tile">
-		<span class="label">Plan status</span>
+<section class="grid grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] gap-4 mb-4">
+	<div class="flex flex-col gap-1 py-3.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+		<span class="text-xs text-[var(--color-text-muted)]">Plan status</span>
 		{#if projection.firstShortfallAge === null}
-			<span class="value ok">Funded to {endAge}</span>
+			<span class="text-xl font-semibold text-[var(--color-success)]">Funded to {endAge}</span>
 		{:else}
-			<span class="value bad">⚠ Shortfall at {projection.firstShortfallAge}</span>
+			<span class="text-xl font-semibold text-[var(--color-error)]">⚠ Shortfall at {projection.firstShortfallAge}</span>
 		{/if}
 	</div>
-	<div class="tile">
-		<span class="label">Net worth at {retirementAge}</span>
-		<span class="value">{formatCents(netWorthAtRetirement)}</span>
+	<div class="flex flex-col gap-1 py-3.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+		<span class="text-xs text-[var(--color-text-muted)]">Net worth at {retirementAge}</span>
+		<span class="text-xl font-semibold">{formatCents(netWorthAtRetirement)}</span>
 	</div>
-	<div class="tile">
-		<span class="label">
+	<div class="flex flex-col gap-1 py-3.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+		<span class="text-xs text-[var(--color-text-muted)]">
 			FERS annuity from {fersAnnuityDisplay?.age ?? '—'}
 			{#if fersAnnuityDisplay?.deferred}(deferred){/if}
 		</span>
-		<span class="value">
+		<span class="text-xl font-semibold">
 			{fersAnnuityDisplay ? `${formatCents(fersAnnuityDisplay.annual)}/yr` : 'not eligible'}
 		</span>
 	</div>
-	<div class="tile">
-		<span class="label">Social Security at {ssClaimingAge}</span>
-		<span class="value">{formatCents(projection.ssMonthlyAtClaimTodayCents)}/mo</span>
+	<div class="flex flex-col gap-1 py-3.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+		<span class="text-xs text-[var(--color-text-muted)]">Social Security at {ssClaimingAge}</span>
+		<span class="text-xl font-semibold">{formatCents(projection.ssMonthlyAtClaimTodayCents)}/mo</span>
 	</div>
 </section>
 
-<div class="charts">
+<div class="flex flex-col gap-4 mb-4">
 	<TimeSeriesChart
 		title="Wealth by bucket"
 		valueLabel={unit}
@@ -360,45 +378,51 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 	/>
 </div>
 
-<details>
-	<summary>Year-by-year table</summary>
-	<div class="table-wrap">
-		<table>
+<details class="mb-4">
+	<summary class="text-[var(--color-text-muted)] hover:text-[var(--color-text)] py-2 select-none">
+		Year-by-year table
+	</summary>
+	<div class="overflow-x-auto bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg">
+		<table class="w-full border-collapse text-sm">
 			<thead>
-				<tr>
-					<th>Year</th>
-					<th>Age</th>
-					<th class="num">Salary</th>
-					<th class="num">FERS</th>
-					<th class="num">Soc. Sec.</th>
-					<th class="num">Returns</th>
-					<th class="num">Withdrawals</th>
-					<th class="num">Taxes</th>
-					<th class="num">Expenses</th>
-					<th class="num">Net cash flow</th>
-					<th class="num">Net worth</th>
+				<tr class="border-b border-[var(--color-border)]">
+					<th class={th}>Year</th>
+					<th class={th}>Age</th>
+					<th class="{th} {num}">Salary</th>
+					<th class="{th} {num}">FERS</th>
+					<th class="{th} {num}">Soc. Sec.</th>
+					<th class="{th} {num}">Returns</th>
+					<th class="{th} {num}">Withdrawals</th>
+					<th class="{th} {num}">Taxes</th>
+					<th class="{th} {num}">Expenses</th>
+					<th class="{th} {num}">Net cash flow</th>
+					<th class="{th} {num}">Net worth</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each rows as r, i (r.year)}
-					<tr class:shortfall={r.shortfallCents > 0} class:separation={r.age === retirementAge}>
-						<td>{r.year}</td>
-						<td>{r.age}</td>
-						<td class="num">{r.salaryCents ? formatCents(display(r.salaryCents, i)) : '—'}</td>
-						<td class="num">
+					<tr
+						class="border-b border-[var(--color-border)] last:border-b-0
+							{r.shortfallCents > 0 ? 'text-[var(--color-error)]' : ''}
+							{r.age === retirementAge ? 'border-t-2 border-t-[var(--color-border-hover)]' : ''}"
+					>
+						<td class={td}>{r.year}</td>
+						<td class={td}>{r.age}</td>
+						<td class="{td} {num}">{r.salaryCents ? formatCents(display(r.salaryCents, i)) : '—'}</td>
+						<td class="{td} {num}">
 							{r.fersAnnuityCents + r.srsCents
 								? formatCents(display(r.fersAnnuityCents + r.srsCents, i))
 								: '—'}
 						</td>
-						<td class="num">
+						<td class="{td} {num}">
 							{r.ssBenefitCents ? formatCents(display(r.ssBenefitCents, i)) : '—'}
 						</td>
-						<td class="num">
+						<td class="{td} {num}">
 							{r.investmentGrowthCents
 								? formatCents(display(r.investmentGrowthCents, i))
 								: '—'}
 						</td>
-						<td class="num">
+						<td class="{td} {num}">
 							{formatCents(
 								display(
 									r.withdrawalCashCents +
@@ -410,7 +434,7 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 								),
 							)}
 						</td>
-						<td class="num">
+						<td class="{td} {num}">
 							{formatCents(
 								display(
 									r.federalTaxCents +
@@ -422,9 +446,9 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 								),
 							)}
 						</td>
-						<td class="num">{formatCents(display(r.expensesCents, i))}</td>
-						<td class="num">{formatCents(display(r.netCashFlowCents, i))}</td>
-						<td class="num">{formatCents(display(r.netWorthCents, i))}</td>
+						<td class="{td} {num}">{formatCents(display(r.expensesCents, i))}</td>
+						<td class="{td} {num}">{formatCents(display(r.netCashFlowCents, i))}</td>
+						<td class="{td} {num}">{formatCents(display(r.netWorthCents, i))}</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -432,9 +456,9 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 	</div>
 </details>
 
-<p class="footnote">
+<p class="text-xs text-[var(--color-text-muted)] max-w-3xl">
 	All amounts in {unit}. Constants (tax brackets, bend points, limits) are 2026
-	figures — see <code>src/lib/engine/constants.ts</code>.
+	figures — see <code>src/lib/argent/engine/constants.ts</code>.
 	{#if projection.fers.eligible && !projection.fers.immediate}
 		Retiring at {retirementAge} is before FERS immediate eligibility: the annuity
 		defers to 62 with the high-3 frozen at separation, and there is no retiree
@@ -442,161 +466,3 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 		insurance.
 	{/if}
 </p>
-
-<style>
-	.knobs {
-		padding: 0.9rem 1rem;
-		background: var(--card);
-		border: 1px solid var(--border);
-		border-radius: 0.5rem;
-		margin-bottom: 1rem;
-	}
-
-	.knob-row {
-		display: flex;
-		align-items: end;
-		gap: 1.25rem;
-		flex-wrap: wrap;
-	}
-
-	.more {
-		margin-top: 0.6rem;
-	}
-
-	.more summary {
-		cursor: pointer;
-		font-size: 0.85rem;
-		color: var(--ink-secondary);
-		padding: 0.2rem 0;
-	}
-
-	.more .knob-row {
-		padding-top: 0.6rem;
-	}
-
-	.knob {
-		display: flex;
-		flex-direction: column;
-		gap: 0.3rem;
-		font-size: 0.85rem;
-		color: var(--ink-secondary);
-	}
-
-	.knob.wide {
-		min-width: 16rem;
-	}
-
-	.knob input[type='number'] {
-		width: 5rem;
-		padding: 0.3rem 0.45rem;
-		font-size: 0.95rem;
-	}
-
-	.toggle-row {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		padding: 0.35rem 0;
-	}
-
-	.knobs button {
-		padding: 0.45rem 0.9rem;
-		font-size: 0.9rem;
-	}
-
-	.tiles {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
-
-	.tile {
-		display: flex;
-		flex-direction: column;
-		gap: 0.3rem;
-		padding: 0.9rem 1rem;
-		background: var(--card);
-		border: 1px solid var(--border);
-		border-radius: 0.5rem;
-	}
-
-	.tile .label {
-		font-size: 0.8rem;
-		color: var(--ink-secondary);
-	}
-
-	.tile .value {
-		font-size: 1.35rem;
-		font-weight: 600;
-	}
-
-	.tile .value.ok {
-		color: var(--success);
-	}
-
-	.tile .value.bad {
-		color: var(--error);
-	}
-
-	.charts {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
-
-	details {
-		margin-bottom: 1rem;
-	}
-
-	summary {
-		cursor: pointer;
-		color: var(--ink-secondary);
-		padding: 0.5rem 0;
-	}
-
-	.table-wrap {
-		overflow-x: auto;
-		background: var(--card);
-		border: 1px solid var(--border);
-		border-radius: 0.5rem;
-	}
-
-	table {
-		border-collapse: collapse;
-		width: 100%;
-		font-size: 0.85rem;
-	}
-
-	th,
-	td {
-		text-align: left;
-		padding: 0.3rem 0.6rem;
-		border-bottom: 1px solid var(--border);
-		white-space: nowrap;
-	}
-
-	.num {
-		text-align: right;
-		font-variant-numeric: tabular-nums;
-	}
-
-	tr.shortfall td {
-		color: var(--error);
-	}
-
-	tr.separation td {
-		border-top: 2px solid var(--axis);
-	}
-
-	.footnote {
-		font-size: 0.8rem;
-		color: var(--muted);
-		max-width: 46rem;
-	}
-
-	.error {
-		color: var(--error);
-	}
-</style>

@@ -20,7 +20,14 @@
   <title>Ghost — Retirement</title>
 </svelte:head>
 
-<div class="argent">
+<div class="max-w-6xl mx-auto">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold flex items-center gap-3">
+      <img src="/icon-retirement.svg" alt="" class="w-8 h-8" />
+      Retirement
+    </h1>
+  </div>
+
   <nav class="flex gap-1 mb-6">
     {#each tabs as tab}
       <a
@@ -36,42 +43,3 @@
 
   {@render children()}
 </div>
-
-<style>
-  /* Argent's pages and chart are styled against these tokens (see the
-     original argent +layout.svelte). Scoped to this section, remapped to
-     argent's dark palette so they sit inside ghost's dark theme. */
-  .argent {
-    --page: transparent;
-    --card: #1a1a19;
-    --ink: #ffffff;
-    --ink-secondary: #c3c2b7;
-    --muted: #898781;
-    --border: #2c2c2a;
-    --axis: #383835;
-    --error: #e66767;
-    --success: #0ca30c;
-    --viz-1: #3987e5;
-    --viz-2: #d95926;
-    --viz-3: #199e70;
-    --viz-4: #c98500;
-    --viz-5: #d55181;
-
-    max-width: 72rem;
-    margin: 0 auto;
-    color: var(--ink);
-  }
-
-  .argent :global(input),
-  .argent :global(select),
-  .argent :global(button) {
-    background: var(--card);
-    color: var(--ink);
-    border: 1px solid var(--axis);
-    border-radius: 0.3rem;
-  }
-
-  .argent :global(button) {
-    cursor: pointer;
-  }
-</style>
