@@ -5,6 +5,7 @@ import { count } from 'drizzle-orm';
 import * as schema from './schema';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 
 // Get database path from env or default to local data directory
 const __filename = fileURLToPath(import.meta.url);
@@ -40,6 +41,29 @@ async function seedVideoGamesIfEmpty(db: BunSQLiteDatabase<typeof schema>) {
 	}
 }
 
+// One-time import of retirement (argent) data: if the argent tables are
+// empty and an argent-seed.sql file sits next to the database file, run it.
+// The seed file contains only INSERTs into argent_* tables, wrapped in a
+// transaction here — data in other tables is never touched.
+function seedArgentIfEmpty(db: BunSQLiteDatabase<typeof schema>, sqlite: Database) {
+	const result = db.select({ count: count() }).from(schema.job).get();
+	if (result && result.count > 0) return;
+
+	const seedPath = join(dirname(dbPath), 'argent-seed.sql');
+	if (!existsSync(seedPath)) return;
+
+	console.log('Argent tables are empty, importing argent-seed.sql...');
+	try {
+		const sql = readFileSync(seedPath, 'utf-8');
+		sqlite.transaction(() => {
+			sqlite.exec(sql);
+		})();
+		console.log('Argent data imported');
+	} catch (err) {
+		console.error('Failed to import argent seed:', err);
+	}
+}
+
 function getDb() {
 	if (!_db) {
 		const sqlite = new Database(dbPath);
@@ -54,6 +78,9 @@ function getDb() {
 
 			// Seed video games if table is empty
 			seedVideoGamesIfEmpty(_db);
+
+			// Import argent data if present and not yet imported
+			seedArgentIfEmpty(_db, sqlite);
 		}
 	}
 	return _db;
