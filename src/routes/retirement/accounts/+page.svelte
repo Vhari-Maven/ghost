@@ -5,6 +5,16 @@ import {
 	formatCents,
 	parseDollarsToCents,
 } from '$lib/argent/format';
+import {
+	banner,
+	bodyRow,
+	btn,
+	field,
+	input,
+	inputOnCard,
+	td,
+	th,
+} from '$lib/argent/styles';
 import type { PageProps } from './$types';
 
 let { data, form }: PageProps = $props();
@@ -67,19 +77,6 @@ const missingBasis = $derived(
 	),
 );
 
-// Shared Tailwind fragments (ghost design language — see DESIGN.md)
-const input =
-	'bg-[var(--color-surface)] border border-[var(--color-border)] rounded px-2.5 py-1.5 text-[var(--color-text)] outline-none focus:border-[var(--color-accent)] transition-colors';
-const cellInput =
-	'bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] outline-none focus:border-[var(--color-accent)] transition-colors';
-const btn =
-	'px-3 py-1.5 bg-[var(--color-accent)] text-white rounded text-sm font-medium hover:bg-[var(--color-accent-hover)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors';
-const label = 'flex flex-col gap-1 text-sm text-[var(--color-text-muted)]';
-const th = 'text-left py-2 px-3 text-[var(--color-text-muted)] font-medium';
-const td = 'py-2 px-3';
-const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
-const banner =
-	'py-3 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] border-l-2 border-l-[var(--color-accent)] rounded-lg mb-4 text-sm flex flex-col gap-1';
 </script>
 
 <h2 class="text-xl font-semibold mb-2">Accounts</h2>
@@ -114,7 +111,7 @@ const banner =
 	use:enhance
 	class="flex items-end gap-4 mb-4 flex-wrap"
 >
-	<label class={label}>
+	<label class={field}>
 		Import balances CSV (Date,Balance,Account)
 		<input class={input} name="balances" type="file" accept=".csv,text/csv" required />
 	</label>
@@ -167,10 +164,10 @@ const banner =
 					<tr class="{bodyRow} {row.include ? '' : 'opacity-45'}">
 						<td class={td}><input type="checkbox" class="accent-[var(--color-accent)]" bind:checked={row.include} /></td>
 						<td class={td}>
-							<input class="{cellInput} w-full min-w-56" bind:value={row.name} disabled={!row.include} />
+							<input class="{inputOnCard} w-full min-w-56" bind:value={row.name} disabled={!row.include} />
 						</td>
 						<td class={td}>
-							<select class={cellInput} bind:value={row.kind} disabled={!row.include}>
+							<select class={inputOnCard} bind:value={row.kind} disabled={!row.include}>
 								{#each data.accountKinds as k (k)}
 									<option value={k}>{KIND_LABELS[k]}</option>
 								{/each}
@@ -180,7 +177,7 @@ const banner =
 						<td class="{td} text-right">
 							{#if rowIsRoth(row)}
 								<input
-									class="{cellInput} w-30 text-right"
+									class="{inputOnCard} w-30 text-right"
 									bind:value={row.rothBasis}
 									placeholder="required"
 									disabled={!row.include}
@@ -228,7 +225,7 @@ const banner =
 						<td class={td}>{KIND_LABELS[account.kind] ?? account.kind}</td>
 						<td class="{td} text-right">
 							<input
-								class="{cellInput} w-32 text-right"
+								class="{inputOnCard} w-32 text-right"
 								name="balance"
 								form="acct-{account.id}"
 								value={dollars(account.balanceCents)}
@@ -238,7 +235,7 @@ const banner =
 						<td class="{td} text-right">
 							{#if account.kind === 'tsp-roth' || account.kind === 'ira-roth'}
 								<input
-									class="{cellInput} w-32 text-right"
+									class="{inputOnCard} w-32 text-right"
 									name="rothBasis"
 									form="acct-{account.id}"
 									value={dollars(account.rothBasisCents ?? 0)}
@@ -246,7 +243,7 @@ const banner =
 								/>
 							{:else if account.kind === 'taxable'}
 								<input
-									class="{cellInput} w-32 text-right"
+									class="{inputOnCard} w-32 text-right"
 									name="costBasis"
 									form="acct-{account.id}"
 									value={account.costBasisCents != null ? dollars(account.costBasisCents) : ''}
@@ -280,11 +277,11 @@ const banner =
 <h3 class="text-lg font-semibold mb-3">Add account</h3>
 
 <form method="POST" action="?/create" use:enhance class="flex items-end gap-4 flex-wrap">
-	<label class={label}>
+	<label class={field}>
 		Name
 		<input class={input} name="name" required />
 	</label>
-	<label class={label}>
+	<label class={field}>
 		Kind
 		<select class={input} name="kind" bind:value={kind}>
 			{#each data.accountKinds as k (k)}
@@ -292,12 +289,12 @@ const banner =
 			{/each}
 		</select>
 	</label>
-	<label class={label}>
+	<label class={field}>
 		Balance ($)
 		<input class={input} name="balance" required />
 	</label>
 	{#if isRoth}
-		<label class={label}>
+		<label class={field}>
 			Contribution basis ($)
 			<input class={input} name="rothBasis" required />
 		</label>

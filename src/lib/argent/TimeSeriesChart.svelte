@@ -327,6 +327,8 @@ const tooltipLeftPct = $derived(
 	}
 
 	.axis {
+		/* No dedicated axis token exists; the stronger border step is the
+		   closest match. Promote to a --color-axis token if charts multiply. */
 		stroke: var(--color-border-hover);
 		stroke-width: 1;
 	}

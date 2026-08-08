@@ -1,6 +1,15 @@
 <script lang="ts">
 import { enhance } from '$app/forms';
 import { centsToDollarsInput as dollars } from '$lib/argent/format';
+import {
+	banner,
+	bodyRow,
+	btn,
+	field,
+	input,
+	td,
+	th,
+} from '$lib/argent/styles';
 import type { PageProps } from './$types';
 
 let { data, form }: PageProps = $props();
@@ -24,16 +33,6 @@ const initial = $derived({
 		parsed?.employeeHealthCents ?? data.job.employeeHealthCents,
 	),
 });
-
-// Shared Tailwind fragments (ghost design language — see DESIGN.md)
-const input =
-	'bg-[var(--color-surface)] border border-[var(--color-border)] rounded px-2.5 py-1.5 text-[var(--color-text)] outline-none focus:border-[var(--color-accent)] transition-colors';
-const btn =
-	'px-3 py-1.5 bg-[var(--color-accent)] text-white rounded text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors';
-const label = 'flex flex-col gap-1 text-sm text-[var(--color-text-muted)]';
-const th = 'text-left py-2 px-3 text-[var(--color-text-muted)] font-medium';
-const td = 'py-2 px-3';
-const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 </script>
 
 <h2 class="text-xl font-semibold mb-2">Job</h2>
@@ -50,7 +49,7 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 	use:enhance
 	class="flex items-end gap-4 mb-4 flex-wrap"
 >
-	<label class={label}>
+	<label class={field}>
 		Import from LES (DFAS PDF)
 		<input class={input} name="les" type="file" accept="application/pdf" required />
 	</label>
@@ -58,7 +57,7 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 </form>
 
 {#if parsed}
-	<div class="max-w-2xl py-3 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] border-l-2 border-l-[var(--color-accent)] rounded-lg mb-4 text-sm flex flex-col gap-1">
+	<div class="{banner} max-w-2xl">
 		<strong>Imported{parsed.gradeStep ? ` — ${parsed.gradeStep}` : ''}</strong>
 		{#if parsed.payPeriodEnd}(pay period ending {parsed.payPeriodEnd}){/if}
 		— review the prefilled fields below, then Save.
@@ -70,31 +69,31 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 
 {#key parsed}
 	<form method="POST" action="?/save" use:enhance class="grid grid-cols-[repeat(2,minmax(0,20rem))] gap-4">
-		<label class={label}>
+		<label class={field}>
 			Base salary (annual $)
 			<input class={input} name="salary" value={initial.salary} required />
 		</label>
-		<label class={label}>
+		<label class={field}>
 			Service start date
 			<input class={input} name="serviceStartDate" type="date" value={initial.serviceStartDate} required />
 		</label>
-		<label class={label}>
+		<label class={field}>
 			TSP — traditional (% of salary)
 			<input class={input} name="tspTraditional" value={initial.tspTraditional} required />
 		</label>
-		<label class={label}>
+		<label class={field}>
 			TSP — Roth (% of salary)
 			<input class={input} name="tspRoth" value={initial.tspRoth} required />
 		</label>
-		<label class={label}>
+		<label class={field}>
 			FERS contribution (% of salary)
 			<input class={input} name="fersContribution" value={initial.fersContribution} required />
 		</label>
-		<label class={label}>
+		<label class={field}>
 			Employer health contribution (annual $)
 			<input class={input} name="employerHealth" value={initial.employerHealth} required />
 		</label>
-		<label class={label}>
+		<label class={field}>
 			Your health premium (annual $, pre-tax)
 			<input class={input} name="employeeHealth" value={initial.employeeHealth} required />
 		</label>
@@ -150,11 +149,11 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 {/if}
 
 <form method="POST" action="?/addEarnings" use:enhance class="flex items-end gap-4 mt-2 flex-wrap">
-	<label class={label}>
+	<label class={field}>
 		Year
 		<input class="{input} w-24" name="year" type="number" min="1950" max="2100" required />
 	</label>
-	<label class={label}>
+	<label class={field}>
 		Earnings ($)
 		<input class={input} name="earnings" required />
 	</label>

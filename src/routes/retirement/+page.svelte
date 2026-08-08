@@ -3,6 +3,14 @@ import { enhance } from '$app/forms';
 import TimeSeriesChart from '$lib/argent/TimeSeriesChart.svelte';
 import { project } from '$lib/argent/engine/project';
 import { formatCents } from '$lib/argent/format';
+import {
+	btn,
+	field,
+	inputOnCard,
+	num,
+	tdDense,
+	thDense,
+} from '$lib/argent/styles';
 import type { PageProps } from './$types';
 
 let { data, form }: PageProps = $props();
@@ -225,17 +233,6 @@ const fersAnnuityDisplay = $derived.by(() => {
 });
 
 const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
-
-// Shared Tailwind fragments (ghost design language — see DESIGN.md)
-const input =
-	'bg-[var(--color-bg)] border border-[var(--color-border)] rounded px-2 py-1 text-[var(--color-text)] outline-none focus:border-[var(--color-accent)] transition-colors';
-const btn =
-	'px-3.5 py-1.5 bg-[var(--color-accent)] text-white rounded text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors';
-const knob = 'flex flex-col gap-1.5 text-sm text-[var(--color-text-muted)]';
-const th =
-	'text-left py-1.5 px-2.5 text-[var(--color-text-muted)] font-medium whitespace-nowrap';
-const td = 'py-1.5 px-2.5 whitespace-nowrap';
-const num = 'text-right tabular-nums';
 </script>
 
 <h2 class="text-xl font-semibold mb-3">Projection</h2>
@@ -247,27 +244,27 @@ const num = 'text-right tabular-nums';
 	class="py-3.5 px-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg mb-4"
 >
 	<div class="flex items-end gap-5 flex-wrap">
-		<label class="{knob} min-w-64">
+		<label class="{field} min-w-64">
 			<span>Retirement age <strong class="text-[var(--color-text)]">{retirementAge}</strong></span>
 			<input type="range" min="40" max="70" bind:value={retirementAge} class="accent-[var(--color-accent)]" />
 			<input type="hidden" name="retirementAge" value={retirementAge} />
 		</label>
-		<label class={knob}>
+		<label class={field}>
 			<span>SS claim age</span>
-			<input class="{input} w-20" type="number" min="62" max="70" bind:value={ssClaimingAge} />
+			<input class="{inputOnCard} w-20" type="number" min="62" max="70" bind:value={ssClaimingAge} />
 			<input type="hidden" name="ssClaimingAge" value={ssClaimingAge} />
 		</label>
-		<label class={knob}>
+		<label class={field}>
 			<span>Return %/yr</span>
-			<input class="{input} w-20" type="number" step="0.5" min="0" max="15" bind:value={returnPctInput} />
+			<input class="{inputOnCard} w-20" type="number" step="0.5" min="0" max="15" bind:value={returnPctInput} />
 			<input type="hidden" name="nominalReturnPct" value={returnPctInput / 100} />
 		</label>
-		<label class={knob}>
+		<label class={field}>
 			<span>Inflation %/yr</span>
-			<input class="{input} w-20" type="number" step="0.25" min="0" max="10" bind:value={inflationPctInput} />
+			<input class="{inputOnCard} w-20" type="number" step="0.25" min="0" max="10" bind:value={inflationPctInput} />
 			<input type="hidden" name="inflationPct" value={inflationPctInput / 100} />
 		</label>
-		<label class={knob}>
+		<label class={field}>
 			<span>Display</span>
 			<span class="flex items-center gap-1.5 py-1.5">
 				<input type="checkbox" bind:checked={showReal} class="accent-[var(--color-accent)]" />
@@ -283,20 +280,20 @@ const num = 'text-right tabular-nums';
 			More assumptions
 		</summary>
 		<div class="flex items-end gap-5 flex-wrap pt-2.5">
-			<label class={knob}>
+			<label class={field}>
 				<span>Birth date</span>
-				<input class={input} type="date" name="birthDate" bind:value={birthDate} />
+				<input class={inputOnCard} type="date" name="birthDate" bind:value={birthDate} />
 			</label>
-			<label class={knob}>
+			<label class={field}>
 				<span>State tax %</span>
-				<input class="{input} w-20" type="number" step="0.25" min="0" max="15" bind:value={stateTaxPctInput} />
+				<input class="{inputOnCard} w-20" type="number" step="0.25" min="0" max="15" bind:value={stateTaxPctInput} />
 				<input type="hidden" name="stateTaxPct" value={stateTaxPctInput / 100} />
 			</label>
-			<label class={knob}>
+			<label class={field}>
 				<span>End-of-plan age</span>
-				<input class="{input} w-20" type="number" name="endAge" min="70" max="110" bind:value={endAge} />
+				<input class="{inputOnCard} w-20" type="number" name="endAge" min="70" max="110" bind:value={endAge} />
 			</label>
-			<label class={knob}>
+			<label class={field}>
 				<span>Wage growth</span>
 				<span class="flex items-center gap-1.5 py-1.5">
 					<input type="checkbox" bind:checked={wageTracksInflation} class="accent-[var(--color-accent)]" />
@@ -304,9 +301,9 @@ const num = 'text-right tabular-nums';
 				</span>
 			</label>
 			{#if !wageTracksInflation}
-				<label class={knob}>
+				<label class={field}>
 					<span>Wage growth %/yr</span>
-					<input class="{input} w-20" type="number" step="0.25" min="0" max="10" bind:value={wageGrowthPctInput} />
+					<input class="{inputOnCard} w-20" type="number" step="0.25" min="0" max="10" bind:value={wageGrowthPctInput} />
 				</label>
 			{/if}
 			<input
@@ -386,17 +383,17 @@ const num = 'text-right tabular-nums';
 		<table class="w-full border-collapse text-sm">
 			<thead>
 				<tr class="border-b border-[var(--color-border)]">
-					<th class={th}>Year</th>
-					<th class={th}>Age</th>
-					<th class="{th} {num}">Salary</th>
-					<th class="{th} {num}">FERS</th>
-					<th class="{th} {num}">Soc. Sec.</th>
-					<th class="{th} {num}">Returns</th>
-					<th class="{th} {num}">Withdrawals</th>
-					<th class="{th} {num}">Taxes</th>
-					<th class="{th} {num}">Expenses</th>
-					<th class="{th} {num}">Net cash flow</th>
-					<th class="{th} {num}">Net worth</th>
+					<th class={thDense}>Year</th>
+					<th class={thDense}>Age</th>
+					<th class="{thDense} {num}">Salary</th>
+					<th class="{thDense} {num}">FERS</th>
+					<th class="{thDense} {num}">Soc. Sec.</th>
+					<th class="{thDense} {num}">Returns</th>
+					<th class="{thDense} {num}">Withdrawals</th>
+					<th class="{thDense} {num}">Taxes</th>
+					<th class="{thDense} {num}">Expenses</th>
+					<th class="{thDense} {num}">Net cash flow</th>
+					<th class="{thDense} {num}">Net worth</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -406,23 +403,23 @@ const num = 'text-right tabular-nums';
 							{r.shortfallCents > 0 ? 'text-[var(--color-error)]' : ''}
 							{r.age === retirementAge ? 'border-t-2 border-t-[var(--color-border-hover)]' : ''}"
 					>
-						<td class={td}>{r.year}</td>
-						<td class={td}>{r.age}</td>
-						<td class="{td} {num}">{r.salaryCents ? formatCents(display(r.salaryCents, i)) : '—'}</td>
-						<td class="{td} {num}">
+						<td class={tdDense}>{r.year}</td>
+						<td class={tdDense}>{r.age}</td>
+						<td class="{tdDense} {num}">{r.salaryCents ? formatCents(display(r.salaryCents, i)) : '—'}</td>
+						<td class="{tdDense} {num}">
 							{r.fersAnnuityCents + r.srsCents
 								? formatCents(display(r.fersAnnuityCents + r.srsCents, i))
 								: '—'}
 						</td>
-						<td class="{td} {num}">
+						<td class="{tdDense} {num}">
 							{r.ssBenefitCents ? formatCents(display(r.ssBenefitCents, i)) : '—'}
 						</td>
-						<td class="{td} {num}">
+						<td class="{tdDense} {num}">
 							{r.investmentGrowthCents
 								? formatCents(display(r.investmentGrowthCents, i))
 								: '—'}
 						</td>
-						<td class="{td} {num}">
+						<td class="{tdDense} {num}">
 							{formatCents(
 								display(
 									r.withdrawalCashCents +
@@ -434,7 +431,7 @@ const num = 'text-right tabular-nums';
 								),
 							)}
 						</td>
-						<td class="{td} {num}">
+						<td class="{tdDense} {num}">
 							{formatCents(
 								display(
 									r.federalTaxCents +
@@ -446,9 +443,9 @@ const num = 'text-right tabular-nums';
 								),
 							)}
 						</td>
-						<td class="{td} {num}">{formatCents(display(r.expensesCents, i))}</td>
-						<td class="{td} {num}">{formatCents(display(r.netCashFlowCents, i))}</td>
-						<td class="{td} {num}">{formatCents(display(r.netWorthCents, i))}</td>
+						<td class="{tdDense} {num}">{formatCents(display(r.expensesCents, i))}</td>
+						<td class="{tdDense} {num}">{formatCents(display(r.netCashFlowCents, i))}</td>
+						<td class="{tdDense} {num}">{formatCents(display(r.netWorthCents, i))}</td>
 					</tr>
 				{/each}
 			</tbody>

@@ -1,6 +1,15 @@
 <script lang="ts">
 import { enhance } from '$app/forms';
 import { centsToDollarsInput as dollars, formatCents } from '$lib/argent/format';
+import {
+	bodyRow,
+	btn,
+	field,
+	input,
+	inputOnCard,
+	td,
+	th,
+} from '$lib/argent/styles';
 import type { PageProps } from './$types';
 
 let { data, form }: PageProps = $props();
@@ -16,15 +25,6 @@ const totalFor = (applies: string[]) =>
 		.filter((e) => applies.includes(e.applies))
 		.reduce((s, e) => s + e.annualCents, 0);
 
-// Shared Tailwind fragments (ghost design language — see DESIGN.md)
-const input =
-	'bg-[var(--color-surface)] border border-[var(--color-border)] rounded px-2.5 py-1.5 text-[var(--color-text)] outline-none focus:border-[var(--color-accent)] transition-colors';
-const btn =
-	'px-3 py-1.5 bg-[var(--color-accent)] text-white rounded text-sm font-medium hover:bg-[var(--color-accent-hover)] transition-colors';
-const label = 'flex flex-col gap-1 text-sm text-[var(--color-text-muted)]';
-const th = 'text-left py-2 px-3 text-[var(--color-text-muted)] font-medium';
-const td = 'py-2 px-3';
-const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 </script>
 
 <h2 class="text-xl font-semibold mb-2">Expenses</h2>
@@ -67,7 +67,7 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 						<td class={td}>{e.name}</td>
 						<td class="{td} text-right">
 							<input
-								class="{input} w-32 text-right py-1 px-2 bg-[var(--color-bg)]"
+								class="{inputOnCard} w-32 text-right"
 								name="annual"
 								form="exp-{e.id}"
 								value={dollars(e.annualCents)}
@@ -76,7 +76,7 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 						</td>
 						<td class={td}>
 							<select
-								class="{input} py-1 px-2 bg-[var(--color-bg)]"
+								class={inputOnCard}
 								name="applies"
 								form="exp-{e.id}"
 								value={e.applies}
@@ -110,15 +110,15 @@ const bodyRow = 'border-b border-[var(--color-border)] last:border-b-0';
 <h3 class="text-lg font-semibold mb-3">Add expense</h3>
 
 <form method="POST" action="?/create" use:enhance class="flex items-end gap-4 flex-wrap">
-	<label class={label}>
+	<label class={field}>
 		Name
 		<input class={input} name="name" required />
 	</label>
-	<label class={label}>
+	<label class={field}>
 		Annual ($)
 		<input class={input} name="annual" required />
 	</label>
-	<label class={label}>
+	<label class={field}>
 		Applies
 		<select class={input} name="applies">
 			{#each Object.entries(APPLIES_LABELS) as [value, label] (value)}
