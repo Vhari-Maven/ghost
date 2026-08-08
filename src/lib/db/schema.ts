@@ -256,3 +256,85 @@ export const fitbitDailyData = sqliteTable('fitbit_daily_data', {
 
 export type FitbitDailyData = typeof fitbitDailyData.$inferSelect;
 export type NewFitbitDailyData = typeof fitbitDailyData.$inferInsert;
+
+// ============================================
+// Retirement Planner (argent)
+// ============================================
+
+// Single-row table: James's federal job.
+export const job = sqliteTable('argent_job', {
+  id: integer('id').primaryKey(),
+  salaryCents: integer('salary_cents').notNull(),
+  // ISO YYYY-MM-DD
+  serviceStartDate: text('service_start_date').notNull(),
+  // Employee TSP contribution as a fraction of salary, split by destination.
+  tspTraditionalPct: real('tsp_traditional_pct').notNull(),
+  tspRothPct: real('tsp_roth_pct').notNull(),
+  // FERS employee contribution rate by hire-date cohort (0.008 / 0.031 / 0.044).
+  fersContributionPct: real('fers_contribution_pct').notNull(),
+  // Annual employer-paid share of FEHB premium (part of total comp).
+  employerHealthCents: integer('employer_health_cents').notNull(),
+  // Annual employee-paid FEHB premium (pre-tax).
+  employeeHealthCents: integer('employee_health_cents').notNull()
+});
+
+export const ACCOUNT_KINDS = [
+  'tsp-traditional',
+  'tsp-roth',
+  'ira-traditional',
+  'ira-roth',
+  'taxable',
+  'cash'
+] as const;
+export type AccountKind = (typeof ACCOUNT_KINDS)[number];
+
+export const accounts = sqliteTable('argent_accounts', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  kind: text('kind', { enum: ACCOUNT_KINDS }).notNull(),
+  balanceCents: integer('balance_cents').notNull(),
+  // Roth kinds only: cumulative contribution basis (withdrawable any time).
+  rothBasisCents: integer('roth_basis_cents'),
+  // Taxable kind only: cost basis for capital-gains tax. NULL = assume
+  // fully basis (no embedded gains) until entered. Cash counts in full.
+  costBasisCents: integer('cost_basis_cents')
+});
+
+export const EXPENSE_APPLIES = ['always', 'working', 'retirement'] as const;
+export type ExpenseApplies = (typeof EXPENSE_APPLIES)[number];
+
+export const expenses = sqliteTable('argent_expenses', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  // Today's dollars; inflated by the plan inflation rate.
+  annualCents: integer('annual_cents').notNull(),
+  // Whether the cost exists while working, in retirement, or both.
+  applies: text('applies', { enum: EXPENSE_APPLIES }).notNull().default('always')
+});
+
+// SSA covered-earnings record, one row per year worked.
+export const earningsHistory = sqliteTable('argent_earnings_history', {
+  year: integer('year').primaryKey(),
+  earningsCents: integer('earnings_cents').notNull()
+});
+
+// Single-row table: plan-level knobs.
+export const assumptions = sqliteTable('argent_assumptions', {
+  id: integer('id').primaryKey(),
+  // ISO YYYY-MM-DD
+  birthDate: text('birth_date').notNull(),
+  inflationPct: real('inflation_pct').notNull(),
+  nominalReturnPct: real('nominal_return_pct').notNull(),
+  // NULL = wage growth tracks the inflation assumption (pay-cap baseline).
+  wageGrowthPct: real('wage_growth_pct'),
+  retirementAge: integer('retirement_age').notNull(),
+  ssClaimingAge: integer('ss_claiming_age').notNull(),
+  stateTaxPct: real('state_tax_pct').notNull(),
+  endAge: integer('end_age').notNull()
+});
+
+export type Job = typeof job.$inferSelect;
+export type Account = typeof accounts.$inferSelect;
+export type Expense = typeof expenses.$inferSelect;
+export type EarningsYear = typeof earningsHistory.$inferSelect;
+export type Assumptions = typeof assumptions.$inferSelect;
