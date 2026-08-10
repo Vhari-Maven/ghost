@@ -193,6 +193,31 @@ describe('project — taxable-bucket taxation', () => {
 		expect(after!.taxableBasisCents).toBeGreaterThan(0);
 	});
 
+	test('dividends are spendable cash: they reduce the taxable withdrawal', () => {
+		// Bridge years live off the taxable bucket alone; the sale only needs
+		// to cover spending + taxes net of the dividend distribution.
+		const p = project(baseInputs({ retirementAge: 40 }));
+		const r = p.rows.find((x) => x.age === 41)!;
+		expect(r.dividendsCents).toBeGreaterThan(0);
+		const need =
+			r.expensesCents +
+			r.federalTaxCents +
+			r.capitalGainsTaxCents +
+			r.stateTaxCents +
+			r.ficaCents +
+			r.earlyWithdrawalPenaltyCents;
+		const funded =
+			r.withdrawalCashCents +
+			r.withdrawalTaxableCents +
+			r.withdrawalRothBasisCents +
+			r.withdrawalDeferredCents +
+			r.withdrawalRothEarningsCents +
+			r.dividendsCents;
+		// Withdrawal + dividends covers the need (within fixed-point rounding),
+		// i.e. the sale was sized net of dividends.
+		expect(Math.abs(funded - need)).toBeLessThanOrEqual(500);
+	});
+
 	test('surplus saved to taxable is new basis (no phantom gains)', () => {
 		const p = project(
 			baseInputs({ nominalReturnPct: 0, inflationPct: 0, wageGrowthPct: 0 }),
@@ -359,7 +384,8 @@ describe('project — gross-frame health line', () => {
 			r.salaryCents -
 			r.employeeTspTraditionalCents -
 			r.employeeTspRothCents -
-			r.fersContributionCents -
+			r.fersContributionCents +
+			r.dividendsCents - // brokerage distributions are cash income
 			6_000_00 - // employee FEHB share
 			(30_000_00 + 12_000_00) - // user expense rows
 			(r.federalTaxCents +
@@ -423,13 +449,18 @@ describe('project — economics sanity', () => {
 				r.employeeTspRothCents +
 				r.employerTspCents;
 			// With zero growth, net worth change = TSP contributions + net cash
-			// flow (surplus saved, deficits withdrawn) — unless a shortfall
-			// truncated the draw.
+			// flow (surplus saved, deficits withdrawn) − dividends, which are
+			// counted in net cash flow but sourced from the taxable bucket
+			// (a transfer, not outside income) — unless a shortfall truncated
+			// the draw.
 			if (r.shortfallCents === 0) {
 				expect(
 					Math.abs(
 						r.netWorthCents -
-							(prev.netWorthCents + inflows + r.netCashFlowCents),
+							(prev.netWorthCents +
+								inflows +
+								r.netCashFlowCents -
+								r.dividendsCents),
 					),
 				).toBeLessThan(10);
 			}

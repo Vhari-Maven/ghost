@@ -264,9 +264,11 @@ export function project(inputs: EngineInputs): Projection {
 		expensesByCategory['Health care (insured)'] = healthExpense;
 		expensesTotal += healthExpense;
 
-		// Taxable-bucket tax inputs for the year: qualified dividends thrown
-		// off by the balance, and the unrealized-gain fraction that a
-		// withdrawal would realize. Both fixed before the tax loop.
+		// Taxable-bucket inputs for the year: qualified dividends thrown off
+		// by the balance (distributed as spendable cash — any unspent
+		// remainder recycles into the bucket as new basis via the surplus
+		// path below), and the unrealized-gain fraction that a withdrawal
+		// would realize. Both fixed before the tax loop.
 		const dividends = Math.round(taxable * DIVIDEND_YIELD);
 		const gainFraction =
 			taxable > 0 ? Math.min(1, Math.max(0, 1 - taxableBasis / taxable)) : 0;
@@ -299,6 +301,7 @@ export function project(inputs: EngineInputs): Projection {
 					fersAnnuity +
 					srs +
 					ssBenefit +
+					dividends +
 					mandatoryDeferred;
 				const need =
 					expensesTotal + fed + capGains + state + fica + penalty - grossCash;
@@ -312,7 +315,9 @@ export function project(inputs: EngineInputs): Projection {
 					let remaining = need;
 					wCash = Math.min(remaining, cash);
 					remaining -= wCash;
-					wTaxable = Math.min(remaining, taxable);
+					// Dividends are distributed this year, so only the rest of
+					// the bucket is available to sell.
+					wTaxable = Math.min(remaining, taxable - dividends);
 					remaining -= wTaxable;
 					wRothBasis = Math.min(remaining, rothBasis);
 					remaining -= wRothBasis;
@@ -427,7 +432,8 @@ export function project(inputs: EngineInputs): Projection {
 			healthSubsidy +
 			fersAnnuity +
 			srs +
-			ssBenefit;
+			ssBenefit +
+			dividends;
 		const totalTax = fed + capGains + state + fica + penalty;
 
 		// The tax↔withdrawal fixed point only converges to within a few cents
@@ -447,21 +453,22 @@ export function project(inputs: EngineInputs): Projection {
 				return t;
 			};
 			wCash += take(cash - wCash);
-			wTaxable += take(taxable - wTaxable);
+			wTaxable += take(taxable - dividends - wTaxable);
 			wRothBasis += take(rothBasis - wRothBasis);
 			wDeferred += take(deferred - wDeferred);
 			wRothEarnings += take(roth - rothBasis - wRothEarnings);
 		}
 
 		// 6. Apply flows to buckets. A taxable withdrawal consumes basis in
-		// proportion to the basis fraction; reinvested dividends add basis
-		// (their tax is paid from cash flow, not from the bucket).
+		// proportion to the basis fraction. Dividends leave the bucket as a
+		// cash distribution (no basis consumed); whatever isn't spent comes
+		// back as new basis through the surplus path below.
 		deferred += employeeTspTraditional + employerTsp - wDeferred;
 		roth += employeeTspRoth - wRothBasis - wRothEarnings;
 		rothBasis += employeeTspRoth - wRothBasis;
 		cash -= wCash;
-		taxable -= wTaxable;
-		taxableBasis += dividends - Math.round(wTaxable * (1 - gainFraction));
+		taxable -= wTaxable + dividends;
+		taxableBasis -= Math.round(wTaxable * (1 - gainFraction));
 
 		const netCashFlow = grossCashIncome - totalTax - expensesTotal;
 		const totalWithdrawn =
