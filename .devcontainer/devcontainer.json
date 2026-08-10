@@ -1,0 +1,103 @@
+{
+	// -------------------------------------------------------------------------
+	// Project devcontainer template — copy this directory into a project as
+	// .devcontainer/ and replace PROJECT throughout. The container inherits
+	// bun, uv, Claude Code, zsh+p10k, fonts, and firewall/secrets scaffolding
+	// from dev-base. Add project-specific tools via the optional Dockerfile.
+	// -------------------------------------------------------------------------
+	"name": "ghost",
+
+	// Extends dev-base via the Dockerfile (adds sqlite3 CLI for inspecting the app DB)
+	"build": { "dockerfile": "Dockerfile" },
+
+	// Host-side hook that decrypts entries from secrets.list into podman secrets
+	// before the container is built. Safe to leave even if secrets.list is missing.
+	"initializeCommand": "${localWorkspaceFolder}/.devcontainer/load-secrets.sh ${localWorkspaceFolder}",
+
+	"runArgs": [
+		"--cap-add=NET_ADMIN",
+		"--cap-add=NET_RAW",
+		"--userns=keep-id",
+		// NOTE, no action needed: the Wayland mount below only connects because the
+		// container runs without SELinux label confinement. We do not ask for that
+		// — the devcontainer CLI injects `--security-opt label=disable` for every
+		// podman container on Linux (spec-node/devContainersSpecCLI.js, unconditional
+		// for cliVariant==="podman"). The host socket is labeled user_tmp_t, which a
+		// default container_t process may not connect to. If a future CLI drops that
+		// injection, image paste breaks and "--security-opt=label=disable" has to be
+		// added to this array by hand.
+		// One --secret line per podman secret listed in secrets.list:
+		"--secret=github_token,type=mount,uid=1000,gid=1000,mode=0400,target=/run/secrets/github-token",
+		"--secret=fly_token,type=mount,uid=1000,gid=1000,mode=0400,target=/run/secrets/fly-api-token"
+	],
+
+	"remoteUser": "dev",
+	"containerUser": "dev",
+	"updateRemoteUserUID": true,
+
+	"mounts": [
+		"source=ghost-bashhistory,target=/commandhistory,type=volume",
+		"source=ghost-claude-config,target=/home/dev/.claude,type=volume",
+		// bun's global install cache on a persistent, writable volume. Redirected
+		// off the default ~/.bun/install/cache (BUN_INSTALL_CACHE_DIR below) to dodge
+		// the first-write AccessDenied under --userns=keep-id + updateRemoteUserUID,
+		// and persisted across rebuilds so reinstalls stay warm.
+		"source=ghost-bun-cache,target=/home/dev/.bun-cache,type=volume",
+		// uv's package cache, same pattern (UV_CACHE_DIR below) — redirected off the
+		// default ~/.cache/uv so the volume doesn't swallow the rest of ~/.cache.
+		// UV_LINK_MODE=copy: cache volume and workspace venvs are different
+		// filesystems, so uv's default hardlink would fail and warn on every sync.
+		"source=ghost-uv-cache,target=/home/dev/.uv-cache,type=volume",
+		// Rust projects only (image FROM rust-base): persist the cargo crate cache,
+		// git-dep cache, and `cargo install` binaries across container rebuilds —
+		// otherwise ~/.cargo lives in the throwaway container layer and every
+		// rebuild re-downloads all deps. The baked toolchain is in /usr/local/cargo,
+		// so this volume doesn't shadow it; a fresh volume comes up dev-owned under
+		// --userns=keep-id, so no chown is needed. Uncomment for Rust projects:
+		// "source=PROJECT-cargo,target=/home/dev/.cargo,type=volume",
+		// Share ONLY the host's Claude auth token so the container skips OAuth
+		// re-login, while this project's history/memory stay isolated in the
+		// volume above. (Inside the container the cwd is always /workspace, so a
+		// *shared* config volume would collapse every project's transcripts/memory
+		// into one bucket — binding just the credential file avoids that.)
+		// Read-write on purpose: Claude refreshes the OAuth token in place, so a
+		// readonly mount would eventually expire and force re-auth. The host file
+		// must exist (you're logged in on the host) or podman creates a dir there.
+		"source=${localEnv:HOME}/.claude/.credentials.json,target=/home/dev/.claude/.credentials.json,type=bind",
+		"source=${localEnv:HOME}/.gnupg,target=/home/dev/host-gnupg,type=bind,readonly",
+		"source=${localEnv:HOME}/.gitconfig,target=/home/dev/.gitconfig-host,type=bind,readonly",
+		// Host Wayland socket -> a fixed in-container path, so `wl-paste` (baked
+		// into dev-base) can reach the compositor — that is what Claude Code shells
+		// out to for Ctrl+V image paste. The socket is owner-write-only and owned by
+		// host uid 1000, which --userns=keep-id maps onto `dev`; that ownership is
+		// what satisfies the connect. No :Z — never relabel a live host socket.
+		// WAYLAND-ONLY: on a host where XDG_RUNTIME_DIR/WAYLAND_DISPLAY are unset
+		// this expands to `source=/` and bind-mounts the host root. Delete this line
+		// (and WAYLAND_DISPLAY below) for X11/headless hosts.
+		"source=${localEnv:XDG_RUNTIME_DIR}/${localEnv:WAYLAND_DISPLAY},target=/tmp/wayland-0,type=bind"
+	],
+
+	"containerEnv": {
+		"CLAUDE_CONFIG_DIR": "/home/dev/.claude",
+		"POWERLEVEL9K_DISABLE_GITSTATUS": "true",
+		"GPG_TTY": "/dev/console",
+		"BUN_INSTALL_CACHE_DIR": "/home/dev/.bun-cache",
+		"UV_CACHE_DIR": "/home/dev/.uv-cache",
+		"UV_LINK_MODE": "copy",
+		// Absolute-path WAYLAND_DISPLAY: libwayland (>=1.15) connects to this path
+		// directly, so wl-paste finds the bound socket without us overriding the
+		// container's XDG_RUNTIME_DIR (podman creates it root-owned, and `dev`
+		// could not write there).
+		"WAYLAND_DISPLAY": "/tmp/wayland-0"
+	},
+
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated,Z",
+	"workspaceFolder": "/workspace",
+
+	// SvelteKit/Vite dev server
+	"forwardPorts": [5173],
+
+	"postCreateCommand": "/usr/local/bin/post-create.sh",
+	"postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
+	"waitFor": "postStartCommand"
+}

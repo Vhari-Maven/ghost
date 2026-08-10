@@ -1,0 +1,38 @@
+# firewall-extra — additional domains to allow outbound from this project's container.
+# One domain per line. Blank lines and # comments OK.
+# The base allowlist already covers: GitHub IPs, Anthropic, npm registry, PyPI,
+# ghcr, sentry, statsig, VS Code marketplace. Only add things beyond that.
+# This project's patched init-firewall.sh also accepts raw IPv4/CIDR lines.
+
+# Playwright browser downloads (for e2e tests / headless visual checks).
+# cdn.playwright.dev 307-redirects browser zips to the Chrome-for-Testing
+# bucket on storage.googleapis.com.
+cdn.playwright.dev
+playwright.download.prod.azureedge.net
+storage.googleapis.com
+
+# Fly.io deploys (fly deploy from /workspace): API, machines API, image
+# registry. ssh/sftp/remote-build tunnels ride a websocket to api.fly.io.
+fly.io
+api.fly.io
+api.machines.dev
+registry.fly.io
+# Fly wireguard-over-websocket gateways (ssh/sftp tunnel endpoints, all regions)
+6pn.dev
+# Depot (fly deploy's default remote image builder)
+depot.dev
+api.depot.dev
+# Fly machine endpoints (depot builder machines, *.fly.dev app hosts)
+fly.dev
+flyio.net
+# Fly.io machine IP space (ARIN: FLYIO, 149.248.192.0/19) — depot build
+# machines are dialed by raw IP; requires the CIDR-capable patched
+# init-firewall.sh from this directory.
+149.248.192.0/19
+
+# Fitbit API (analytics micro-app syncs Pixel Watch data; OAuth + data pulls)
+api.fitbit.com
+www.fitbit.com
+
+# Production app (Cloudflare Access in front of the Fly app)
+ghostdash.dev
