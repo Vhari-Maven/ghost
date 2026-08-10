@@ -1,5 +1,6 @@
 <script lang="ts">
   import { generateWorkoutMarkdown } from '$lib/services/exercise-export';
+  import { MODULES } from '$lib/nav';
 
   function triggerPulse(event: MouseEvent) {
     const rect = (event.target as HTMLElement).getBoundingClientRect();
@@ -26,7 +27,7 @@
   }
 </script>
 
-<div class="max-w-2xl">
+<div class="max-w-5xl">
   <div class="flex items-center gap-4 mb-4">
     <button
       onclick={triggerPulse}
@@ -41,93 +42,31 @@
     Your personal dashboard for tracking fitness, habits, and more.
   </p>
 
-  <div class="grid gap-4">
-    <a
-      href="/morning"
-      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-    >
-      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-morning.svg" alt="" class="w-6 h-6" />
-        Morning Tracker
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Track your weight, walks, and morning routine.</p>
-    </a>
-
-    <div class="relative">
-      <a
-        href="/exercise"
-        class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-      >
-        <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-          <img src="/icon-exercise.svg" alt="" class="w-6 h-6" />
-          Exercise Tracker
-        </h2>
-        <p class="text-[var(--color-text-muted)]">7-day workout rotation with detailed exercise guides.</p>
-      </a>
-      <button
-        onclick={exportWorkoutPlan}
-        class="absolute top-4 right-4 p-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)] transition-all"
-        title="Export workout plan as Markdown"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[var(--color-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-      </button>
-    </div>
-
-    <a
-      href="/shopping"
-      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-    >
-      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-shopping.svg" alt="" class="w-6 h-6" />
-        Shopping List
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Kanban-style shopping list with drag-and-drop.</p>
-    </a>
-
-    <a
-      href="/media"
-      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-    >
-      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-media.svg" alt="" class="w-6 h-6" />
-        Media
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Tier list for ranking TV series and movies.</p>
-    </a>
-
-    <a
-      href="/tasks"
-      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-    >
-      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-tasks.svg" alt="" class="w-6 h-6" />
-        Tasks
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Kanban-style task management with drag-and-drop.</p>
-    </a>
-
-    <a
-      href="/meal-prep"
-      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-    >
-      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-meal-prep.svg" alt="" class="w-6 h-6" />
-        Meal Prep
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Heart-healthy weekly meal plan and grocery list.</p>
-    </a>
-
-    <a
-      href="/games"
-      class="block p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
-    >
-      <h2 class="text-xl font-semibold mb-2 flex items-center gap-2">
-        <img src="/icon-games.svg" alt="" class="w-6 h-6" />
-        Games
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Tier list for ranking your video game collection.</p>
-    </a>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {#each MODULES as module}
+      <div class="relative">
+        <a
+          href={module.href}
+          class="block h-full p-5 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-accent)] hover:bg-[var(--color-surface-hover)] hover-glow transition-all"
+        >
+          <h2 class="text-lg font-semibold mb-2 flex items-center gap-2">
+            <img src={module.icon} alt="" class="w-6 h-6" />
+            {module.label}
+          </h2>
+          <p class="text-sm text-[var(--color-text-muted)]">{module.description}</p>
+        </a>
+        {#if module.href === '/exercise'}
+          <button
+            onclick={exportWorkoutPlan}
+            class="absolute top-3 right-3 p-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)] transition-all"
+            title="Export workout plan as Markdown"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[var(--color-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+          </button>
+        {/if}
+      </div>
+    {/each}
   </div>
 </div>
