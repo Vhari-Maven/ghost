@@ -191,12 +191,11 @@
   });
 </script>
 
-<div class="h-64 md:h-80">
+<div class="relative h-64 md:h-80">
   <canvas bind:this={canvas}></canvas>
+  {#if data.dataPoints.length === 0}
+    <div class="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)] pointer-events-none">
+      No data available
+    </div>
+  {/if}
 </div>
-
-{#if data.dataPoints.length === 0}
-  <div class="absolute inset-0 flex items-center justify-center text-[var(--color-text-muted)]">
-    No data available
-  </div>
-{/if}
