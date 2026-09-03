@@ -37,6 +37,23 @@ RUN curl -fsSL https://fly.io/install.sh | FLYCTL_INSTALL=/opt/flyctl sh \
     && chmod 755 /usr/local/bin/fly \
     && ln -sf fly /usr/local/bin/flyctl
 
+# --- Claude Desktop SSH sessions (same wiring as xml; promote to dev-base) ---
+# The Desktop app reaches this container over ssh, but without a port or a
+# daemon: the host's ~/.local/bin/dc-ssh-proxy runs `sshd -i` (inetd mode)
+# unprivileged as `dev` through a `podman exec` pipe, and provisions the host
+# key + authorized_keys into ~/.ssh on each connect. Firewall untouched.
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openssh-server \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    && install -d -m 700 -o dev -g dev /home/dev/.ssh
+# ssh exec channels run `zsh -c`, which reads only ~/.zshenv: restore the baked
+# PATH (sshd resets it to the system default) and mirror ~/.zshrc's GH_TOKEN
+# export, which otherwise happens only in interactive shells.
+RUN printf '%s\n' \
+      'export PATH=/home/dev/.local/bin:/home/dev/.bun/bin:$PATH' \
+      '[ -r /run/secrets/github-token ] && export GH_TOKEN=$(cat /run/secrets/github-token)' \
+      > /home/dev/.zshenv && chown dev:dev /home/dev/.zshenv
+
 USER dev
 # Per-user tool installs (uv/bun/pip --user) go here, e.g.:
 # RUN uv tool install ruff
