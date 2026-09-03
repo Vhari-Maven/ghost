@@ -93,7 +93,7 @@ A signature effect: cyan "data pulses" travel along the background's actual trac
 
 - **Path**: a random walk on the tile graph, following ports into neighbouring tiles, biased toward a target screen edge and away from already-visited nodes
 - **Automatic pulses**: Fire every 15-30 seconds from a random node near the viewport centre
-- **Manual trigger**: Clicking the ghost icon on the home page fires four pulses from the nearest node, one toward each edge
+- **Manual trigger**: Clicking the ghost icon on the home page fires three pulses from the nearest node, aimed at the far side of the viewport (from the top-left icon: right-middle, bottom-middle, bottom-right) so none exit immediately
 - **Duration**: proportional to path length (~420 px/s, clamped to 1.2-4.5s)
 - **Component**: `src/lib/components/CircuitPulse.svelte`
 

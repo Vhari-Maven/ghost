@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { TILE_SIZE, buildGraph } from '$lib/circuit/tile';
-  import { walk, startNodes, nearestNode, type Pos } from '$lib/circuit/walk';
+  import { walk, startNodes, nearestNode, type Pos, type Target } from '$lib/circuit/walk';
 
   // Pulses ride the actual traces of the tiled background. The body background
   // is `background-attachment: fixed` with its tile origin at the viewport
@@ -34,8 +34,8 @@
     };
   }
 
-  function addPulse(start: Pos, edge: number, opacity: number) {
-    const { path, length } = walk(graph, start, edge, {
+  function addPulse(start: Pos, target: Target, opacity: number) {
+    const { path, length } = walk(graph, start, target, {
       width: window.innerWidth,
       height: window.innerHeight,
     });
@@ -53,11 +53,23 @@
     addPulse(randomStart(), Math.floor(Math.random() * 4), 0.4 + Math.random() * 0.3);
   }
 
-  // Signature pulse: four traces from the node nearest the cursor, one per edge
+  // Signature pulse: three traces from the node nearest the cursor, aimed at
+  // the far side of the viewport (e.g. from the top-left icon: right-middle,
+  // bottom-middle, bottom-right) so none of them exit right away.
   function triggerSignaturePulse(x: number, y: number) {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
     const start = nearestNode(starts, x, y);
     const opacity = 0.5 + Math.random() * 0.2;
-    for (let edge = 0; edge < 4; edge++) addPulse(start, edge, opacity);
+    const farX = x < w / 2 ? w : 0;
+    const farY = y < h / 2 ? h : 0;
+    const jitter = () => (Math.random() - 0.5) * 0.3; // ±15% of the viewport
+    const targets: Array<[number, number]> = [
+      [farX, h * (0.5 + jitter())],
+      [w * (0.5 + jitter()), farY],
+      [farX, farY],
+    ];
+    for (const [tx, ty] of targets) addPulse(start, [tx - x, ty - y], opacity);
   }
 
   function scheduleNextPulse() {

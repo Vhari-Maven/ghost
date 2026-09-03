@@ -51,6 +51,19 @@ describe('walk', () => {
     }
   });
 
+  it('follows an arbitrary direction vector from a corner', () => {
+    // From near the top-left, aim at the bottom-right corner: the walk should
+    // leave through the right or bottom edge, never the top or left.
+    for (let seed = 1; seed <= 10; seed++) {
+      const random = seeded(seed);
+      const start = nearestNode(starts, 40, 40);
+      const w = walk(graph, start, [1400 - 40, 900 - 40], { width: 1400, height: 900, random });
+      const end = w.points[w.points.length - 1];
+      expect(end.x > 1400 || end.y > 900).toBe(true);
+      expect(end.x < 0 || end.y < 0).toBe(false);
+    }
+  });
+
   it('heads toward the requested edge', () => {
     const random = seeded(7);
     const start = { tx: 2, ty: 1, node: nearestNode(starts, 700, 450).node };

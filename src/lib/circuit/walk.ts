@@ -64,13 +64,19 @@ export interface Walk {
   length: number;
 }
 
+/** A walk target: an edge index (see EDGE_DIR) or an arbitrary direction vector. */
+export type Target = number | [number, number];
+
 /**
- * Walk from `start` along traces, biased toward `edge`, preferring unvisited
+ * Walk from `start` along traces, biased toward `target`, preferring unvisited
  * nodes, until the walk leaves the viewport or runs out of steps.
  */
-export function walk(graph: Graph, start: Pos, edge: number, opts: WalkOptions): Walk {
+export function walk(graph: Graph, start: Pos, target: Target, opts: WalkOptions): Walk {
   const { width, height, margin = 40, maxSteps = 80, bias = 3, random = Math.random } = opts;
-  const [bx, by] = EDGE_DIR[edge];
+  const dir = typeof target === 'number' ? EDGE_DIR[target] : target;
+  const dlen = Math.hypot(dir[0], dir[1]) || 1;
+  const bx = dir[0] / dlen;
+  const by = dir[1] / dlen;
 
   const points: XY[] = [worldOf(start)];
   const visited = new Set<string>();
