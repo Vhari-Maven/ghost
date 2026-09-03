@@ -182,7 +182,14 @@ fly deploy
 ### Database is on a persistent volume:
 - Path in production: `/data/ghost.db`
 - Configured via `DATABASE_PATH` env var
-- Backup: `fly sftp shell` → `get /data/ghost.db ./backup.db`
+- Backup: checkpoint the WAL first, then copy the main file. The DB runs in WAL
+  mode, so recent writes (potentially weeks — even whole tables) live in
+  `ghost.db-wal` until a checkpoint; copying `ghost.db` alone silently drops them.
+  The prod image has no `sqlite3` CLI, so checkpoint via `bun:sqlite`:
+  1. `fly ssh console -C "bun -e 'const {Database} = require(\"bun:sqlite\"); new Database(\"/data/ghost.db\").run(\"PRAGMA wal_checkpoint(TRUNCATE)\")'"`
+  2. `fly sftp shell` → `get /data/ghost.db ./backup.db`
+  (If the checkpoint can't run, fetch `ghost.db-wal` and `ghost.db-shm` alongside
+  `ghost.db` instead — SQLite replays the WAL when opening the copy.)
 
 ### Migrations run automatically on app startup:
 - In production, migrations run when the DB first connects (see `src/lib/db/index.ts`)
