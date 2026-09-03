@@ -39,7 +39,10 @@
 
 body {
   background-color: var(--color-bg);
-  background-image: url('/circuit-pattern.svg');
+  /* Imported (not served from static/) so Vite fingerprints it: a plain
+     /circuit-pattern.svg URL got stuck in Cloudflare's edge cache and browsers
+     across redraws. Regenerate with `bun run gen:circuit`. */
+  background-image: url('./lib/assets/circuit-pattern.svg');
   background-repeat: repeat;
   /* Tile size must match TILE_SIZE in src/lib/circuit/tile.ts. Fixed attachment
      keeps the tile origin at the viewport corner so CircuitPulse (a fixed

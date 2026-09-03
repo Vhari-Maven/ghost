@@ -1,5 +1,5 @@
 /**
- * Generates static/circuit-pattern.svg from src/lib/circuit/tile.ts so the
+ * Generates src/lib/assets/circuit-pattern.svg from src/lib/circuit/tile.ts so the
  * background art and the pulse-walk graph never drift apart.
  *
  *   bun run gen:circuit
@@ -45,5 +45,5 @@ ${vias}
 </svg>
 `;
 
-await Bun.write(new URL('../../../static/circuit-pattern.svg', import.meta.url), svg);
-console.log(`Wrote static/circuit-pattern.svg (${graph.nodes.size} nodes, ${TRACES.length} traces)`);
+await Bun.write(new URL('../assets/circuit-pattern.svg', import.meta.url), svg);
+console.log(`Wrote src/lib/assets/circuit-pattern.svg (${graph.nodes.size} nodes, ${TRACES.length} traces)`);
