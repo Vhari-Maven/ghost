@@ -1,161 +1,66 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { TILE_SIZE, buildGraph } from '$lib/circuit/tile';
+  import { walk, startNodes, nearestNode, type Pos } from '$lib/circuit/walk';
 
-  // Track active pulses
-  let activePulses = $state<Array<{
+  // Pulses ride the actual traces of the tiled background. The body background
+  // is `background-attachment: fixed` with its tile origin at the viewport
+  // corner, so world coords = tile index * TILE_SIZE + node coords.
+  const graph = buildGraph();
+  const starts = startNodes(graph);
+
+  interface Pulse {
     id: number;
     path: string;
+    length: number;
     duration: number;
     opacity: number;
-  }>>([]);
+  }
 
+  let activePulses = $state<Pulse[]>([]);
   let pulseId = 0;
 
-  // Generate a circuit path from a point toward a specific edge
-  // edge: 0=top, 1=right, 2=bottom, 3=left
-  function generatePathToEdge(
-    startX: number,
-    startY: number,
-    edge: number,
-    targetPoint: number // where on the edge to aim (0-1)
-  ): string {
-    const width = typeof window !== 'undefined' ? window.innerWidth : 1920;
-    const height = typeof window !== 'undefined' ? window.innerHeight : 1080;
+  const SPEED = 420; // px per second
+  const DASH = 60; // visible length of the travelling pulse, px
 
-    // Calculate the target point on the edge
-    let targetX: number;
-    let targetY: number;
-    if (edge === 0) {
-      // Top edge
-      targetX = targetPoint * width;
-      targetY = -20;
-    } else if (edge === 1) {
-      // Right edge
-      targetX = width + 20;
-      targetY = targetPoint * height;
-    } else if (edge === 2) {
-      // Bottom edge
-      targetX = targetPoint * width;
-      targetY = height + 20;
-    } else {
-      // Left edge
-      targetX = -20;
-      targetY = targetPoint * height;
-    }
-
-    // Build path with circuit-style 90° turns
-    const points: Array<{ x: number; y: number }> = [{ x: startX, y: startY }];
-
-    let currentX = startX;
-    let currentY = startY;
-
-    // Generate 2-4 segments toward the target
-    const segments = 2 + Math.floor(Math.random() * 3);
-
-    for (let i = 0; i < segments; i++) {
-      const isLastSegment = i === segments - 1;
-      const progress = (i + 1) / segments;
-
-      // Calculate intermediate target (interpolate toward final target with some randomness)
-      const intermediateX = currentX + (targetX - currentX) * (0.3 + Math.random() * 0.4);
-      const intermediateY = currentY + (targetY - currentY) * (0.3 + Math.random() * 0.4);
-
-      // Add some perpendicular drift for visual interest
-      const drift = (Math.random() - 0.5) * 80;
-
-      if (isLastSegment) {
-        // Final segment: go straight to target with one turn
-        if (edge === 0 || edge === 2) {
-          // Vertical edges: go horizontal first, then vertical
-          currentX = targetX;
-          points.push({ x: currentX, y: currentY });
-          currentY = targetY;
-          points.push({ x: currentX, y: currentY });
-        } else {
-          // Horizontal edges: go vertical first, then horizontal
-          currentY = targetY;
-          points.push({ x: currentX, y: currentY });
-          currentX = targetX;
-          points.push({ x: currentX, y: currentY });
-        }
-      } else {
-        // Intermediate segment: circuit-style turns
-        if (Math.random() > 0.5) {
-          // Horizontal first
-          currentX = intermediateX + (edge === 0 || edge === 2 ? drift : 0);
-          points.push({ x: currentX, y: currentY });
-          currentY = intermediateY + (edge === 1 || edge === 3 ? drift : 0);
-          points.push({ x: currentX, y: currentY });
-        } else {
-          // Vertical first
-          currentY = intermediateY + (edge === 1 || edge === 3 ? drift : 0);
-          points.push({ x: currentX, y: currentY });
-          currentX = intermediateX + (edge === 0 || edge === 2 ? drift : 0);
-          points.push({ x: currentX, y: currentY });
-        }
-      }
-    }
-
-    // Convert to SVG path
-    return points
-      .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
-      .join(' ');
+  /** Random start node in a tile within the middle third of the viewport. */
+  function randomStart(): Pos {
+    const x = window.innerWidth * (0.33 + Math.random() * 0.34);
+    const y = window.innerHeight * (0.33 + Math.random() * 0.34);
+    return {
+      tx: Math.floor(x / TILE_SIZE),
+      ty: Math.floor(y / TILE_SIZE),
+      node: starts[Math.floor(Math.random() * starts.length)],
+    };
   }
 
-  // Generate a random path from center-ish toward a random edge (for ambient pulses)
-  function generateRandomPath(fromX?: number, fromY?: number): string {
-    const width = typeof window !== 'undefined' ? window.innerWidth : 1920;
-    const height = typeof window !== 'undefined' ? window.innerHeight : 1080;
-
-    const startX = fromX ?? width * (0.33 + Math.random() * 0.34);
-    const startY = fromY ?? height * (0.33 + Math.random() * 0.34);
-    const edge = Math.floor(Math.random() * 4);
-    const targetPoint = Math.random();
-
-    return generatePathToEdge(startX, startY, edge, targetPoint);
-  }
-
-  // Single ambient pulse (random direction)
-  function triggerPulse(fromX?: number, fromY?: number) {
+  function addPulse(start: Pos, edge: number, opacity: number) {
+    const { path, length } = walk(graph, start, edge, {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    if (length < 40) return;
     const id = pulseId++;
-    const path = generateRandomPath(fromX, fromY);
-    const duration = 1.5 + Math.random() * 1; // 1.5-2.5 seconds
-    const opacity = 0.4 + Math.random() * 0.3; // 0.4-0.7
-
-    activePulses = [...activePulses, { id, path, duration, opacity }];
-
-    // Remove pulse after animation completes
+    const duration = Math.min(4.5, Math.max(1.2, length / SPEED)) * (0.9 + Math.random() * 0.2);
+    activePulses = [...activePulses, { id, path, length, duration, opacity }];
     setTimeout(() => {
       activePulses = activePulses.filter((p) => p.id !== id);
     }, duration * 1000 + 500);
   }
 
-  // Signature pulse: four traces from cursor to each edge
-  function triggerSignaturePulse(fromX: number, fromY: number) {
-    const baseDuration = 1.2 + Math.random() * 0.5; // 1.2-1.7 seconds
-    const baseOpacity = 0.5 + Math.random() * 0.2; // 0.5-0.7
+  // Single ambient pulse toward a random edge
+  function triggerPulse() {
+    addPulse(randomStart(), Math.floor(Math.random() * 4), 0.4 + Math.random() * 0.3);
+  }
 
-    // Fire four pulses, one to each edge
-    for (let edge = 0; edge < 4; edge++) {
-      const id = pulseId++;
-      // Random target point on each edge (0-1)
-      const targetPoint = 0.2 + Math.random() * 0.6; // Bias toward middle
-      const path = generatePathToEdge(fromX, fromY, edge, targetPoint);
-      // Slight variation in timing for organic feel
-      const duration = baseDuration + Math.random() * 0.3;
-      const opacity = baseOpacity;
-
-      activePulses = [...activePulses, { id, path, duration, opacity }];
-
-      // Remove pulse after animation completes
-      setTimeout(() => {
-        activePulses = activePulses.filter((p) => p.id !== id);
-      }, duration * 1000 + 500);
-    }
+  // Signature pulse: four traces from the node nearest the cursor, one per edge
+  function triggerSignaturePulse(x: number, y: number) {
+    const start = nearestNode(starts, x, y);
+    const opacity = 0.5 + Math.random() * 0.2;
+    for (let edge = 0; edge < 4; edge++) addPulse(start, edge, opacity);
   }
 
   function scheduleNextPulse() {
-    // Random delay between 15-30 seconds
     const delay = 15000 + Math.random() * 15000;
     setTimeout(() => {
       triggerPulse();
@@ -163,9 +68,6 @@
     }, delay);
   }
 
-  // Allow external triggering via custom event
-  // If coordinates provided, use signature pulse (four directions)
-  // Otherwise use single ambient pulse
   function handleManualTrigger(event: CustomEvent<{ x?: number; y?: number }>) {
     const { x, y } = event.detail || {};
     if (x !== undefined && y !== undefined) {
@@ -176,14 +78,9 @@
   }
 
   onMount(() => {
-    // Listen for manual trigger events
     window.addEventListener('circuit-pulse', handleManualTrigger as EventListener);
-
-    // Start first pulse after a short delay
     setTimeout(() => triggerPulse(), 2000);
-    // Schedule recurring pulses
     scheduleNextPulse();
-
     return () => {
       window.removeEventListener('circuit-pulse', handleManualTrigger as EventListener);
     };
@@ -195,9 +92,8 @@
   xmlns="http://www.w3.org/2000/svg"
 >
   <defs>
-    <!-- Glow filter for the pulse -->
     <filter id="pulse-glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feGaussianBlur stdDeviation="3" result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
         <feMergeNode in="blur" />
@@ -207,42 +103,41 @@
   </defs>
 
   {#each activePulses as pulse (pulse.id)}
-    <!-- The trace path -->
     <path
       d={pulse.path}
       fill="none"
       stroke="#06b6d4"
-      stroke-width="2"
+      stroke-width="1.5"
       stroke-linecap="round"
       stroke-linejoin="round"
-      opacity={pulse.opacity}
       filter="url(#pulse-glow)"
       class="circuit-pulse"
-      style="--duration: {pulse.duration}s"
+      style="--duration: {pulse.duration}s; --opacity: {pulse.opacity}; --travel: {pulse.length + DASH}px; stroke-dasharray: {DASH} {pulse.length + DASH}"
     />
   {/each}
 </svg>
 
 <style>
   .circuit-pulse {
-    stroke-dasharray: 100 1000;
-    stroke-dashoffset: 0;
-    animation: pulse-travel var(--duration) ease-out forwards;
+    /* Start with the dash fully hidden before the path start; the offset
+       then slides the dash along the full path length and off the end. */
+    stroke-dashoffset: 60;
+    animation: pulse-travel var(--duration) linear forwards;
   }
 
   @keyframes pulse-travel {
     0% {
-      stroke-dashoffset: 0;
+      stroke-dashoffset: 60px;
       opacity: 0;
     }
-    5% {
+    8% {
       opacity: var(--opacity, 0.5);
     }
     90% {
       opacity: var(--opacity, 0.5);
     }
     100% {
-      stroke-dashoffset: -1500;
+      stroke-dashoffset: calc(-1 * var(--travel));
       opacity: 0;
     }
   }

@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
 :root {
+  color-scheme: dark;
+
   /* Dark theme with subtle cyan tint */
   --color-bg: #0a0f10;
   --color-surface: #0f1719;
@@ -39,7 +41,11 @@ body {
   background-color: var(--color-bg);
   background-image: url('/circuit-pattern.svg');
   background-repeat: repeat;
-  background-size: 100px 100px;
+  /* Tile size must match TILE_SIZE in src/lib/circuit/tile.ts. Fixed attachment
+     keeps the tile origin at the viewport corner so CircuitPulse (a fixed
+     overlay) can ride the traces exactly. */
+  background-size: 300px 300px;
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: system-ui, -apple-system, sans-serif;
 }

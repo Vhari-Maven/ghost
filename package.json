@@ -14,7 +14,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "bun src/lib/db/migrate.ts",
     "db:seed": "bun src/lib/db/seed.ts",
-    "db:seed-games": "bun src/lib/db/seed-games.ts"
+    "db:seed-games": "bun src/lib/db/seed-games.ts",
+    "gen:circuit": "bun src/lib/circuit/generate-svg.ts"
   },
   "dependencies": {
     "@sveltejs/adapter-node": "^5.4.0",
