@@ -261,7 +261,7 @@ export function project(inputs: EngineInputs): Projection {
 			expensesByCategory[e.name] = (expensesByCategory[e.name] ?? 0) + amount;
 			expensesTotal += amount;
 		}
-		expensesByCategory['Health care (insured)'] = healthExpense;
+		expensesByCategory['Health coverage'] = healthExpense;
 		expensesTotal += healthExpense;
 
 		// Taxable-bucket inputs for the year: qualified dividends thrown off

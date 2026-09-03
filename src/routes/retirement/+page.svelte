@@ -454,8 +454,7 @@ const unit = $derived(showReal ? "today's dollars" : 'nominal dollars');
 </details>
 
 <p class="text-xs text-[var(--color-text-muted)] max-w-3xl">
-	All amounts in {unit}. Constants (tax brackets, bend points, limits) are 2026
-	figures — see <code>src/lib/argent/engine/constants.ts</code>.
+	All amounts in {unit}. Tax brackets, bend points, and limits are 2026 figures.
 	{#if projection.fers.eligible && !projection.fers.immediate}
 		Retiring at {retirementAge} is before FERS immediate eligibility: the annuity
 		defers to 62 with the high-3 frozen at separation, and there is no retiree

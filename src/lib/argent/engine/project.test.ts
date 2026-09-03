@@ -330,7 +330,7 @@ describe('project — gross-frame health line', () => {
 		const r = p.rows[0];
 		expect(r.healthInKindCents).toBe(15_000_00);
 		expect(r.healthExpenseCents).toBe(21_000_00); // both shares
-		expect(r.expensesByCategory['Health care (insured)']).toBe(21_000_00);
+		expect(r.expensesByCategory['Health coverage']).toBe(21_000_00);
 	});
 
 	test('deferred gap: full premium as private-coverage proxy, no subsidy', () => {
