@@ -21,8 +21,9 @@
 	let retryTimer: ReturnType<typeof setTimeout> | undefined;
 
 	const active = $derived(!paused && pageVisible);
-	const withAudio = $derived(audioOn && mode === 'mp4');
-	const src = $derived(`/cameras/live/${id}?format=${mode}${withAudio ? '&audio=1' : ''}&n=${attempt}`);
+	// The MP4 stream always carries the camera's audio (~50 kbit/s); mute/unmute only changes what you
+	// hear, so toggling it never touches the connection.
+	const src = $derived(`/cameras/live/${id}?format=${mode}${audioUnsupported ? '' : '&audio=1'}&n=${attempt}`);
 
 	// Streams stop after this long without mouse/keyboard/touch activity, so a forgotten tab
 	// doesn't stream all day.
@@ -37,7 +38,7 @@
 	}
 
 	$effect(() => {
-		if (video) video.muted = !withAudio;
+		if (video) video.muted = !audioOn;
 	});
 
 	function reconnectSoon() {
@@ -63,8 +64,8 @@
 			.then(() => !ac.signal.aborted && reconnectSoon())
 			.catch((e: Error) => {
 				if (ac.signal.aborted) return;
-				if (withAudio && e.message.startsWith('Unsupported stream type')) {
-					// This browser can't play the FLAC audio track: fall back to video only.
+				if (!audioUnsupported && e.message.startsWith('Unsupported stream type')) {
+					// This browser can't play the FLAC audio track: reconnect with video only.
 					audioUnsupported = true;
 					audioOn = false;
 					return;
@@ -229,7 +230,6 @@
 
 	<div bind:this={container} class="relative bg-black aspect-video group">
 		{#if active}
-			{#key src}
 				{#if mode === 'mp4'}
 					<video
 						bind:this={video}
@@ -241,6 +241,7 @@
 						onplaying={() => (status = 'live')}
 					></video>
 				{:else}
+					{#key src}
 					<img
 						{src}
 						alt="{name} live"
@@ -248,8 +249,8 @@
 						onload={() => (status = 'live')}
 						onerror={reconnectSoon}
 					/>
+					{/key}
 				{/if}
-			{/key}
 		{:else}
 			<div class="absolute inset-0 flex items-center justify-center text-sm text-[var(--color-text-muted)]">
 				{#if idlePaused}
