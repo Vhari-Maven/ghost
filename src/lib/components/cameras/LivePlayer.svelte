@@ -8,6 +8,9 @@
 	type Mode = 'mp4' | 'mjpeg';
 	let mode = $state<Mode>('mp4');
 	let paused = $state(false);
+	let idlePaused = $state(false); // paused automatically after IDLE_MS without activity on the page
+	let audioOn = $state(false);
+	let audioUnsupported = $state(false);
 	let pageVisible = $state(true);
 	let status = $state<'connecting' | 'live' | 'error'>('connecting');
 	let attempt = $state(0); // bumped to force a fresh connection
@@ -18,7 +21,24 @@
 	let retryTimer: ReturnType<typeof setTimeout> | undefined;
 
 	const active = $derived(!paused && pageVisible);
-	const src = $derived(`/cameras/live/${id}?format=${mode}&n=${attempt}`);
+	const withAudio = $derived(audioOn && mode === 'mp4');
+	const src = $derived(`/cameras/live/${id}?format=${mode}${withAudio ? '&audio=1' : ''}&n=${attempt}`);
+
+	// Streams stop after this long without mouse/keyboard/touch activity, so a forgotten tab
+	// doesn't stream all day.
+	const IDLE_MS = 20 * 60 * 1000;
+	let lastActivity = Date.now();
+
+	// Only one camera plays sound at a time.
+	const AUDIO_EVENT = 'ghost-camera-audio';
+	function toggleAudio() {
+		audioOn = !audioOn;
+		if (audioOn) window.dispatchEvent(new CustomEvent(AUDIO_EVENT, { detail: id }));
+	}
+
+	$effect(() => {
+		if (video) video.muted = !withAudio;
+	});
 
 	function reconnectSoon() {
 		status = 'error';
@@ -41,15 +61,35 @@
 		const ac = new AbortController();
 		playLive(v, src, ac.signal)
 			.then(() => !ac.signal.aborted && reconnectSoon())
-			.catch(() => !ac.signal.aborted && reconnectSoon());
+			.catch((e: Error) => {
+				if (ac.signal.aborted) return;
+				if (withAudio && e.message.startsWith('Unsupported stream type')) {
+					// This browser can't play the FLAC audio track: fall back to video only.
+					audioUnsupported = true;
+					audioOn = false;
+					return;
+				}
+				reconnectSoon();
+			});
 		return () => ac.abort();
 	});
 
 	onMount(() => {
 		const onVis = () => (pageVisible = !document.hidden);
 		document.addEventListener('visibilitychange', onVis);
+		const onActivity = () => (lastActivity = Date.now());
+		const activityEvents = ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart'] as const;
+		for (const ev of activityEvents) window.addEventListener(ev, onActivity, { passive: true });
+		const onAudio = (e: Event) => {
+			if ((e as CustomEvent).detail !== id) audioOn = false;
+		};
+		window.addEventListener(AUDIO_EVENT, onAudio);
 		// Keep the fMP4 player at the live edge; browsers otherwise fall further behind over time.
 		const tick = setInterval(() => {
+			if (active && Date.now() - lastActivity > IDLE_MS) {
+				paused = true;
+				idlePaused = true;
+			}
 			const v = video;
 			if (!v || v.buffered.length === 0) return;
 			const seek = liveEdgeSeek(v.currentTime, v.buffered.end(v.buffered.length - 1));
@@ -58,6 +98,8 @@
 		}, 1000);
 		return () => {
 			document.removeEventListener('visibilitychange', onVis);
+			for (const ev of activityEvents) window.removeEventListener(ev, onActivity);
+			window.removeEventListener(AUDIO_EVENT, onAudio);
 			clearInterval(tick);
 			clearTimeout(retryTimer);
 		};
@@ -130,6 +172,31 @@
 			{name}
 		</h2>
 		<div class="flex items-center gap-1 text-xs">
+			{#if mode === 'mp4'}
+				<button
+					class="px-2 py-1 rounded border transition-colors disabled:opacity-40 {audioOn
+						? 'border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-glow)]'
+						: 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-text)]'}"
+					aria-pressed={audioOn}
+					disabled={audioUnsupported}
+					title={audioUnsupported
+						? "This browser can't play the camera's audio"
+						: audioOn
+							? 'Mute'
+							: 'Listen (one camera at a time)'}
+					aria-label={audioOn ? 'Mute' : 'Listen'}
+					onclick={toggleAudio}
+				>
+					<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M11 5L6 9H3v6h3l5 4V5z" />
+						{#if audioOn}
+							<path d="M15.5 8.5a5 5 0 010 7M18.5 5.5a9 9 0 010 13" />
+						{:else}
+							<path d="M16 9l6 6M22 9l-6 6" />
+						{/if}
+					</svg>
+				</button>
+			{/if}
 			<button
 				class="px-2 py-1 rounded border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
 				title="Fallback: about one still per second, for browsers that can't play the MP4 stream"
@@ -144,6 +211,7 @@
 				class="px-2 py-1 rounded border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
 				onclick={() => {
 					paused = !paused;
+					idlePaused = false;
 					status = 'connecting';
 				}}
 			>
@@ -184,7 +252,20 @@
 			{/key}
 		{:else}
 			<div class="absolute inset-0 flex items-center justify-center text-sm text-[var(--color-text-muted)]">
-				{paused ? 'Paused' : 'Paused while the tab is hidden'}
+				{#if idlePaused}
+					<button
+						class="px-4 py-2 rounded-md border border-[var(--color-accent)] text-[var(--color-accent)] hover:bg-[var(--color-glow)]"
+						onclick={() => {
+							paused = false;
+							idlePaused = false;
+							status = 'connecting';
+						}}
+					>
+						Paused after 20 minutes idle. Resume
+					</button>
+				{:else}
+					{paused ? 'Paused' : 'Paused while the tab is hidden'}
+				{/if}
 			</div>
 		{/if}
 
