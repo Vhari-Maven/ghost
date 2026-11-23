@@ -23,10 +23,13 @@ FROM oven/bun:1-slim
 
 WORKDIR /app
 
-# Install timezone support
+# Install timezone support (and CA roots for tailscaled)
 RUN apt-get update && apt-get install -y \
-    tzdata \
+    tzdata ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+
+# Tailscale, so the server can reach the camera gateway on kitten (see deploy/fly-start.sh)
+COPY --from=docker.io/tailscale/tailscale:v1.104.7 /usr/local/bin/tailscaled /usr/local/bin/tailscale /usr/local/bin/
 
 # Copy built app and production dependencies
 COPY --from=builder /app/build ./build
@@ -48,5 +51,6 @@ ENV DATABASE_PATH=/data/ghost.db
 
 EXPOSE 3000
 
-# Run the app
-CMD ["bun", "./build"]
+# Join the tailnet (if configured), then run the app
+COPY --from=builder /app/deploy/fly-start.sh ./fly-start.sh
+CMD ["/bin/sh", "./fly-start.sh"]

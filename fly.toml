@@ -21,7 +21,7 @@ primary_region = "iad"  # Virginia (Ashburn)
 [[vm]]
   cpu_kind = "shared"
   cpus = 1
-  memory_mb = 256
+  memory_mb = 512   # 256 -> 512 for tailscaled (cameras page)
 
 [mounts]
   source = "ghost_data"

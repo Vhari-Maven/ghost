@@ -15,6 +15,12 @@ export const MODULES: Module[] = [
     description: 'Track your weight, walks, and morning routine.'
   },
   {
+    href: '/cameras',
+    label: 'Cameras',
+    icon: '/icon-cameras.svg',
+    description: 'Live view, pan/tilt, and the last 24 hours of photos from home.'
+  },
+  {
     href: '/exercise',
     label: 'Exercise',
     icon: '/icon-exercise.svg',

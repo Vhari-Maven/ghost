@@ -121,6 +121,20 @@ Meal planning guide with nutrition tracking and prep instructions:
 - **Nutrition focus**: Calorie targets, macro breakdowns, lipid health goals
 - **Architecture**: Settings stored in `mealPrepSettings` table, service layer in `src/lib/services/meal-prep-settings.ts`
 
+### Cameras (`/cameras`)
+Live view, pan/tilt and last-24h photos from the two Tapo C211 cameras at home:
+- **Transport**: Ghost's Fly machine joins the user's tailnet (`deploy/fly-start.sh`, tailscaled state on the
+  `/data` volume, node tagged `tag:ghost`) and server routes proxy to **cam-gateway** on kitten
+  (source in the private `kitten` repo, `home-cams/kitten/gateway.py`). The browser only ever talks to Ghost.
+- **Env**: `CAMERA_GATEWAY_URL`, `CAMERA_GATEWAY_TOKEN` (and `TS_AUTHKEY` for the first Fly boot). Without them the
+  page shows a "not configured" note.
+- **Live video**: endless fMP4 of the 720p sub stream in a `<video>` kept at the live edge, MJPEG fallback;
+  streams pause while the tab is hidden.
+- **Photos**: kitten's `snap` job saves a 2K still + 480px thumb per camera every 5 min (72 h retention).
+- **PTZ**: ONVIF ContinuousMove + Stop via the gateway; presets come from the cameras (ONVIF GetPresets).
+- **Architecture**: shared helpers in `src/lib/cameras.ts`, gateway client in `src/lib/services/cameras.ts`,
+  components in `src/lib/components/cameras/`, proxy endpoints under `src/routes/cameras/`.
+
 ### Analytics (`/analytics`)
 Dashboard for tracking progress across exercise and morning tracker metrics:
 - **Exercise progress**: Track weight, reps, volume for all exercises over time

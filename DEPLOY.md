@@ -102,6 +102,25 @@ To protect your dashboard with Google login via Cloudflare:
 4. Add a policy requiring your Google email
 5. Done - Cloudflare handles auth before requests reach your app
 
+## Tailscale (cameras page)
+
+`/cameras` reaches the camera gateway on the home server (kitten) over Tailscale. `deploy/fly-start.sh`
+starts `tailscaled` before Ghost when `TS_AUTHKEY` is set or saved state exists in `/data/tailscale`.
+
+1. Tailnet policy (Tailscale admin → Access controls): define `tag:ghost`, and allow it to reach only
+   kitten's gateway port, e.g. `{"src": ["tag:ghost"], "dst": ["kitten:8787"]}` with a host alias for kitten.
+   Make sure no catch-all rule (`"*" -> "*:*"`) also covers tagged nodes.
+2. Create an auth key: one-off, **not** ephemeral, pre-approved, tag `tag:ghost`.
+3. Set secrets (the token lives in `home-cams/secrets.json` in the kitten repo as `ghost_gateway_token`):
+   ```bash
+   fly secrets set TS_AUTHKEY=tskey-auth-... CAMERA_GATEWAY_URL=http://<kitten tailscale IP>:8787 CAMERA_GATEWAY_TOKEN=...
+   ```
+4. `fly deploy`. The key is only used on the first boot; afterwards the node identity is reused from the
+   volume. Remove the secret once the node shows up (`fly secrets unset TS_AUTHKEY`).
+
+If the machine can't bring Tailscale up, Ghost still starts and the cameras show as offline
+(`fly logs | grep tailscale`).
+
 ## Regions
 
 Change `primary_region` in `fly.toml` to your nearest:
