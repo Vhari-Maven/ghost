@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { liveEdgeSeek, type CameraId, type Preset } from '$lib/cameras';
+	import { mseSupported, playLive } from './mse';
 
 	let { id, name, presets = [] }: { id: CameraId; name: string; presets?: Preset[] } = $props();
 
@@ -27,6 +28,22 @@
 			attempt++;
 		}, 5000);
 	}
+
+	// MP4 mode: feed the stream to the <video> through Media Source Extensions. Re-runs (reconnects)
+	// whenever the element, source or `attempt` changes; aborting closes the HTTP stream.
+	$effect(() => {
+		if (!active || mode !== 'mp4' || !video) return;
+		if (!mseSupported()) {
+			mode = 'mjpeg';
+			return;
+		}
+		const v = video;
+		const ac = new AbortController();
+		playLive(v, src, ac.signal)
+			.then(() => !ac.signal.aborted && reconnectSoon())
+			.catch(() => !ac.signal.aborted && reconnectSoon());
+		return () => ac.abort();
+	});
 
 	onMount(() => {
 		const onVis = () => (pageVisible = !document.hidden);
@@ -115,13 +132,13 @@
 		<div class="flex items-center gap-1 text-xs">
 			<button
 				class="px-2 py-1 rounded border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
-				title="MJPEG works in more browsers but uses more bandwidth"
+				title="Fallback: about one still per second, for browsers that can't play the MP4 stream"
 				onclick={() => {
 					mode = mode === 'mp4' ? 'mjpeg' : 'mp4';
 					status = 'connecting';
 				}}
 			>
-				{mode === 'mp4' ? 'MP4' : 'MJPEG'}
+				{mode === 'mp4' ? 'Video' : 'Stills'}
 			</button>
 			<button
 				class="px-2 py-1 rounded border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
@@ -148,15 +165,12 @@
 				{#if mode === 'mp4'}
 					<video
 						bind:this={video}
-						{src}
 						poster="/cameras/frame/{id}"
 						class="w-full h-full object-contain"
 						autoplay
 						muted
 						playsinline
 						onplaying={() => (status = 'live')}
-						onerror={reconnectSoon}
-						onended={reconnectSoon}
 					></video>
 				{:else}
 					<img

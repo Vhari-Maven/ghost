@@ -128,7 +128,8 @@ Live view, pan/tilt and last-24h photos from the two Tapo C211 cameras at home:
   (source in the private `kitten` repo, `home-cams/kitten/gateway.py`). The browser only ever talks to Ghost.
 - **Env**: `CAMERA_GATEWAY_URL`, `CAMERA_GATEWAY_TOKEN` (and `TS_AUTHKEY` for the first Fly boot). Without them the
   page shows a "not configured" note.
-- **Live video**: endless fMP4 of the 720p sub stream in a `<video>` kept at the live edge, MJPEG fallback;
+- **Live video**: endless fMP4 of the 720p sub stream fed to `<video>` via Media Source Extensions (`mse.ts`;
+  a plain `<video src>` stalls in Chrome), kept at the live edge; ~1 fps "Stills" (MJPEG) fallback;
   streams pause while the tab is hidden.
 - **Photos**: kitten's `snap` job saves a 2K still + 480px thumb per camera every 5 min (72 h retention).
 - **PTZ**: ONVIF ContinuousMove + Stop via the gateway; presets come from the cameras (ONVIF GetPresets).
